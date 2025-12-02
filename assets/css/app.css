@@ -1,0 +1,109 @@
+@font-face {
+    font-family: 'Alkatra';
+    src: url('../../fonts/Alkatra-Regular.woff2') format('woff2');
+    font-weight: 400 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DMSans';
+    src: url('../../fonts/DMSans-VariableFont_opsz\,wght.ttf') format('woff2');
+    font-weight: 100 1000;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DMSans-italic';
+    src: url('../../fonts/DMSans-Italic-VariableFont_opsz\,wght.ttf') format('woff2');
+    font-weight: 100 1000;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    /* Couleurs (palette réduite pour meilleure cohérence) */
+    --primary-color: #1A202C;
+    --secondary-color: #b417e4;
+    --secondary-color-hover: rgb(151, 89, 170);
+    --title-color: #EDF2F7;
+    /* Etat hover explicite */
+    --alt-color: #718096;
+
+    /* Font */
+    --primary-font: 'Alkatra', 'system-ui', sans-serif;
+    --secondary-font: 'DMSans';
+
+    /* Espacements (système cohérent) */
+    /* 8px */
+    --espace-xs: 0.5rem;
+    /* 16px */
+    --espace-s: 1rem;
+    /* 24px */
+    --espace-m: 1.5rem;
+    /* 32px */
+    --espace-l: 2rem;
+    /* 48px */
+    --espace-xl: 3rem;
+
+    /* Transitions */
+    --fast-transition: 0.2s ease-in-out;
+    --strandart-transition: 0.3s ease;
+
+    /* Rayons de bordure */
+    /* 4px */
+    --radius-s: 0.25rem;
+    /* 8px */
+    --radius-m: 0.5rem;
+    /* 32px (rounded buttons)*/
+    --radius-l: 2rem;
+
+    /* Z-index rationalized */
+    --z-normal: 1;
+    --z-overlay: 10;
+    --z-modal: 100;
+}
+
+.music-player {
+    background: var(--primary-color);
+    font-family: var(--secondary-font);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+h1 {
+    background: -webkit-linear-gradient(#eee, #b417e4);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+    text-align: center;
+}
+
+h2 {
+    background: -webkit-linear-gradient(#eee, #b417e4);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-top: 0;
+    text-align: center;
+}
+
+.album-cover img {
+    width: 300px;
+    height: 300px;
+}
+
+.player-logic {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.progress-bar {
+    margin: 6px;
+}

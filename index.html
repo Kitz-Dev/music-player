@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- HTML Meta Tags -->
+    <title>SwiftFox.fr | For those who come after</title>
+    <meta name="description" content="SwiftFox.com | For Gustave">
+
+    <!-- Security Meta Tags -->
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self', font-src 'self'; https://api.project-fox.com;">
+    <meta http-equiv="X-Content-type-options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-policy" content="no-referrer-when-downgrade">
+
+    <!-- Facebook Meta Tags -->
+    <meta property="og:url" content="./">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="SwiftFox.com | For those who come after">
+    <meta property="og:description" content="SwiftFox.com | For Gustave">
+    <meta property="og:image" content="./img/section/fox.png">
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="https://swiftfox.com">
+    <meta property="twitter:url" content="./">
+    <meta name="twitter:title" content="SwiftFox.com | For those who come after">
+    <meta name="twitter:description" content="SwiftFox.com | For Gustave">
+    <meta name="twitter:image" content="./img/section/fox.png">
+
+    <!-- Meta Tags Generated via https://www.opengraph.xyz -->
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="./fox-corpo-icon.webp">
+
+    <!-- Font preload: 
+         Cette balise preload est CRUCIALE pour les performances:
+         - Elle dit au navigateur de télécharger la police en priorité
+         - "as="font"" indique au navigateur le type de ressource
+         - "type=font/woff2"" précise le format exact
+         - "crossorigin" est nécessaire car les polices sont toujours chargées en CORS
+         -->
+    <link rel="preload" href="./fonts/Alkatra-Regular.woff2" as="font" type="font/woff2" crossorigin>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="./assets/css/app.css">
+    <link rel="stylesheet" href="./assets/css/normalize.css">
+</head>
+
+<body>
+    <section class="music-player">
+        <h1>
+            SwiftFox Music
+        </h1>
+
+        <a href="#" class="album-cover">
+            <img loading="eager" class="logo__img" src="./fox-corpo-icon.webp" alt="logo de swiftfox.com">
+        </a>
+
+        <div id="player-logic" class="player-logic">
+            <svg id="previous-button" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16">
+                <path fill="#eeefec"
+                    d="M14 3.002a1 1 0 0 0-1.578-.816l-7 4.963a1 1 0 0 0-.007 1.628l7 5.037A1 1 0 0 0 14 13.003zM2 2.5a.5.5 0 0 1 1 0v11a.5.5 0 0 1-1 0z" />
+            </svg>
+
+            <svg id="play-button" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 32 32">
+                <path fill="none"
+                    d="M11 23a1 1 0 0 1-1-1V10a1 1 0 0 1 1.447-.894l12 6a1 1 0 0 1 0 1.788l-12 6A1 1 0 0 1 11 23" />
+                <path fill="#eeefec"
+                    d="M16 2a14 14 0 1 0 14 14A14 14 0 0 0 16 2m7.447 14.895l-12 6A1 1 0 0 1 10 22V10a1 1 0 0 1 1.447-.894l12 6a1 1 0 0 1 0 1.788" />
+            </svg>
+
+            <svg id="next-button" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16">
+                <path fill="#eeefec"
+                    d="M2 3.002a1 1 0 0 1 1.578-.816l7 4.963a1 1 0 0 1 .007 1.628l-7 5.037A1 1 0 0 1 2 13.003zM14 2.5a.5.5 0 1 0-1 0v11a.5.5 0 0 0 1 0z" />
+            </svg>
+        </div>
+
+        <progress id="progress-bar" class="progress-bar" max="100" value="0"></progress>
+
+
+
+        <h2 class="song-title">Nekfeu - Ecrire</h2>
+        <audio preload="metadata" crossorigin="use-credentials" id="current-song"
+            src="./music/Nekfeu - Ecrire (les étoiles vagabondes expansion) Parole.mp3"></audio>
+    </section>
+
+    <!-- Script -->
+    <script src="./assets/js/app.js"></script>
+</body>
+
+</html>
