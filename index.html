@@ -51,42 +51,73 @@
 </head>
 
 <body>
-    <section class="music-player">
-        <h1>
-            SwiftFox Music
-        </h1>
+    <main>
+        <section class="playlists">
+            <h2>
+                Playlists
+            </h2>
 
-        <a href="#" class="album-cover">
-            <img loading="eager" class="logo__img" src="./fox-corpo-icon.webp" alt="logo de swiftfox.com">
-        </a>
+            <div class="playlist-container">
+                <a href="#" class="playlist-card">
+                    <img loading="lazy" class="playlist-cover" src="./fox-corpo-icon.webp" alt="Playlist 1 Cover">
+                    <span class="playlist-title">Playlist 1</span>
+                </a>
 
-        <div id="player-logic" class="player-logic">
-            <svg id="previous-button" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16">
-                <path fill="#eeefec"
-                    d="M14 3.002a1 1 0 0 0-1.578-.816l-7 4.963a1 1 0 0 0-.007 1.628l7 5.037A1 1 0 0 0 14 13.003zM2 2.5a.5.5 0 0 1 1 0v11a.5.5 0 0 1-1 0z" />
-            </svg>
+                <a href="#" class="playlist-card">
+                    <img loading="lazy" class="playlist-cover" src="./fox-corpo-icon.webp" alt="Playlist 2 Cover">
+                    <span class="playlist-title">Playlist 2</span>
+                </a>
+            </div>
+        </section>
 
-            <svg id="play-button" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 32 32">
-                <path fill="none"
-                    d="M11 23a1 1 0 0 1-1-1V10a1 1 0 0 1 1.447-.894l12 6a1 1 0 0 1 0 1.788l-12 6A1 1 0 0 1 11 23" />
-                <path fill="#eeefec"
-                    d="M16 2a14 14 0 1 0 14 14A14 14 0 0 0 16 2m7.447 14.895l-12 6A1 1 0 0 1 10 22V10a1 1 0 0 1 1.447-.894l12 6a1 1 0 0 1 0 1.788" />
-            </svg>
+        <section class="music-player">
+            <h1>
+                SwiftFox Music
+            </h1>
 
-            <svg id="next-button" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16">
-                <path fill="#eeefec"
-                    d="M2 3.002a1 1 0 0 1 1.578-.816l7 4.963a1 1 0 0 1 .007 1.628l-7 5.037A1 1 0 0 1 2 13.003zM14 2.5a.5.5 0 1 0-1 0v11a.5.5 0 0 0 1 0z" />
-            </svg>
-        </div>
+            <a href="#" class="album-cover">
+                <img loading="eager" class="logo__img" src="./fox-corpo-icon.webp" alt="logo de swiftfox.com">
+            </a>
 
-        <progress id="progress-bar" class="progress-bar" max="100" value="0"></progress>
+            <div id="player-logic" class="player-logic">
+                <div class="button-container">
+                    <span id="previous-tooltip" class="tooltip">Previous</span>
+                    <svg id="previous-button" class="logic-button" xmlns="http://www.w3.org/2000/svg" width="24"
+                        height="24" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                        <use href="./img/sprite.svg#previous-button"></use>
+                    </svg>
+                </div>
+
+                <div class="button-container">
+                    <span id="play-tooltip" class="tooltip">Pause</span>
+                    <svg id="play-button" class="logic-button" xmlns="http://www.w3.org/2000/svg" width="40" height="40"
+                        viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+                        <use id="play-button-img" href="./img/sprite.svg#play-button"></use>
+                    </svg>
+                </div>
+
+                <div class="button-container">
+                    <span id="next-tooltip" class="tooltip">Next</span>
+                    <svg id="next-button" class="logic-button" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                        <use href="./img/sprite.svg#next-button"></use>
+                    </svg>
+                </div>
 
 
 
-        <h2 class="song-title">Nekfeu - Ecrire</h2>
-        <audio preload="metadata" crossorigin="use-credentials" id="current-song"
-            src="./music/Nekfeu - Ecrire (les étoiles vagabondes expansion) Parole.mp3"></audio>
-    </section>
+            </div>
+
+            <progress id="progress-bar" class="progress-bar" max="100" value="0"></progress>
+
+
+
+            <h2 class="song-title">Nekfeu - Ecrire</h2>
+            <audio preload="metadata" crossorigin="use-credentials" id="current-song"
+                src="./music/Nekfeu - Ecrire (les étoiles vagabondes expansion) Parole.mp3"></audio>
+        </section>
+    </main>
+
 
     <!-- Script -->
     <script src="./assets/js/app.js"></script>

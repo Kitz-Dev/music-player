@@ -1,0 +1,37 @@
+[
+    {
+        "name": "Playlist test",
+        "songs": [
+            {
+                "title": "edamame (Official Video)",
+                "author": "bbno$ & Rich Brian",
+                "url": "../music/bbno$ & Rich Brian - edamame (Official Video).mp3"
+            },
+            {
+                "title": "Mockingbird (Lyrics)",
+                "author": "Eminem",
+                "url": "../music/Eminem - Mockingbird (Lyrics).mp3"
+            }
+        ]
+    },
+    {
+        "name": "Playlist test 2",
+        "songs": [
+            {
+                "title": "Goodbye",
+                "author": "Russ",
+                "url": "../music/Goodbye.mp3"
+            },
+            {
+                "title": "Stressed Out",
+                "author": "Twenty One Pilots",
+                "url": "../music/twenty one pilots Stressed Out [OFFICIAL VIDEO].mp3"
+            },
+            {
+                "title": "Ecrire (les étoiles vagabondes expansion)",
+                "author": "Nekfeu",
+                "url": "../music/Nekfeu - Ecrire (les étoiles vagabondes expansion) Parole.mp3"
+            }
+        ]
+    }
+]
