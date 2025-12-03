@@ -63,6 +63,14 @@
 
             <div id="player-logic" class="player-logic">
                 <div class="button-container">
+                    <span id="shuffle-tooltip" class="tooltip">Shuffle</span>
+                    <svg id="shuffle-button" class="logic-button" xmlns="http://www.w3.org/2000/svg" width="32"
+                        height="32" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                        <use href="./img/sprite.svg#shuffle-button"></use>
+                    </svg>
+                </div>
+
+                <div class="button-container">
                     <span id="previous-tooltip" class="tooltip">Previous</span>
                     <svg id="previous-button" class="logic-button" xmlns="http://www.w3.org/2000/svg" width="24"
                         height="24" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
@@ -85,12 +93,26 @@
                         <use href="./img/sprite.svg#next-button"></use>
                     </svg>
                 </div>
+
+                <div class="volume-container">
+                    <div class="volume-bar-container">
+                        <input type="range" id="volume-bar" class="volume-bar" value="0.5" step="any" max="1"
+                            aria-label="volume bar" />
+                    </div>
+
+                    <svg id="volume-button" class="logic-button" xmlns="http://www.w3.org/2000/svg" width="32"
+                        height="32" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <use href="./img/sprite.svg#low-volume"></use>
+                    </svg>
+                </div>
             </div>
 
             <div class="progress-bar-container">
-                <input type="range" id="progress-bar" class="progress-bar" step="any" max="100" aria-label="progressbar"
-                    orient="" />
+                <input type="range" id="progress-bar" class="progress-bar" step="any" max="100"
+                    aria-label="progress bar" />
+
             </div>
+
 
 
             <h2 class="song-title">Nekfeu - Ecrire</h2>

@@ -5,8 +5,12 @@ const playTooltip = document.getElementById("play-tooltip")
 const nextButton = document.getElementById("next-button")
 const previousButton = document.getElementById("previous-button")
 const progressBar = document.getElementById("progress-bar")
+const volumeBar = document.getElementById("volume-bar")
+const initialVolumePercentage = (volumeBar.value / volumeBar.max) * 100
 
+volumeBar.style.setProperty('--slider-value', `${initialVolumePercentage}%`)
 currentSong.volume = 0.5
+volumeBar.value = 0.5
 
 let sortedAlphabetically = []
 let currentIndex = 0
@@ -77,10 +81,22 @@ currentSong.addEventListener("loadedmetadata", () => {
 currentSong.addEventListener("timeupdate", () => {
     if (!currentSong.paused) {
         progressBar.value = Math.floor(currentSong.currentTime)
+        const percentage = (currentSong.currentTime / currentSong.duration) * 100
+        progressBar.style.setProperty('--slider-value', `${percentage}%`)
+        progressBar.value = Math.floor(currentSong.currentTime)
     }
 })
 
 progressBar.addEventListener("input", () => {
     currentSong.currentTime = progressBar.value
+    const percentage = (progressBar.value / progressBar.max) * 100
+    progressBar.style.setProperty('--slider-value', `${percentage}%`)
+    currentSong.currentTime = progressBar.value
+})
+
+volumeBar.addEventListener("input", () => {
+    const percentage = (volumeBar.value / volumeBar.max) * 100
+    volumeBar.style.setProperty('--slider-value', `${percentage}%`)
+    currentSong.volume = volumeBar.value
 })
 

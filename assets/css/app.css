@@ -58,6 +58,7 @@
     /* Transitions */
     --fast-transition: 0.2s ease-in-out;
     --strandart-transition: 0.3s ease;
+    --slov-transition: 0.5s ease-in-out;
 
     /* Rayons de bordure */
     /* 4px */
@@ -71,6 +72,13 @@
     --z-normal: 1;
     --z-overlay: 10;
     --z-modal: 100;
+
+    /* Webkit sliders track fix */
+    --track-height: 8px;
+    --thumb-height: 12px;
+    --thumb-width: 12px;
+    --slider-value: 0%;
+
 }
 
 /** ==============================
@@ -113,6 +121,7 @@ h2 {
 .album-cover img {
     width: 300px;
     height: 300px;
+    cursor: default;
 }
 
 .player-logic {
@@ -156,8 +165,95 @@ h2 {
 
 .progress-bar-container {
     display: inline-block;
-}
-
-.progress-bar {
     margin: 6px;
 }
+
+/** ==============================
+ * VOLUME-BAR
+ * =============================== */
+
+.volume-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.volume-bar-container {
+    display: inline-block;
+    position: absolute;
+    margin-top: -160px;
+    width: 20px;
+    height: 150px;
+    padding: 0;
+    visibility: hidden;
+    transition: visibility var(--fast-transition);
+}
+
+.volume-bar {
+    width: 150px;
+    height: 20px;
+    margin: 0;
+    transform-origin: 75px 75px;
+    transform: rotate(-90deg);
+}
+
+.volume-container:hover .volume-bar-container {
+    visibility: visible;
+}
+
+input[type="range"] {
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--primary-color);
+    border-radius: var(--radius-m);
+    height: 8px;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    background: linear-gradient(to right,
+            var(--secondary-color) 0%,
+            var(--secondary-color) var(--slider-value, 0%),
+            var(--alt-color) var(--slider-value, 0%),
+            var(--alt-color) 100%);
+    height: 0.5rem;
+    border-radius: 3px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    background: var(--secondary-color);
+    border-radius: 50%;
+    width: var(--thumb-width);
+    height: var(--thumb-height);
+    margin-top: calc((var(--track-height) / 2) - (var(--thumb-height) / 2));
+
+}
+
+input[type="range"]::-moz-range-track {
+    background: var(--alt-color);
+    height: 0.5rem;
+    border-radius: 3px;
+}
+
+input[type="range"]::-moz-range-progress {
+    background: var(--secondary-color);
+    height: 0.5rem;
+    border-radius: 3px;
+}
+
+input[type="range"]::-moz-range-thumb {
+    appearance: none;
+    background: var(--secondary-color);
+    width: var(--thumb-width);
+    height: var(--thumb-height);
+    border-radius: 50%;
+}
+
+input[type="range"]:focus {
+    outline: none;
+}
+
+
+/* TODO : Add touch support for volume button
