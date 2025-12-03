@@ -132,9 +132,11 @@ h1 {
     -webkit-text-fill-color: transparent;
 }
 
-.album-cover img {
+.album-cover {
     width: 300px;
     height: 300px;
+    border-radius: 50%;
+    margin: 16px 0;
     cursor: default;
 }
 

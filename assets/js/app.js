@@ -4,6 +4,7 @@ const currentSongTitle = document.getElementById("song-title")
 const currentSongAuthor = document.getElementById("song-author")
 const currentSongCountUp = document.getElementById("song-countup")
 const currentSongCountDown = document.getElementById("song-countdown")
+const currentSongAlbumCover = document.getElementById("album-cover")
 const playButton = document.getElementById("play-button")
 const playTooltip = document.getElementById("play-tooltip")
 const nextButton = document.getElementById("next-button")
@@ -61,6 +62,7 @@ const audioPlayer = async () => {
             currentSong.src = sortedAlphabetically[currentIndex].url
             currentSongTitle.textContent = sortedAlphabetically[currentIndex].title
             currentSongAuthor.textContent = sortedAlphabetically[currentIndex].author
+            currentSongAlbumCover.src = sortedAlphabetically[currentIndex].cover
             currentSong.play()
             playTooltip.textContent = "Pause"
             document.getElementById("play-button-img").setAttribute("href", "./img/sprite.svg#pause-button")
@@ -71,6 +73,7 @@ const audioPlayer = async () => {
             currentSong.src = sortedAlphabetically[currentIndex].url
             currentSongTitle.textContent = sortedAlphabetically[currentIndex].title
             currentSongAuthor.textContent = sortedAlphabetically[currentIndex].author
+            currentSongAlbumCover.src = sortedAlphabetically[currentIndex].cover
             currentSong.play()
             playTooltip.textContent = "Pause"
             document.getElementById("play-button-img").setAttribute("href", "./img/sprite.svg#pause-button")
@@ -101,9 +104,6 @@ const audioPlayer = async () => {
             currentSong.src = sortedAlphabetically[currentIndex].url
             currentSong.play()
         })
-
-
-
 
         progressBar.addEventListener("input", () => {
             currentSong.currentTime = progressBar.value
