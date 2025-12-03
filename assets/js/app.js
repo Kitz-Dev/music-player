@@ -50,14 +50,22 @@ const audioPlayer = async () => {
                 currentSong.pause()
                 playTooltip.textContent = "Play"
                 document.getElementById("play-button-img").setAttribute("href", "./img/sprite.svg#play-button")
+                currentSongAlbumCover.classList.toggle("active")
             } else {
                 currentSong.play()
                 playTooltip.textContent = "Pause"
                 document.getElementById("play-button-img").setAttribute("href", "./img/sprite.svg#pause-button")
+                currentSongAlbumCover.src = sortedAlphabetically[currentIndex].cover
+                currentSongAlbumCover.classList.toggle("active")
             }
         })
 
         nextButton.addEventListener("click", () => {
+            if (currentSong.paused) {
+                currentSongAlbumCover.classList.toggle("active")
+                playTooltip.textContent = "Pause"
+                document.getElementById("play-button-img").setAttribute("href", "./img/sprite.svg#pause-button")
+            }
             currentIndex = (currentIndex + 1) % sortedAlphabetically.length
             currentSong.src = sortedAlphabetically[currentIndex].url
             currentSongTitle.textContent = sortedAlphabetically[currentIndex].title
@@ -69,6 +77,11 @@ const audioPlayer = async () => {
         })
 
         previousButton.addEventListener("click", () => {
+            if (currentSong.paused) {
+                currentSongAlbumCover.classList.toggle("active")
+                playTooltip.textContent = "Pause"
+                document.getElementById("play-button-img").setAttribute("href", "./img/sprite.svg#pause-button")
+            }
             currentIndex = (currentIndex - 1 + sortedAlphabetically.length) % sortedAlphabetically.length
             currentSong.src = sortedAlphabetically[currentIndex].url
             currentSongTitle.textContent = sortedAlphabetically[currentIndex].title
@@ -94,7 +107,7 @@ const audioPlayer = async () => {
                 let s = Math.floor(currentSong.currentTime % 60)
                 let m = Math.floor(currentSong.currentTime / 60)
                 let sDisplay = s > 0 ? (s < 10 ? "0" + s : s) : "00"
-                currentSongCountUp.textContent = m + ":" + sDisplay
+                currentSongCountUp.textContent = (m + ":" + sDisplay)
                 currentSongCountDown.textContent = Math.floor(currentSong.duration / 60) + ":" + Math.floor(currentSong.duration % 60)
             }
         })
@@ -102,6 +115,9 @@ const audioPlayer = async () => {
         currentSong.addEventListener("ended", () => {
             currentIndex = (currentIndex + 1) % sortedAlphabetically.length
             currentSong.src = sortedAlphabetically[currentIndex].url
+            currentSongAlbumCover.src = sortedAlphabetically[currentIndex].cover
+            currentSongTitle.textContent = sortedAlphabetically[currentIndex].title
+            currentSongAuthor.textContent = sortedAlphabetically[currentIndex].author
             currentSong.play()
         })
 
