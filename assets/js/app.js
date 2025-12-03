@@ -1,5 +1,9 @@
 'use strict'
 const currentSong = document.getElementById("current-song")
+const currentSongTitle = document.getElementById("song-title")
+const currentSongAuthor = document.getElementById("song-author")
+const currentSongCountUp = document.getElementById("song-countup")
+const currentSongCountDown = document.getElementById("song-countdown")
 const playButton = document.getElementById("play-button")
 const playTooltip = document.getElementById("play-tooltip")
 const nextButton = document.getElementById("next-button")
@@ -37,6 +41,8 @@ const audioPlayer = async () => {
         })
 
         currentSong.src = sortedAlphabetically[0].url
+        currentSongTitle.textContent = sortedAlphabetically[currentIndex].title
+        currentSongAuthor.textContent = sortedAlphabetically[currentIndex].author
 
         playButton.addEventListener("click", () => {
             if (!currentSong.paused) {
@@ -53,6 +59,8 @@ const audioPlayer = async () => {
         nextButton.addEventListener("click", () => {
             currentIndex = (currentIndex + 1) % sortedAlphabetically.length
             currentSong.src = sortedAlphabetically[currentIndex].url
+            currentSongTitle.textContent = sortedAlphabetically[currentIndex].title
+            currentSongAuthor.textContent = sortedAlphabetically[currentIndex].author
             currentSong.play()
             playTooltip.textContent = "Pause"
             document.getElementById("play-button-img").setAttribute("href", "./img/sprite.svg#pause-button")
@@ -61,6 +69,8 @@ const audioPlayer = async () => {
         previousButton.addEventListener("click", () => {
             currentIndex = (currentIndex - 1 + sortedAlphabetically.length) % sortedAlphabetically.length
             currentSong.src = sortedAlphabetically[currentIndex].url
+            currentSongTitle.textContent = sortedAlphabetically[currentIndex].title
+            currentSongAuthor.textContent = sortedAlphabetically[currentIndex].author
             currentSong.play()
             playTooltip.textContent = "Pause"
             document.getElementById("play-button-img").setAttribute("href", "./img/sprite.svg#pause-button")
@@ -78,6 +88,11 @@ const audioPlayer = async () => {
                 const percentage = (currentSong.currentTime / currentSong.duration) * 100
                 progressBar.style.setProperty('--slider-value', `${percentage}%`)
                 progressBar.value = Math.floor(currentSong.currentTime)
+                let s = Math.floor(currentSong.currentTime % 60)
+                let m = Math.floor(currentSong.currentTime / 60)
+                let sDisplay = s > 0 ? (s < 10 ? "0" + s : s) : "00"
+                currentSongCountUp.textContent = m + ":" + sDisplay
+                currentSongCountDown.textContent = Math.floor(currentSong.duration / 60) + ":" + Math.floor(currentSong.duration % 60)
             }
         })
 
@@ -86,6 +101,9 @@ const audioPlayer = async () => {
             currentSong.src = sortedAlphabetically[currentIndex].url
             currentSong.play()
         })
+
+
+
 
         progressBar.addEventListener("input", () => {
             currentSong.currentTime = progressBar.value

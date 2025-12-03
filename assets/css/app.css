@@ -98,6 +98,7 @@ main {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    min-width: 100vw;
 }
 
 h1 {
@@ -109,13 +110,26 @@ h1 {
     text-align: center;
 }
 
-h2 {
+.song-title-container {
+    display: flex;
     background: -webkit-linear-gradient(#eee, #b417e4);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-top: 0;
     text-align: center;
+}
+
+.title-display {
+    margin: 0 5px;
+    font-size: calc(0.5vw + 12px);
+}
+
+.song-timer {
+    background: -webkit-linear-gradient(#eee, #b417e4);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .album-cover img {
@@ -164,8 +178,16 @@ h2 {
  * =============================== */
 
 .progress-bar-container {
-    display: inline-block;
+    display: flex;
+    align-items: center;
     margin: 6px;
+}
+
+.counts-container {
+    display: flex;
+    justify-content: center;
+    min-width: 50px;
+    margin: 0 5px;
 }
 
 .progress-bar {

@@ -108,14 +108,25 @@
             </div>
 
             <div class="progress-bar-container">
+                <div class="counts-container">
+                    <span id="song-countup" class="song-timer">-:--</span>
+                </div>
+
                 <input type="range" id="progress-bar" class="progress-bar" step="any" max="100"
                     aria-label="progress bar" />
 
+                <div class="counts-container">
+                    <span id="song-countdown" class="song-timer">-:--</span>
+                </div>
             </div>
 
 
+            <section class="song-title-container">
+                <div id="song-title" class="title-display"></div>
+                <span class="title-display"> - </span>
+                <div id="song-author" class="title-display"></div>
+            </section>
 
-            <h2 class="song-title">Nekfeu - Ecrire</h2>
             <audio preload="metadata" crossorigin="use-credentials" id="current-song"
                 src="./music/Nekfeu - Ecrire (les étoiles vagabondes expansion) Parole.mp3" type="audio/mpeg"></audio>
         </section>
