@@ -1,3 +1,7 @@
+/** ==============================
+ * FONTS
+ * =============================== */
+
 @font-face {
     font-family: 'Alkatra';
     src: url('../../fonts/Alkatra-Regular.woff2') format('woff2');
@@ -21,6 +25,10 @@
     font-style: normal;
     font-display: swap;
 }
+
+/** ==============================
+ * VARIABLES
+ * =============================== */
 
 :root {
     /* Couleurs (palette réduite pour meilleure cohérence) */
@@ -64,6 +72,10 @@
     --z-overlay: 10;
     --z-modal: 100;
 }
+
+/** ==============================
+ * MAIN STYLES
+ * =============================== */
 
 main {
     display: flex;
@@ -109,10 +121,6 @@ h2 {
     gap: 20px;
 }
 
-.progress-bar {
-    margin: 6px;
-}
-
 .logic-button {
     cursor: pointer;
 }
@@ -140,4 +148,16 @@ h2 {
 
 .button-container:hover .tooltip {
     visibility: visible;
+}
+
+/** ==============================
+ * PROGRESS-BAR
+ * =============================== */
+
+.progress-bar-container {
+    display: inline-block;
+}
+
+.progress-bar {
+    margin: 6px;
 }

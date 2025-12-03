@@ -4,6 +4,7 @@ const playButton = document.getElementById("play-button")
 const playTooltip = document.getElementById("play-tooltip")
 const nextButton = document.getElementById("next-button")
 const previousButton = document.getElementById("previous-button")
+const progressBar = document.getElementById("progress-bar")
 
 currentSong.volume = 0.5
 
@@ -68,5 +69,18 @@ const playSong = async () => {
 
 playSong()
 
+currentSong.addEventListener("loadedmetadata", () => {
+    progressBar.max = Math.floor(currentSong.duration)
+    progressBar.value = currentSong.currentTime
+})
 
+currentSong.addEventListener("timeupdate", () => {
+    if (!currentSong.paused) {
+        progressBar.value = Math.floor(currentSong.currentTime)
+    }
+})
+
+progressBar.addEventListener("input", () => {
+    currentSong.currentTime = progressBar.value
+})
 
