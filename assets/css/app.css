@@ -168,6 +168,10 @@ h2 {
     margin: 6px;
 }
 
+.progress-bar {
+    width: 300px;
+}
+
 /** ==============================
  * VOLUME-BAR
  * =============================== */
@@ -202,12 +206,16 @@ h2 {
     visibility: visible;
 }
 
+/** ==============================
+ * SLIDERS STYLES
+ * =============================== */
+
 input[type="range"] {
     cursor: pointer;
     -webkit-appearance: none;
     appearance: none;
     background: var(--primary-color);
-    border-radius: var(--radius-m);
+    border-radius: 3px;
     height: 8px;
 }
 
@@ -246,6 +254,7 @@ input[type="range"]::-moz-range-progress {
 input[type="range"]::-moz-range-thumb {
     appearance: none;
     background: var(--secondary-color);
+    border: none;
     width: var(--thumb-width);
     height: var(--thumb-height);
     border-radius: 50%;

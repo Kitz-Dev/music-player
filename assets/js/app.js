@@ -15,7 +15,7 @@ volumeBar.value = 0.5
 let sortedAlphabetically = []
 let currentIndex = 0
 
-const playSong = async () => {
+const audioPlayer = async () => {
     try {
         const res = await fetch("../../data/playlist.json")
 
@@ -35,7 +35,6 @@ const playSong = async () => {
             }
             return 0
         })
-        console.log(sortedAlphabetically)
 
         currentSong.src = sortedAlphabetically[0].url
 
@@ -66,37 +65,44 @@ const playSong = async () => {
             playTooltip.textContent = "Pause"
             document.getElementById("play-button-img").setAttribute("href", "./img/sprite.svg#pause-button")
         })
+
+
+        currentSong.addEventListener("loadedmetadata", () => {
+            progressBar.max = Math.floor(currentSong.duration)
+            progressBar.value = currentSong.currentTime
+        })
+
+        currentSong.addEventListener("timeupdate", () => {
+            if (!currentSong.paused) {
+                progressBar.value = Math.floor(currentSong.currentTime)
+                const percentage = (currentSong.currentTime / currentSong.duration) * 100
+                progressBar.style.setProperty('--slider-value', `${percentage}%`)
+                progressBar.value = Math.floor(currentSong.currentTime)
+            }
+        })
+
+        currentSong.addEventListener("ended", () => {
+            currentIndex = (currentIndex + 1) % sortedAlphabetically.length
+            currentSong.src = sortedAlphabetically[currentIndex].url
+            currentSong.play()
+        })
+
+        progressBar.addEventListener("input", () => {
+            currentSong.currentTime = progressBar.value
+            const percentage = (progressBar.value / progressBar.max) * 100
+            progressBar.style.setProperty('--slider-value', `${percentage}%`)
+            currentSong.currentTime = progressBar.value
+        })
+
+        volumeBar.addEventListener("input", () => {
+            const percentage = (volumeBar.value / volumeBar.max) * 100
+            volumeBar.style.setProperty('--slider-value', `${percentage}%`)
+            currentSong.volume = volumeBar.value
+        })
+
     } catch (error) {
         console.log(error)
     }
 }
 
-playSong()
-
-currentSong.addEventListener("loadedmetadata", () => {
-    progressBar.max = Math.floor(currentSong.duration)
-    progressBar.value = currentSong.currentTime
-})
-
-currentSong.addEventListener("timeupdate", () => {
-    if (!currentSong.paused) {
-        progressBar.value = Math.floor(currentSong.currentTime)
-        const percentage = (currentSong.currentTime / currentSong.duration) * 100
-        progressBar.style.setProperty('--slider-value', `${percentage}%`)
-        progressBar.value = Math.floor(currentSong.currentTime)
-    }
-})
-
-progressBar.addEventListener("input", () => {
-    currentSong.currentTime = progressBar.value
-    const percentage = (progressBar.value / progressBar.max) * 100
-    progressBar.style.setProperty('--slider-value', `${percentage}%`)
-    currentSong.currentTime = progressBar.value
-})
-
-volumeBar.addEventListener("input", () => {
-    const percentage = (volumeBar.value / volumeBar.max) * 100
-    volumeBar.style.setProperty('--slider-value', `${percentage}%`)
-    currentSong.volume = volumeBar.value
-})
-
+audioPlayer()
