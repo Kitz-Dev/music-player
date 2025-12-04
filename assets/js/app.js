@@ -11,7 +11,9 @@ const nextButton = document.getElementById("next-button")
 const previousButton = document.getElementById("previous-button")
 const progressBar = document.getElementById("progress-bar")
 const volumeBar = document.getElementById("volume-bar")
+const volumeButton = document.getElementById("volume-button")
 const initialVolumePercentage = (volumeBar.value / volumeBar.max) * 100
+let previousVolumeValue = currentSong.volume
 
 volumeBar.style.setProperty('--slider-value', `${initialVolumePercentage}%`)
 currentSong.volume = 0.5
@@ -132,6 +134,32 @@ const audioPlayer = async () => {
             const percentage = (volumeBar.value / volumeBar.max) * 100
             volumeBar.style.setProperty('--slider-value', `${percentage}%`)
             currentSong.volume = volumeBar.value
+            if (percentage >= 50) {
+                document.getElementById("volume-button-img").setAttribute("href", "../../img/sprite.svg#high-volume")
+            }
+            if (percentage < 50) {
+                document.getElementById("volume-button-img").setAttribute("href", "../../img/sprite.svg#low-volume")
+            }
+            if (percentage === 0) {
+                document.getElementById("volume-button-img").setAttribute("href", "../../img/sprite.svg#mute-volume")
+            }
+        })
+
+        volumeButton.addEventListener("click", () => {
+            if (currentSong.volume > 0) {
+                previousVolumeValue = currentSong.volume
+                currentSong.volume = 0
+                volumeBar.value = 0
+                document.getElementById("volume-button-img").setAttribute("href", "../../img/sprite.svg#mute-volume")
+            } else if (currentSong.volume === 0) {
+                currentSong.volume = previousVolumeValue
+                volumeBar.value = previousVolumeValue
+                if (currentSong.volume >= 0.5) {
+                    document.getElementById("volume-button-img").setAttribute("href", "../../img/sprite.svg#high-volume")
+                } else if (currentSong.volume < 0.5) {
+                    document.getElementById("volume-button-img").setAttribute("href", "../../img/sprite.svg#low-volume")
+                }
+            }
         })
 
     } catch (error) {
