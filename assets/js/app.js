@@ -1,170 +1,306 @@
-'use strict'
-const currentSong = document.getElementById("current-song")
-const currentSongTitle = document.getElementById("song-title")
-const currentSongAuthor = document.getElementById("song-author")
-const currentSongCountUp = document.getElementById("song-countup")
-const currentSongCountDown = document.getElementById("song-countdown")
-const currentSongAlbumCover = document.getElementById("album-cover")
-const playButton = document.getElementById("play-button")
-const playTooltip = document.getElementById("play-tooltip")
-const nextButton = document.getElementById("next-button")
-const previousButton = document.getElementById("previous-button")
-const progressBar = document.getElementById("progress-bar")
-const volumeBar = document.getElementById("volume-bar")
-const volumeButton = document.getElementById("volume-button")
-const initialVolumePercentage = (volumeBar.value / volumeBar.max) * 100
-let previousVolumeValue = currentSong.volume
+// ============================================
+// 1. DOM.js - Gestion des éléments DOM
+// ============================================
+const DOM = {
+    currentSong: document.getElementById("current-song"),
+    currentSongTitle: document.getElementById("song-title"),
+    currentSongAuthor: document.getElementById("song-author"),
+    currentSongCountUp: document.getElementById("song-countup"),
+    currentSongCountDown: document.getElementById("song-countdown"),
+    currentSongAlbumCover: document.getElementById("album-cover"),
+    playButton: document.getElementById("play-button"),
+    playTooltip: document.getElementById("play-tooltip"),
+    playButtonImg: document.getElementById("play-button-img"),
+    nextButton: document.getElementById("next-button"),
+    previousButton: document.getElementById("previous-button"),
+    shuffleButton: document.getElementById("shuffle-button"),
+    progressBar: document.getElementById("progress-bar"),
+    volumeBar: document.getElementById("volume-bar"),
+    volumeButton: document.getElementById("volume-button"),
+    volumeButtonImg: document.getElementById("volume-button-img")
+};
 
-volumeBar.style.setProperty('--slider-value', `${initialVolumePercentage}%`)
-currentSong.volume = 0.5
-volumeBar.value = 0.5
+// ============================================
+// 2. PlaylistService.js - Gestion de la playlist
+// ============================================
+class PlaylistService {
+    constructor() {
+        this.playlist = [];
+        this.currentIndex = 0;
+    }
 
-let sortedAlphabetically = []
-let currentIndex = 0
-
-const audioPlayer = async () => {
-    try {
-        const res = await fetch("../../data/playlist.json")
-
+    async loadPlaylist(url) {
+        const res = await fetch(url);
         if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`)
+            throw new Error(`HTTP error! status: ${res.status}`);
         }
+        const data = await res.json();
+        this.playlist = [...data[1].songs].sort((a, b) =>
+            a.title.localeCompare(b.title)
+        );
+        return this.playlist;
+    }
 
-        const data = await res.json()
-        const playlist2 = data[1].songs
+    getCurrentSong() {
+        return this.playlist[this.currentIndex];
+    }
 
-        sortedAlphabetically = [...playlist2].sort((a, b) => {
-            if (a.title < b.title) {
-                return -1
-            }
-            if (a.title > b.title) {
-                return 1
-            }
-            return 0
-        })
+    nextSong() {
+        this.currentIndex = (this.currentIndex + 1) % this.playlist.length;
+        return this.getCurrentSong();
+    }
 
-        currentSong.src = sortedAlphabetically[0].url
-        currentSongTitle.textContent = sortedAlphabetically[currentIndex].title
-        currentSongAuthor.textContent = sortedAlphabetically[currentIndex].author
+    previousSong() {
+        this.currentIndex = (this.currentIndex - 1 + this.playlist.length) % this.playlist.length;
+        return this.getCurrentSong();
+    }
 
-        playButton.addEventListener("click", () => {
-            if (!currentSong.paused) {
-                currentSong.pause()
-                playTooltip.textContent = "Play"
-                document.getElementById("play-button-img").setAttribute("href", "./img/sprite.svg#play-button")
-                currentSongAlbumCover.classList.toggle("active")
-            } else {
-                currentSong.play()
-                playTooltip.textContent = "Pause"
-                document.getElementById("play-button-img").setAttribute("href", "./img/sprite.svg#pause-button")
-                currentSongAlbumCover.src = sortedAlphabetically[currentIndex].cover
-                currentSongAlbumCover.classList.toggle("active")
-            }
-        })
-
-        nextButton.addEventListener("click", () => {
-            if (currentSong.paused) {
-                currentSongAlbumCover.classList.toggle("active")
-                playTooltip.textContent = "Pause"
-                document.getElementById("play-button-img").setAttribute("href", "./img/sprite.svg#pause-button")
-            }
-            currentIndex = (currentIndex + 1) % sortedAlphabetically.length
-            currentSong.src = sortedAlphabetically[currentIndex].url
-            currentSongTitle.textContent = sortedAlphabetically[currentIndex].title
-            currentSongAuthor.textContent = sortedAlphabetically[currentIndex].author
-            currentSongAlbumCover.src = sortedAlphabetically[currentIndex].cover
-            currentSong.play()
-            playTooltip.textContent = "Pause"
-            document.getElementById("play-button-img").setAttribute("href", "./img/sprite.svg#pause-button")
-        })
-
-        previousButton.addEventListener("click", () => {
-            if (currentSong.paused) {
-                currentSongAlbumCover.classList.toggle("active")
-                playTooltip.textContent = "Pause"
-                document.getElementById("play-button-img").setAttribute("href", "./img/sprite.svg#pause-button")
-            }
-            currentIndex = (currentIndex - 1 + sortedAlphabetically.length) % sortedAlphabetically.length
-            currentSong.src = sortedAlphabetically[currentIndex].url
-            currentSongTitle.textContent = sortedAlphabetically[currentIndex].title
-            currentSongAuthor.textContent = sortedAlphabetically[currentIndex].author
-            currentSongAlbumCover.src = sortedAlphabetically[currentIndex].cover
-            currentSong.play()
-            playTooltip.textContent = "Pause"
-            document.getElementById("play-button-img").setAttribute("href", "./img/sprite.svg#pause-button")
-        })
-
-
-        currentSong.addEventListener("loadedmetadata", () => {
-            progressBar.max = Math.floor(currentSong.duration)
-            progressBar.value = currentSong.currentTime
-        })
-
-        currentSong.addEventListener("timeupdate", () => {
-            if (!currentSong.paused) {
-                progressBar.value = Math.floor(currentSong.currentTime)
-                const percentage = (currentSong.currentTime / currentSong.duration) * 100
-                progressBar.style.setProperty('--slider-value', `${percentage}%`)
-                progressBar.value = Math.floor(currentSong.currentTime)
-                let s = Math.floor(currentSong.currentTime % 60)
-                let m = Math.floor(currentSong.currentTime / 60)
-                let sDisplay = s > 0 ? (s < 10 ? "0" + s : s) : "00"
-                currentSongCountUp.textContent = (m + ":" + sDisplay)
-                currentSongCountDown.textContent = Math.floor(currentSong.duration / 60) + ":" + Math.floor(currentSong.duration % 60)
-            }
-        })
-
-        currentSong.addEventListener("ended", () => {
-            currentIndex = (currentIndex + 1) % sortedAlphabetically.length
-            currentSong.src = sortedAlphabetically[currentIndex].url
-            currentSongAlbumCover.src = sortedAlphabetically[currentIndex].cover
-            currentSongTitle.textContent = sortedAlphabetically[currentIndex].title
-            currentSongAuthor.textContent = sortedAlphabetically[currentIndex].author
-            currentSong.play()
-        })
-
-        progressBar.addEventListener("input", () => {
-            currentSong.currentTime = progressBar.value
-            const percentage = (progressBar.value / progressBar.max) * 100
-            progressBar.style.setProperty('--slider-value', `${percentage}%`)
-            currentSong.currentTime = progressBar.value
-        })
-
-        volumeBar.addEventListener("input", () => {
-            const percentage = (volumeBar.value / volumeBar.max) * 100
-            volumeBar.style.setProperty('--slider-value', `${percentage}%`)
-            currentSong.volume = volumeBar.value
-            if (percentage >= 50) {
-                document.getElementById("volume-button-img").setAttribute("href", "../../img/sprite.svg#high-volume")
-            }
-            if (percentage < 50) {
-                document.getElementById("volume-button-img").setAttribute("href", "../../img/sprite.svg#low-volume")
-            }
-            if (percentage === 0) {
-                document.getElementById("volume-button-img").setAttribute("href", "../../img/sprite.svg#mute-volume")
-            }
-        })
-
-        volumeButton.addEventListener("click", () => {
-            if (currentSong.volume > 0) {
-                previousVolumeValue = currentSong.volume
-                currentSong.volume = 0
-                volumeBar.value = 0
-                document.getElementById("volume-button-img").setAttribute("href", "../../img/sprite.svg#mute-volume")
-            } else if (currentSong.volume === 0) {
-                currentSong.volume = previousVolumeValue
-                volumeBar.value = previousVolumeValue
-                if (currentSong.volume >= 0.5) {
-                    document.getElementById("volume-button-img").setAttribute("href", "../../img/sprite.svg#high-volume")
-                } else if (currentSong.volume < 0.5) {
-                    document.getElementById("volume-button-img").setAttribute("href", "../../img/sprite.svg#low-volume")
-                }
-            }
-        })
-
-    } catch (error) {
-        console.log(error)
+    getRandomSong(excludeIndex) {
+        let randomIndex;
+        do {
+            randomIndex = Math.floor(Math.random() * this.playlist.length);
+        } while (randomIndex === excludeIndex && this.playlist.length > 1);
+        this.currentIndex = randomIndex;
+        return this.getCurrentSong();
     }
 }
 
-audioPlayer()
+// ============================================
+// 3. TimeFormatter.js - Formatage du temps
+// ============================================
+const TimeFormatter = {
+    formatTime(seconds) {
+        const m = Math.floor(seconds / 60);
+        const s = Math.floor(seconds % 60);
+        const sDisplay = s < 10 ? `0${s}` : s;
+        return `${m}:${sDisplay}`;
+    }
+};
+
+// ============================================
+// 4. UIController.js - Contrôle de l'interface
+// ============================================
+class UIController {
+    constructor(dom) {
+        this.dom = dom;
+    }
+
+    updateSongInfo(song) {
+        this.dom.currentSongTitle.textContent = song.title;
+        this.dom.currentSongAuthor.textContent = song.author;
+        this.dom.currentSongAlbumCover.src = song.cover;
+        this.dom.currentSong.src = song.url;
+    }
+
+    updatePlayButton(isPlaying) {
+        const icon = isPlaying ? "pause-button" : "play-button";
+        const tooltip = isPlaying ? "Pause" : "Play";
+        this.dom.playButtonImg.setAttribute("href", `./img/sprite.svg#${icon}`);
+        this.dom.playTooltip.textContent = tooltip;
+    }
+
+    toggleAlbumCoverAnimation() {
+        this.dom.currentSongAlbumCover.classList.toggle("active");
+    }
+
+    updateProgressBar(currentTime, duration) {
+        const percentage = (currentTime / duration) * 100;
+        this.dom.progressBar.value = Math.floor(currentTime);
+        this.dom.progressBar.style.setProperty('--slider-value', `${percentage}%`);
+        this.dom.currentSongCountUp.textContent = TimeFormatter.formatTime(currentTime);
+        this.dom.currentSongCountDown.textContent = TimeFormatter.formatTime(duration);
+    }
+
+    initProgressBar(duration) {
+        this.dom.progressBar.max = Math.floor(duration);
+        this.dom.progressBar.value = 0;
+    }
+
+    updateVolumeIcon(volume) {
+        let icon;
+        if (volume === 0) {
+            icon = "mute-volume";
+        } else if (volume < 0.5) {
+            icon = "low-volume";
+        } else {
+            icon = "high-volume";
+        }
+        this.dom.volumeButtonImg.setAttribute("href", `../../img/sprite.svg#${icon}`);
+    }
+
+    updateVolumeBar(volume) {
+        const percentage = volume * 100;
+        this.dom.volumeBar.value = volume;
+        this.dom.volumeBar.style.setProperty('--slider-value', `${percentage}%`);
+        this.updateVolumeIcon(volume);
+    }
+}
+
+// ============================================
+// 5. AudioController.js - Contrôle audio
+// ============================================
+class AudioController {
+    constructor(audioElement, uiController) {
+        this.audio = audioElement;
+        this.ui = uiController;
+        this.previousVolume = 0.5;
+    }
+
+    play() {
+        this.audio.play();
+        this.ui.updatePlayButton(true);
+    }
+
+    pause() {
+        this.audio.pause();
+        this.ui.updatePlayButton(false);
+    }
+
+    togglePlay() {
+        if (this.audio.paused) {
+            this.play();
+        } else {
+            this.pause();
+        }
+    }
+
+    loadSong(song) {
+        this.audio.src = song.url;
+        this.ui.updateSongInfo(song);
+    }
+
+    setVolume(volume) {
+        this.audio.volume = volume;
+        this.ui.updateVolumeBar(volume);
+    }
+
+    toggleMute() {
+        if (this.audio.volume > 0) {
+            this.previousVolume = this.audio.volume;
+            this.setVolume(0);
+        } else {
+            this.setVolume(this.previousVolume);
+        }
+    }
+
+    seekTo(time) {
+        this.audio.currentTime = time;
+    }
+}
+
+// ============================================
+// 6. AudioPlayer.js - Application principale
+// ============================================
+class AudioPlayer {
+    constructor(dom) {
+        this.dom = dom;
+        this.playlistService = new PlaylistService();
+        this.uiController = new UIController(dom);
+        this.audioController = new AudioController(dom.currentSong, this.uiController);
+        this.initVolume();
+    }
+
+    initVolume() {
+        const initialVolume = 0.5;
+        this.audioController.setVolume(initialVolume);
+    }
+
+    async init(playlistUrl) {
+        try {
+            await this.playlistService.loadPlaylist(playlistUrl);
+            const firstSong = this.playlistService.getCurrentSong();
+            this.audioController.loadSong(firstSong);
+            this.setupEventListeners();
+        } catch (error) {
+            console.error("Erreur lors du chargement de la playlist:", error);
+        }
+    }
+
+    setupEventListeners() {
+        // Bouton play/pause
+        this.dom.playButton.addEventListener("click", () => {
+            this.audioController.togglePlay();
+            this.uiController.toggleAlbumCoverAnimation();
+        });
+
+        // Bouton suivant
+        this.dom.nextButton.addEventListener("click", () => {
+            this.playNextSong();
+        });
+
+        // Bouton précédent
+        this.dom.previousButton.addEventListener("click", () => {
+            this.playPreviousSong();
+        });
+
+        // Bouton shuffle
+        this.dom.shuffleButton.addEventListener("click", () => {
+            this.playRandomSong();
+        });
+
+        // Événements audio
+        this.dom.currentSong.addEventListener("loadedmetadata", () => {
+            this.uiController.initProgressBar(this.dom.currentSong.duration);
+        });
+
+        this.dom.currentSong.addEventListener("timeupdate", () => {
+            if (!this.dom.currentSong.paused) {
+                this.uiController.updateProgressBar(
+                    this.dom.currentSong.currentTime,
+                    this.dom.currentSong.duration
+                );
+            }
+        });
+
+        this.dom.currentSong.addEventListener("ended", () => {
+            this.playNextSong();
+        });
+
+        // Barre de progression
+        this.dom.progressBar.addEventListener("input", (e) => {
+            this.audioController.seekTo(e.target.value);
+            const percentage = (e.target.value / this.dom.progressBar.max) * 100;
+            this.dom.progressBar.style.setProperty('--slider-value', `${percentage}%`);
+        });
+
+        // Contrôle du volume
+        this.dom.volumeBar.addEventListener("input", (e) => {
+            this.audioController.setVolume(parseFloat(e.target.value));
+        });
+
+        this.dom.volumeButton.addEventListener("click", () => {
+            this.audioController.toggleMute();
+        });
+    }
+
+    playNextSong() {
+        const song = this.playlistService.nextSong();
+        this.audioController.loadSong(song);
+        this.audioController.play();
+        if (!this.dom.currentSongAlbumCover.classList.contains("active")) {
+            this.uiController.toggleAlbumCoverAnimation();
+        }
+    }
+
+    playPreviousSong() {
+        const song = this.playlistService.previousSong();
+        this.audioController.loadSong(song);
+        this.audioController.play();
+        if (!this.dom.currentSongAlbumCover.classList.contains("active")) {
+            this.uiController.toggleAlbumCoverAnimation();
+        }
+    }
+
+    playRandomSong() {
+        const currentIndex = this.playlistService.currentIndex;
+        const song = this.playlistService.getRandomSong(currentIndex);
+        this.audioController.loadSong(song);
+        this.audioController.play();
+    }
+}
+
+// ============================================
+// 7. Initialisation
+// ============================================
+const player = new AudioPlayer(DOM);
+player.init("../../data/playlist.json");
