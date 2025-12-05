@@ -14,6 +14,7 @@ const DOM = {
     nextButton: document.getElementById("next-button"),
     previousButton: document.getElementById("previous-button"),
     shuffleButton: document.getElementById("shuffle-button"),
+    repeatButton: document.getElementById("repeat-button"),
     progressBar: document.getElementById("progress-bar"),
     volumeBar: document.getElementById("volume-bar"),
     volumeButton: document.getElementById("volume-button"),
@@ -54,9 +55,16 @@ class PlaylistService {
         return this.shuffleMode
     }
 
+    toggleRepeatMode() {
+        this.repeatMode = !this.repeatMode
+        return this.repeatMode
+    }
+
     nextSong() {
         if (this.shuffleMode) {
             return this.getRandomSong()
+        } else if (this.repeatMode) {
+            return this.getCurrentSong()
         } else {
             this.currentIndex = (this.currentIndex + 1) % this.playlist.length
             return this.getCurrentSong()
@@ -139,10 +147,19 @@ class UIController {
         if (isActive) {
             this.dom.shuffleButton.classList.add("active")
             this.dom.shuffleButton.style.fill = "#b417e4"
-            // Vous pouvez aussi changer l'icône ou la couleur du bouton
         } else {
             this.dom.shuffleButton.classList.remove("active")
             this.dom.shuffleButton.style.fill = "#EDF2F7"
+        }
+    }
+
+    updateRepeatButton(isActive) {
+        if (isActive) {
+            this.dom.repeatButton.classList.add("active")
+            this.dom.repeatButton.style.stroke = "#b417e4"
+        } else {
+            this.dom.repeatButton.classList.remove("active")
+            this.dom.repeatButton.style.stroke = "#EDF2F7"
         }
     }
 
@@ -256,6 +273,7 @@ class AudioPlayer {
     initColor() {
         const initialColor = "#EDF2F7"
         this.dom.shuffleButton.style.fill = initialColor
+        this.dom.repeatButton.style.stroke = initialColor
     }
 
     async init(playlistUrl) {
@@ -289,6 +307,11 @@ class AudioPlayer {
         // Bouton shuffle
         this.dom.shuffleButton.addEventListener("click", () => {
             this.toggleShuffleMode()
+        })
+
+        // Bouton repeat
+        this.dom.repeatButton.addEventListener("click", () => {
+            this.toggleRepeatMode()
         })
 
         // Événements audio
@@ -354,9 +377,11 @@ class AudioPlayer {
     toggleShuffleMode() {
         const isShuffleActive = this.playlistService.toggleShuffleMode()
         this.uiController.updateShuffleButton(isShuffleActive)
+    }
 
-        // Message optionnel pour informer l'utilisateur
-        console.log(isShuffleActive ? "Mode aléatoire activé" : "Mode aléatoire désactivé")
+    toggleRepeatMode() {
+        const isRepeatActive = this.playlistService.toggleRepeatMode()
+        this.uiController.updateRepeatButton(isRepeatActive)
     }
 }
 
