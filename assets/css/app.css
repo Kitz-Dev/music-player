@@ -84,12 +84,14 @@
 /** ==============================
  * MAIN STYLES
  * =============================== */
+body {
+    background: var(--primary-color);
+    font-family: var(--secondary-font);
+}
 
 main {
     display: flex;
     justify-content: space-around;
-    background: var(--primary-color);
-    font-family: var(--secondary-font);
 }
 
 .music-player {
@@ -221,10 +223,6 @@ h1 {
     visibility: visible;
 }
 
-#shuffle-button.( !active) use {
-    fill: var(--title-color);
-}
-
 /** ==============================
  * PROGRESS-BAR
  * =============================== */
@@ -233,6 +231,12 @@ h1 {
     display: flex;
     align-items: center;
     margin: 6px;
+}
+
+.progress-timer-container {
+    display: flex;
+    align-items: center;
+    margin-right: -48px;
 }
 
 .counts-container {
@@ -255,6 +259,7 @@ h1 {
     flex-direction: column;
     align-items: center;
     position: relative;
+    margin-top: -70px;
 }
 
 .volume-bar-container {

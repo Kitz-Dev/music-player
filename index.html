@@ -95,6 +95,30 @@
                     </svg>
                 </div>
 
+                <div class="button-container">
+                    <span id="repeat-tooltip" class="tooltip">Repeat</span>
+                    <svg id="repeat-button" class="logic-button" xmlns="http://www.w3.org/2000/svg" width="32"
+                        height="32" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <use href="./img/sprite.svg#repeat-button"></use>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="progress-bar-container">
+                <div class="progress-timer-container">
+                    <div class="counts-container">
+                        <span id="song-countup" class="song-timer">-:--</span>
+                    </div>
+
+                    <input type="range" id="progress-bar" class="progress-bar" step="any" max="100"
+                        aria-label="progress bar" />
+
+                    <div class="counts-container">
+                        <span id="song-countdown" class="song-timer">-:--</span>
+                    </div>
+                </div>
+
+
                 <div class="volume-container">
                     <div class="volume-bar-container">
                         <input type="range" id="volume-bar" class="volume-bar" value="0.5" step="any" max="1"
@@ -107,20 +131,6 @@
                     </svg>
                 </div>
             </div>
-
-            <div class="progress-bar-container">
-                <div class="counts-container">
-                    <span id="song-countup" class="song-timer">-:--</span>
-                </div>
-
-                <input type="range" id="progress-bar" class="progress-bar" step="any" max="100"
-                    aria-label="progress bar" />
-
-                <div class="counts-container">
-                    <span id="song-countdown" class="song-timer">-:--</span>
-                </div>
-            </div>
-
 
             <section class="song-title-container">
                 <div id="song-title" class="title-display"></div>

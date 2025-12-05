@@ -40,4 +40,12 @@
         <path fill="none" stroke="#EDF2F7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298zM16 9a5 5 0 0 1 0 6m3.364 3.364a9 9 0 0 0 0-12.728" />
     </symbol>
+
+    <symbol id="repeat-button">
+        <g fill="none" stroke="#EDF2F7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+            <path d="m17 2l4 4l-4 4" />
+            <path d="M3 11v-1a4 4 0 0 1 4-4h14M7 22l-4-4l4-4" />
+            <path d="M21 13v1a4 4 0 0 1-4 4H3" />
+        </g>
+    </symbol>
 </svg>
