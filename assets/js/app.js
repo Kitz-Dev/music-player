@@ -18,7 +18,8 @@ const DOM = {
     progressBar: document.getElementById("progress-bar"),
     volumeBar: document.getElementById("volume-bar"),
     volumeButton: document.getElementById("volume-button"),
-    volumeButtonImg: document.getElementById("volume-button-img")
+    volumeButtonImg: document.getElementById("volume-button-img"),
+    playlistButton: document.getElementById("playlist-1")
 }
 
 // ============================================
@@ -27,9 +28,11 @@ const DOM = {
 class PlaylistService {
     constructor() {
         this.playlist = []
+        this.playlists = []
         this.currentIndex = 0
         this.shuffleMode = false  // Mode shuffle activé ou non
         this.playedIndexes = []   // Historique des pistes jouées en mode shuffle
+        this.playlistIndex = 0
     }
 
     async loadPlaylist(url) {
@@ -38,10 +41,22 @@ class PlaylistService {
             throw new Error(`HTTP error! status: ${res.status}`)
         }
         const data = await res.json()
-        this.playlist = [...data[1].songs].sort((a, b) =>
+        this.playlists = data
+        this.playlist = this.getPlaylistIndex(data)
+        console.log(this.playlist)
+        return this.playlist
+    }
+
+    getPlaylistIndex(data) {
+        return [...data[this.playlistIndex].songs].sort((a, b) =>
             a.title.localeCompare(b.title)
         )
-        return this.playlist
+    }
+
+    getCurrentPlaylist(id) {
+        this.playlistIndex = id
+        this.playlist = this.getPlaylistIndex(this.playlists)
+        return this.playlistIndex
     }
 
     getCurrentSong() {
@@ -201,6 +216,22 @@ class UIController {
 }
 
 // ============================================
+// 5. PlaylistController.js - Contrôle de la playlist
+// ============================================
+class PlaylistController {
+    constructor(playlist) {
+        this.playlist = playlist
+    }
+
+    getPlaylist() {
+
+    }
+
+
+}
+
+
+// ============================================
 // 5. AudioController.js - Contrôle audio
 // ============================================
 class AudioController {
@@ -261,6 +292,7 @@ class AudioPlayer {
         this.playlistService = new PlaylistService()
         this.uiController = new UIController(dom)
         this.audioController = new AudioController(dom.currentSong, this.uiController)
+        this.playlistController = new PlaylistController()
         this.initVolume()
         this.initColor()
     }
@@ -312,6 +344,11 @@ class AudioPlayer {
         // Bouton repeat
         this.dom.repeatButton.addEventListener("click", () => {
             this.toggleRepeatMode()
+        })
+
+        // Bouton playlist
+        this.dom.playlistButton.addEventListener("click", () => {
+            this.playlistService.getCurrentPlaylist()
         })
 
         // Événements audio
