@@ -345,5 +345,28 @@ input[type="range"]:focus {
     outline: none;
 }
 
+/* PLAYLISTS */
+
+.playlists {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.playlist-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.playlist-container img {
+    width: 50px;
+    height: 50px;
+}
+
+.playlist-card {
+    display: flex;
+    align-items: center;
+}
 
 /* TODO : Add touch support for volume button
