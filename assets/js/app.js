@@ -19,7 +19,8 @@ const DOM = {
     volumeBar: document.getElementById("volume-bar"),
     volumeButton: document.getElementById("volume-button"),
     volumeButtonImg: document.getElementById("volume-button-img"),
-    playlistButton: document.getElementById("playlist-1")
+    playlistButton1: document.getElementById("playlist-1"),
+    playlistButton2: document.getElementById("playlist-2")
 }
 
 // ============================================
@@ -42,21 +43,20 @@ class PlaylistService {
         }
         const data = await res.json()
         this.playlists = data
-        this.playlist = this.getPlaylistIndex(data)
+        this.playlist = this.sortCurrentPlaylist()
         console.log(this.playlist)
         return this.playlist
     }
 
-    getPlaylistIndex(data) {
-        return [...data[this.playlistIndex].songs].sort((a, b) =>
+    sortCurrentPlaylist() {
+        return [...this.playlists[this.playlistIndex].songs].sort((a, b) =>
             a.title.localeCompare(b.title)
         )
     }
 
-    getCurrentPlaylist(id) {
+    switchPlaylist(id) {
         this.playlistIndex = id
-        this.playlist = this.getPlaylistIndex(this.playlists)
-        return this.playlistIndex
+        this.playlist = this.sortCurrentPlaylist()
     }
 
     getCurrentSong() {
@@ -346,9 +346,14 @@ class AudioPlayer {
             this.toggleRepeatMode()
         })
 
-        // Bouton playlist
-        this.dom.playlistButton.addEventListener("click", () => {
-            this.playlistService.getCurrentPlaylist()
+        // Bouton playlist 1
+        this.dom.playlistButton1.addEventListener("click", () => {
+            this.playlistService.switchPlaylist(0)
+        })
+
+        // Bouton playlist 2
+        this.dom.playlistButton2.addEventListener("click", () => {
+            this.playlistService.switchPlaylist(1)
         })
 
         // Événements audio

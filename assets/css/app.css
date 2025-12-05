@@ -345,11 +345,13 @@ input[type="range"]:focus {
     outline: none;
 }
 
-/* PLAYLISTS */
+/** ==============================
+ * PLAYLISTS
+ * =============================== */
 
 .playlists {
     position: absolute;
-    left: 20px;
+    left: 80px;
     top: calc(50% - 167.433px);
     display: flex;
     flex-direction: column;
@@ -357,9 +359,25 @@ input[type="range"]:focus {
     justify-content: center;
 }
 
+.playlists h2 {
+    background: -webkit-linear-gradient(var(--title-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.playlist-title {
+    color: var(--secondary-color);
+    font-weight: 500;
+}
+
 .playlist-container {
     display: flex;
     flex-direction: column;
+    background: linear-gradient(var(--alt-color, 0, var(--title-color), 100));
+    border-radius: 4px;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
 }
 
 .playlist-container img {
@@ -370,6 +388,22 @@ input[type="range"]:focus {
 .playlist-card {
     display: flex;
     align-items: center;
+    background-color: var(--title-color);
+    border-radius: 4px;
+    max-width: 200px;
+    margin: 8px 8px 4px 8px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.playlist-card:last-child {
+    margin-bottom: 8px;
+}
+
+.playlist-card span {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 8px;
 }
 
 /* TODO : Add touch support for volume button
