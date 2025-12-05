@@ -348,6 +348,9 @@ input[type="range"]:focus {
 /* PLAYLISTS */
 
 .playlists {
+    position: absolute;
+    left: 20px;
+    top: calc(50% - 167.433px);
     display: flex;
     flex-direction: column;
     align-items: center;
