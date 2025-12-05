@@ -168,3 +168,8 @@ const audioPlayer = async () => {
 }
 
 audioPlayer()
+
+/* TODO :   Fix Shuffle
+            Repeat button
+            Playlist
+            */
