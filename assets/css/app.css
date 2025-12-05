@@ -221,6 +221,10 @@ h1 {
     visibility: visible;
 }
 
+#shuffle-button.( !active) use {
+    fill: var(--title-color);
+}
+
 /** ==============================
  * PROGRESS-BAR
  * =============================== */

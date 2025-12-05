@@ -18,50 +18,86 @@ const DOM = {
     volumeBar: document.getElementById("volume-bar"),
     volumeButton: document.getElementById("volume-button"),
     volumeButtonImg: document.getElementById("volume-button-img")
-};
+}
 
 // ============================================
 // 2. PlaylistService.js - Gestion de la playlist
 // ============================================
 class PlaylistService {
     constructor() {
-        this.playlist = [];
-        this.currentIndex = 0;
+        this.playlist = []
+        this.currentIndex = 0
+        this.shuffleMode = false  // Mode shuffle activé ou non
+        this.playedIndexes = []   // Historique des pistes jouées en mode shuffle
     }
 
     async loadPlaylist(url) {
-        const res = await fetch(url);
+        const res = await fetch(url)
         if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
+            throw new Error(`HTTP error! status: ${res.status}`)
         }
-        const data = await res.json();
+        const data = await res.json()
         this.playlist = [...data[1].songs].sort((a, b) =>
             a.title.localeCompare(b.title)
-        );
-        return this.playlist;
+        )
+        return this.playlist
     }
 
     getCurrentSong() {
-        return this.playlist[this.currentIndex];
+        return this.playlist[this.currentIndex]
+    }
+
+    toggleShuffleMode() {
+        this.shuffleMode = !this.shuffleMode
+        // Réinitialise l'historique quand on active/désactive
+        this.playedIndexes = [this.currentIndex]
+        return this.shuffleMode
     }
 
     nextSong() {
-        this.currentIndex = (this.currentIndex + 1) % this.playlist.length;
-        return this.getCurrentSong();
+        if (this.shuffleMode) {
+            return this.getRandomSong()
+        } else {
+            this.currentIndex = (this.currentIndex + 1) % this.playlist.length
+            return this.getCurrentSong()
+        }
     }
 
     previousSong() {
-        this.currentIndex = (this.currentIndex - 1 + this.playlist.length) % this.playlist.length;
-        return this.getCurrentSong();
+        if (this.shuffleMode) {
+            // En mode shuffle, on revient à la piste précédente dans l'historique
+            if (this.playedIndexes.length > 1) {
+                this.playedIndexes.pop() // Retire la piste actuelle
+                this.currentIndex = this.playedIndexes[this.playedIndexes.length - 1]
+            }
+            return this.getCurrentSong()
+        } else {
+            this.currentIndex = (this.currentIndex - 1 + this.playlist.length) % this.playlist.length
+            return this.getCurrentSong()
+        }
     }
 
-    getRandomSong(excludeIndex) {
-        let randomIndex;
+    getRandomSong() {
+        // Si toutes les pistes ont été jouées, on réinitialise
+        if (this.playedIndexes.length >= this.playlist.length) {
+            this.playedIndexes = [this.currentIndex]
+        }
+
+        let randomIndex
+        let attempts = 0
         do {
-            randomIndex = Math.floor(Math.random() * this.playlist.length);
-        } while (randomIndex === excludeIndex && this.playlist.length > 1);
-        this.currentIndex = randomIndex;
-        return this.getCurrentSong();
+            randomIndex = Math.floor(Math.random() * this.playlist.length)
+            attempts++
+            // Évite les boucles infinies
+            if (attempts > 100) {
+                randomIndex = (this.currentIndex + 1) % this.playlist.length
+                break
+            }
+        } while (this.playedIndexes.includes(randomIndex) && this.playlist.length > 1)
+
+        this.currentIndex = randomIndex
+        this.playedIndexes.push(randomIndex)
+        return this.getCurrentSong()
     }
 }
 
@@ -70,69 +106,80 @@ class PlaylistService {
 // ============================================
 const TimeFormatter = {
     formatTime(seconds) {
-        const m = Math.floor(seconds / 60);
-        const s = Math.floor(seconds % 60);
-        const sDisplay = s < 10 ? `0${s}` : s;
-        return `${m}:${sDisplay}`;
+        const m = Math.floor(seconds / 60)
+        const s = Math.floor(seconds % 60)
+        const sDisplay = s < 10 ? `0${s}` : s
+        return `${m}:${sDisplay}`
     }
-};
+}
 
 // ============================================
 // 4. UIController.js - Contrôle de l'interface
 // ============================================
 class UIController {
     constructor(dom) {
-        this.dom = dom;
+        this.dom = dom
     }
 
     updateSongInfo(song) {
-        this.dom.currentSongTitle.textContent = song.title;
-        this.dom.currentSongAuthor.textContent = song.author;
-        this.dom.currentSongAlbumCover.src = song.cover;
-        this.dom.currentSong.src = song.url;
+        this.dom.currentSongTitle.textContent = song.title
+        this.dom.currentSongAuthor.textContent = song.author
+        this.dom.currentSongAlbumCover.src = song.cover
+        this.dom.currentSong.src = song.url
     }
 
     updatePlayButton(isPlaying) {
-        const icon = isPlaying ? "pause-button" : "play-button";
-        const tooltip = isPlaying ? "Pause" : "Play";
-        this.dom.playButtonImg.setAttribute("href", `./img/sprite.svg#${icon}`);
-        this.dom.playTooltip.textContent = tooltip;
+        const icon = isPlaying ? "pause-button" : "play-button"
+        const tooltip = isPlaying ? "Pause" : "Play"
+        this.dom.playButtonImg.setAttribute("href", `./img/sprite.svg#${icon}`)
+        this.dom.playTooltip.textContent = tooltip
+    }
+
+    updateShuffleButton(isActive) {
+        if (isActive) {
+            this.dom.shuffleButton.classList.add("active")
+            this.dom.shuffleButton.style.fill = "#b417e4"
+            // Vous pouvez aussi changer l'icône ou la couleur du bouton
+        } else {
+            this.dom.shuffleButton.classList.remove("active")
+            this.dom.shuffleButton.style.fill = "#EDF2F7"
+        }
     }
 
     toggleAlbumCoverAnimation() {
-        this.dom.currentSongAlbumCover.classList.toggle("active");
+        this.dom.currentSongAlbumCover.classList.toggle("active")
     }
 
     updateProgressBar(currentTime, duration) {
-        const percentage = (currentTime / duration) * 100;
-        this.dom.progressBar.value = Math.floor(currentTime);
-        this.dom.progressBar.style.setProperty('--slider-value', `${percentage}%`);
-        this.dom.currentSongCountUp.textContent = TimeFormatter.formatTime(currentTime);
-        this.dom.currentSongCountDown.textContent = TimeFormatter.formatTime(duration);
+        const percentage = (currentTime / duration) * 100
+        this.dom.progressBar.value = Math.floor(currentTime)
+        this.dom.progressBar.style.setProperty('--slider-value', `${percentage}%`)
+        this.dom.currentSongCountUp.textContent = TimeFormatter.formatTime(currentTime)
+        this.dom.currentSongCountDown.textContent = TimeFormatter.formatTime(duration)
     }
 
     initProgressBar(duration) {
-        this.dom.progressBar.max = Math.floor(duration);
-        this.dom.progressBar.value = 0;
+        this.dom.progressBar.max = Math.floor(duration)
+        this.dom.progressBar.value = 0
     }
 
     updateVolumeIcon(volume) {
-        let icon;
+        let icon
         if (volume === 0) {
-            icon = "mute-volume";
+            icon = "mute-volume"
         } else if (volume < 0.5) {
-            icon = "low-volume";
+            icon = "low-volume"
         } else {
-            icon = "high-volume";
+            icon = "high-volume"
         }
-        this.dom.volumeButtonImg.setAttribute("href", `../../img/sprite.svg#${icon}`);
+        this.dom.volumeButtonImg.setAttribute("href", `../../img/sprite.svg#${icon}`)
     }
 
     updateVolumeBar(volume) {
-        const percentage = volume * 100;
-        this.dom.volumeBar.value = volume;
-        this.dom.volumeBar.style.setProperty('--slider-value', `${percentage}%`);
-        this.updateVolumeIcon(volume);
+        const percentage = volume * 100
+        this.dom.volumeBar.value = volume
+        this.dom.volumeBar.style.setProperty('--slider-value', `${percentage}%`)
+        this.updateVolumeIcon(volume)
     }
 }
 
@@ -141,50 +188,50 @@ class UIController {
 // ============================================
 class AudioController {
     constructor(audioElement, uiController) {
-        this.audio = audioElement;
-        this.ui = uiController;
-        this.previousVolume = 0.5;
+        this.audio = audioElement
+        this.ui = uiController
+        this.previousVolume = 0.5
     }
 
     play() {
-        this.audio.play();
-        this.ui.updatePlayButton(true);
+        this.audio.play()
+        this.ui.updatePlayButton(true)
     }
 
     pause() {
-        this.audio.pause();
-        this.ui.updatePlayButton(false);
+        this.audio.pause()
+        this.ui.updatePlayButton(false)
     }
 
     togglePlay() {
         if (this.audio.paused) {
-            this.play();
+            this.play()
         } else {
-            this.pause();
+            this.pause()
         }
     }
 
     loadSong(song) {
-        this.audio.src = song.url;
-        this.ui.updateSongInfo(song);
+        this.audio.src = song.url
+        this.ui.updateSongInfo(song)
     }
 
     setVolume(volume) {
-        this.audio.volume = volume;
-        this.ui.updateVolumeBar(volume);
+        this.audio.volume = volume
+        this.ui.updateVolumeBar(volume)
     }
 
     toggleMute() {
         if (this.audio.volume > 0) {
-            this.previousVolume = this.audio.volume;
-            this.setVolume(0);
+            this.previousVolume = this.audio.volume
+            this.setVolume(0)
         } else {
-            this.setVolume(this.previousVolume);
+            this.setVolume(this.previousVolume)
         }
     }
 
     seekTo(time) {
-        this.audio.currentTime = time;
+        this.audio.currentTime = time
     }
 }
 
@@ -193,114 +240,128 @@ class AudioController {
 // ============================================
 class AudioPlayer {
     constructor(dom) {
-        this.dom = dom;
-        this.playlistService = new PlaylistService();
-        this.uiController = new UIController(dom);
-        this.audioController = new AudioController(dom.currentSong, this.uiController);
-        this.initVolume();
+        this.dom = dom
+        this.playlistService = new PlaylistService()
+        this.uiController = new UIController(dom)
+        this.audioController = new AudioController(dom.currentSong, this.uiController)
+        this.initVolume()
+        this.initColor()
     }
 
     initVolume() {
-        const initialVolume = 0.5;
-        this.audioController.setVolume(initialVolume);
+        const initialVolume = 0.5
+        this.audioController.setVolume(initialVolume)
+    }
+
+    initColor() {
+        const initialColor = "#EDF2F7"
+        this.dom.shuffleButton.style.fill = initialColor
     }
 
     async init(playlistUrl) {
         try {
-            await this.playlistService.loadPlaylist(playlistUrl);
-            const firstSong = this.playlistService.getCurrentSong();
-            this.audioController.loadSong(firstSong);
-            this.setupEventListeners();
+            await this.playlistService.loadPlaylist(playlistUrl)
+            const firstSong = this.playlistService.getCurrentSong()
+            this.audioController.loadSong(firstSong)
+            this.setupEventListeners()
         } catch (error) {
-            console.error("Erreur lors du chargement de la playlist:", error);
+            console.error("Erreur lors du chargement de la playlist:", error)
         }
     }
 
     setupEventListeners() {
         // Bouton play/pause
         this.dom.playButton.addEventListener("click", () => {
-            this.audioController.togglePlay();
-            this.uiController.toggleAlbumCoverAnimation();
-        });
+            this.audioController.togglePlay()
+            this.uiController.toggleAlbumCoverAnimation()
+        })
 
         // Bouton suivant
         this.dom.nextButton.addEventListener("click", () => {
-            this.playNextSong();
-        });
+            this.playNextSong()
+        })
 
         // Bouton précédent
         this.dom.previousButton.addEventListener("click", () => {
-            this.playPreviousSong();
-        });
+            this.playPreviousSong()
+        })
 
         // Bouton shuffle
         this.dom.shuffleButton.addEventListener("click", () => {
-            this.playRandomSong();
-        });
+            this.toggleShuffleMode()
+        })
 
         // Événements audio
         this.dom.currentSong.addEventListener("loadedmetadata", () => {
-            this.uiController.initProgressBar(this.dom.currentSong.duration);
-        });
+            this.uiController.initProgressBar(this.dom.currentSong.duration)
+        })
 
         this.dom.currentSong.addEventListener("timeupdate", () => {
             if (!this.dom.currentSong.paused) {
                 this.uiController.updateProgressBar(
                     this.dom.currentSong.currentTime,
                     this.dom.currentSong.duration
-                );
+                )
             }
-        });
+        })
 
         this.dom.currentSong.addEventListener("ended", () => {
-            this.playNextSong();
-        });
+            this.playNextSong()
+        })
 
         // Barre de progression
         this.dom.progressBar.addEventListener("input", (e) => {
-            this.audioController.seekTo(e.target.value);
-            const percentage = (e.target.value / this.dom.progressBar.max) * 100;
-            this.dom.progressBar.style.setProperty('--slider-value', `${percentage}%`);
-        });
+            this.audioController.seekTo(e.target.value)
+            const percentage = (e.target.value / this.dom.progressBar.max) * 100
+            this.dom.progressBar.style.setProperty('--slider-value', `${percentage}%`)
+        })
 
         // Contrôle du volume
         this.dom.volumeBar.addEventListener("input", (e) => {
-            this.audioController.setVolume(parseFloat(e.target.value));
-        });
+            this.audioController.setVolume(parseFloat(e.target.value))
+        })
 
         this.dom.volumeButton.addEventListener("click", () => {
-            this.audioController.toggleMute();
-        });
+            this.audioController.toggleMute()
+        })
     }
 
     playNextSong() {
-        const song = this.playlistService.nextSong();
-        this.audioController.loadSong(song);
-        this.audioController.play();
+        const song = this.playlistService.nextSong()
+        this.audioController.loadSong(song)
+        this.audioController.play()
         if (!this.dom.currentSongAlbumCover.classList.contains("active")) {
-            this.uiController.toggleAlbumCoverAnimation();
+            this.uiController.toggleAlbumCoverAnimation()
         }
     }
 
     playPreviousSong() {
-        const song = this.playlistService.previousSong();
-        this.audioController.loadSong(song);
-        this.audioController.play();
+        const song = this.playlistService.previousSong()
+        this.audioController.loadSong(song)
+        this.audioController.play()
         if (!this.dom.currentSongAlbumCover.classList.contains("active")) {
-            this.uiController.toggleAlbumCoverAnimation();
+            this.uiController.toggleAlbumCoverAnimation()
         }
     }
 
     playRandomSong() {
-        const currentIndex = this.playlistService.currentIndex;
-        const song = this.playlistService.getRandomSong(currentIndex);
-        this.audioController.loadSong(song);
-        this.audioController.play();
+        const currentIndex = this.playlistService.currentIndex
+        const song = this.playlistService.getRandomSong(currentIndex)
+        this.audioController.loadSong(song)
+        this.audioController.play()
+    }
+
+    toggleShuffleMode() {
+        const isShuffleActive = this.playlistService.toggleShuffleMode()
+        this.uiController.updateShuffleButton(isShuffleActive)
+
+        // Message optionnel pour informer l'utilisateur
+        console.log(isShuffleActive ? "Mode aléatoire activé" : "Mode aléatoire désactivé")
     }
 }
 
 // ============================================
 // 7. Initialisation
 // ============================================
-const player = new AudioPlayer(DOM);
-player.init("../../data/playlist.json");
+const player = new AudioPlayer(DOM)
+player.init("../../data/playlist.json")
