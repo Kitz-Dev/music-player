@@ -53,19 +53,32 @@
 <body>
     <main>
         <section class="playlists">
-            <h2>
-                Playlists
-            </h2>
+            <div class="playlists-container">
+                <div class="title-container">
+                    <h2>
+                        Playlists
+                    </h2>
 
-            <div class="playlist-container">
-                <div id="playlist-1" class="playlist-card">
-                    <img loading="lazy" class="playlist-cover" src="./fox-corpo-icon.webp" alt="Playlist 1 Cover">
-                    <span class="playlist-title">Playlist 1</span>
+                    <div class="button-container">
+                        <span id="add-playlist-tooltip" class="tooltip">Add</span>
+                        <svg id="add-playlist-button" class="logic-button" xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <use href="./img/sprite.svg#add-playlist-button"></use>
+                        </svg>
+                    </div>
                 </div>
 
-                <div id="playlist-2" class="playlist-card">
-                    <img loading="lazy" class="playlist-cover" src="./fox-corpo-icon.webp" alt="Playlist 2 Cover">
-                    <span class="playlist-title">Playlist 2</span>
+
+                <div class="playlist-container">
+                    <div id="playlist-1" class="playlist-card">
+                        <img loading="lazy" class="playlist-cover" src="./fox-corpo-icon.webp" alt="Playlist 1 Cover">
+                        <span class="playlist-title">Playlist 1</span>
+                    </div>
+
+                    <div id="playlist-2" class="playlist-card">
+                        <img loading="lazy" class="playlist-cover" src="./fox-corpo-icon.webp" alt="Playlist 2 Cover">
+                        <span class="playlist-title">Playlist 2</span>
+                    </div>
                 </div>
             </div>
         </section>
@@ -150,14 +163,47 @@
                 </div>
             </div>
 
-            <section class="song-title-container">
+            <div class="song-title-container">
                 <div id="song-title" class="title-display"></div>
                 <span class="title-display"> - </span>
                 <div id="song-author" class="title-display"></div>
-            </section>
+            </div>
 
             <audio preload="metadata" crossorigin="use-credentials" id="current-song"
                 src="./music/Nekfeu - Ecrire (les étoiles vagabondes expansion) Parole.mp3" type="audio/mpeg"></audio>
+        </section>
+
+        <section class="library">
+            <div class="library-container">
+                <div class="title-container">
+                    <h2>
+                        Library
+                    </h2>
+
+                    <div class="button-container">
+                        <span id="add-playlist-tooltip" class="tooltip">Add</span>
+                        <svg id="add-playlist-button" class="logic-button" xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <use href="./img/sprite.svg#add-playlist-button"></use>
+                        </svg>
+                    </div>
+                </div>
+
+
+                <div class="library-tracks-container">
+                    <div id="track-1" class="track-card">
+                        <img loading="lazy" class="library-album-cover" src="./fox-corpo-icon.webp"
+                            alt="Playlist 1 Cover">
+                        <span class="track-title">Track 1</span>
+                    </div>
+
+                    <div id="track-2" class="track-card">
+                        <img loading="lazy" class="library-album-cover" src="./fox-corpo-icon.webp"
+                            alt="Playlist 2 Cover">
+                        <span class="track-title">Track 2</span>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
 

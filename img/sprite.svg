@@ -48,4 +48,11 @@
             <path d="M21 13v1a4 4 0 0 1-4 4H3" />
         </g>
     </symbol>
+
+    <symbol id="add-playlist-button">
+        <g fill="none" stroke="#EDF2F7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M8 12h8m-4-4v8" />
+        </g>
+    </symbol>
 </svg>
