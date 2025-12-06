@@ -166,8 +166,8 @@ h1 {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
     margin-top: -30px;
     background: var(--primary-color);
     border-radius: 50%;
@@ -231,6 +231,7 @@ h1 {
     display: flex;
     align-items: center;
     margin: 6px;
+    margin-left: -18px;
 }
 
 .progress-timer-container {
@@ -351,7 +352,7 @@ input[type="range"]:focus {
 
 .playlists {
     position: absolute;
-    left: 80px;
+    left: 200px;
     top: calc(50% - 167.433px);
     display: flex;
     flex-direction: column;
