@@ -4,7 +4,12 @@
 const DOM = {
     currentSong: document.getElementById("current-song"),
     currentSongTitle: document.getElementById("song-title"),
+    currentSongTitleAnim: document.getElementById("song-title-anim"),
+    currentSongTitleWrapper: document.getElementById("song-title-wrapper"),
+    currentSongTitleContainer: document.getElementById("song-title-container"),
+    currentSongTitleAnimContainer: document.getElementById("song-title-anim-container"),
     currentSongAuthor: document.getElementById("song-author"),
+    currentSongAuthorAnim: document.getElementById("song-author-anim"),
     currentSongCountUp: document.getElementById("song-countup"),
     currentSongCountDown: document.getElementById("song-countdown"),
     currentSongAlbumCover: document.getElementById("album-cover"),
@@ -146,9 +151,12 @@ class UIController {
 
     updateSongInfo(song) {
         this.dom.currentSongTitle.textContent = song.title
+        this.dom.currentSongTitleAnim.textContent = song.title
         this.dom.currentSongAuthor.textContent = song.author
+        this.dom.currentSongAuthorAnim.textContent = song.author
         this.dom.currentSongAlbumCover.src = song.cover
         this.dom.currentSong.src = song.url
+        this.toggleSongTitleAnim()
     }
 
     updatePlayButton(isPlaying) {
@@ -212,6 +220,19 @@ class UIController {
         this.dom.volumeBar.value = volume
         this.dom.volumeBar.style.setProperty('--slider-value', `${percentage}%`)
         this.updateVolumeIcon(volume)
+    }
+
+    toggleSongTitleAnim() {
+        const titleLength = this.dom.currentSongTitleContainer.offsetWidth
+        if (titleLength >= 300) {
+            this.dom.currentSongTitleContainer.classList.add("active")
+            this.dom.currentSongTitleWrapper.classList.add("active")
+            this.dom.currentSongTitleAnimContainer.classList.add("active")
+        } else if (titleLength < 300) {
+            this.dom.currentSongTitleContainer.classList.remove("active")
+            this.dom.currentSongTitleWrapper.classList.remove("active")
+            this.dom.currentSongTitleAnimContainer.classList.remove("active")
+        }
     }
 }
 
@@ -398,6 +419,7 @@ class AudioPlayer {
         if (!this.dom.currentSongAlbumCover.classList.contains("active")) {
             this.uiController.toggleAlbumCoverAnimation()
         }
+        this.uiController.toggleSongTitleAnim()
     }
 
     playPreviousSong() {
