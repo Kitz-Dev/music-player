@@ -297,6 +297,8 @@ class LibraryController {
                 this.audioController.play()
             })
 
+            // TODO : Library Listening List
+
             // TODO : Mouseover event
             const titleLength = newSpan.offsetWidth
             newDiv.addEventListener("mouseover", () => {
