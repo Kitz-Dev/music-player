@@ -25,7 +25,8 @@ const DOM = {
     volumeButton: document.getElementById("volume-button"),
     volumeButtonImg: document.getElementById("volume-button-img"),
     playlistButton1: document.getElementById("playlist-1"),
-    playlistButton2: document.getElementById("playlist-2")
+    playlistButton2: document.getElementById("playlist-2"),
+    trackCard: document.getElementsByClassName("track-card")
 }
 
 // ============================================
@@ -41,20 +42,36 @@ class PlaylistService {
         this.playlistIndex = 0
     }
 
-    async loadPlaylist(url) {
-        const res = await fetch(url)
+    async loadPlaylist(playlistUrl) {
+        const res = await fetch(playlistUrl)
         if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`)
         }
         const data = await res.json()
         this.playlists = data
         this.playlist = this.sortCurrentPlaylist()
-        console.log(this.playlist)
         return this.playlist
+    }
+
+    async loadLibrary(libraryUrl) {
+        const res = await fetch(libraryUrl)
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`)
+        }
+        const data = await res.json()
+        this.library = data
+        this.library = this.sortLibrary()
+        return this.library
     }
 
     sortCurrentPlaylist() {
         return [...this.playlists[this.playlistIndex].songs].sort((a, b) =>
+            a.title.localeCompare(b.title)
+        )
+    }
+
+    sortLibrary() {
+        return [...this.library].sort((a, b) =>
             a.title.localeCompare(b.title)
         )
     }
@@ -237,18 +254,44 @@ class UIController {
 }
 
 // ============================================
-// 5. PlaylistController.js - Contrôle de la playlist
+// 5. LibraryController.js - Contrôle de la playlist
 // ============================================
-class PlaylistController {
-    constructor(playlist) {
-        this.playlist = playlist
+class LibraryController {
+    constructor(dom, playlistService, audioController) {
+        this.dom = dom
+        this.playlistService = playlistService
+        this.audioController = audioController
     }
 
-    getPlaylist() {
+    createLibrary() {
+        this.library = this.playlistService.library
+        const insertDiv = document.getElementById("library-tracks-container")
+        const currentDiv = document.getElementById("track-1")
 
+        for (let i = 0; i < this.library.length; i++) {
+            const track = this.library[i]
+            const newDiv = document.createElement("div")
+            const newImg = document.createElement("img")
+            const newSpan = document.createElement("span")
+            const spanContent = document.createTextNode(track.title)
+
+            newDiv.setAttribute("class", "track-card")
+            newImg.setAttribute("src", track.cover)
+            newSpan.setAttribute("class", "track-title")
+
+            newDiv.appendChild(newImg)
+            newDiv.appendChild(newSpan)
+            newSpan.appendChild(spanContent)
+
+            newDiv.addEventListener("click", () => {
+                console.log("Clicked:", track.title)
+                this.audioController.loadSong(track)
+                this.audioController.play()
+            })
+
+            insertDiv.insertBefore(newDiv, currentDiv)
+        };
     }
-
-
 }
 
 
@@ -313,7 +356,7 @@ class AudioPlayer {
         this.playlistService = new PlaylistService()
         this.uiController = new UIController(dom)
         this.audioController = new AudioController(dom.currentSong, this.uiController)
-        this.playlistController = new PlaylistController()
+        this.libraryController = new LibraryController(dom, this.playlistService, this.audioController)
         this.initVolume()
         this.initColor()
     }
@@ -329,9 +372,12 @@ class AudioPlayer {
         this.dom.repeatButton.style.stroke = initialColor
     }
 
-    async init(playlistUrl) {
+    async init(playlistUrl, libraryUrl) {
         try {
             await this.playlistService.loadPlaylist(playlistUrl)
+            await this.playlistService.loadLibrary(libraryUrl)
+            this.libraryController.createLibrary()
+            // this.libraryController.setupEventListeners() // A tout cassé pour l'instant
             const firstSong = this.playlistService.getCurrentSong()
             this.audioController.loadSong(firstSong)
             this.setupEventListeners()
@@ -453,4 +499,4 @@ class AudioPlayer {
 // 7. Initialisation
 // ============================================
 const player = new AudioPlayer(DOM)
-player.init("../../data/playlist.json")
+player.init("../../data/playlist.json", "../../data/library.json")
