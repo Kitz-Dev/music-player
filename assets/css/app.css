@@ -514,6 +514,7 @@ input[type="range"]:focus {
 .library-tracks-container img {
     width: 50px;
     height: 50px;
+    margin-right: 4px;
 }
 
 .track-card {
@@ -522,9 +523,15 @@ input[type="range"]:focus {
     background-color: var(--title-color);
     border-radius: 4px;
     max-width: 200px;
-    margin: 8px 8px 4px 8px;
+    margin: 4px 8px 4px 8px;
     padding: 10px;
     cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.track-card:first-child {
+    margin-top: 8px;
 }
 
 .track-card:last-child {
@@ -536,6 +543,10 @@ input[type="range"]:focus {
     display: flex;
     flex-wrap: wrap;
     margin-left: 8px;
+}
+
+.track-card.active span {
+    animation: slide-left 10s linear infinite;
 }
 
 /* TODO : Add touch support for volume button

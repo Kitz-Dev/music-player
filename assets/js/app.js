@@ -254,16 +254,17 @@ class UIController {
 }
 
 // ============================================
-// 5. LibraryController.js - Contrôle de la playlist
+// 5. LibraryController.js - Contrôle de la bibliothèque
 // ============================================
 class LibraryController {
-    constructor(dom, playlistService, audioController) {
+    constructor(dom, playlistService, audioController, uiController) {
         this.dom = dom
         this.playlistService = playlistService
         this.audioController = audioController
+        this.uiController = uiController
     }
 
-    createLibrary() {
+    createAndPlayLibrary() {
         this.library = this.playlistService.library
         const insertDiv = document.getElementById("library-tracks-container")
         const currentDiv = document.getElementById("track-1")
@@ -273,20 +274,37 @@ class LibraryController {
             const newDiv = document.createElement("div")
             const newImg = document.createElement("img")
             const newSpan = document.createElement("span")
-            const spanContent = document.createTextNode(track.title)
+            const spanTitle = document.createTextNode(track.title)
+            const spanSpacer = document.createTextNode(" - ")
+            const spanAuthor = document.createTextNode(track.author)
 
             newDiv.setAttribute("class", "track-card")
             newImg.setAttribute("src", track.cover)
             newSpan.setAttribute("class", "track-title")
+            newSpan.setAttribute("width", "180px")
 
             newDiv.appendChild(newImg)
             newDiv.appendChild(newSpan)
-            newSpan.appendChild(spanContent)
+            newSpan.appendChild(spanTitle)
+            newSpan.appendChild(spanSpacer)
+            newSpan.appendChild(spanAuthor)
 
             newDiv.addEventListener("click", () => {
-                console.log("Clicked:", track.title)
                 this.audioController.loadSong(track)
+                if (!this.dom.currentSongAlbumCover.classList.contains("active")) {
+                    this.uiController.toggleAlbumCoverAnimation()
+                }
                 this.audioController.play()
+            })
+
+            // TODO : Mouseover event
+            const titleLength = newSpan.offsetWidth
+            newDiv.addEventListener("mouseover", () => {
+                // console.log("toto")
+                if (titleLength >= 150) {
+                    console.log("toto")
+                    newDiv.classList.add("active")
+                }
             })
 
             insertDiv.insertBefore(newDiv, currentDiv)
@@ -296,7 +314,7 @@ class LibraryController {
 
 
 // ============================================
-// 5. AudioController.js - Contrôle audio
+// 6. AudioController.js - Contrôle audio
 // ============================================
 class AudioController {
     constructor(audioElement, uiController) {
@@ -348,7 +366,7 @@ class AudioController {
 }
 
 // ============================================
-// 6. AudioPlayer.js - Application principale
+// 7. AudioPlayer.js - Application principale
 // ============================================
 class AudioPlayer {
     constructor(dom) {
@@ -356,7 +374,7 @@ class AudioPlayer {
         this.playlistService = new PlaylistService()
         this.uiController = new UIController(dom)
         this.audioController = new AudioController(dom.currentSong, this.uiController)
-        this.libraryController = new LibraryController(dom, this.playlistService, this.audioController)
+        this.libraryController = new LibraryController(dom, this.playlistService, this.audioController, this.uiController)
         this.initVolume()
         this.initColor()
     }
@@ -376,8 +394,7 @@ class AudioPlayer {
         try {
             await this.playlistService.loadPlaylist(playlistUrl)
             await this.playlistService.loadLibrary(libraryUrl)
-            this.libraryController.createLibrary()
-            // this.libraryController.setupEventListeners() // A tout cassé pour l'instant
+            this.libraryController.createAndPlayLibrary()
             const firstSong = this.playlistService.getCurrentSong()
             this.audioController.loadSong(firstSong)
             this.setupEventListeners()
@@ -465,7 +482,6 @@ class AudioPlayer {
         if (!this.dom.currentSongAlbumCover.classList.contains("active")) {
             this.uiController.toggleAlbumCoverAnimation()
         }
-        this.uiController.toggleSongTitleAnim()
     }
 
     playPreviousSong() {
@@ -496,7 +512,7 @@ class AudioPlayer {
 }
 
 // ============================================
-// 7. Initialisation
+// 8. Initialisation
 // ============================================
 const player = new AudioPlayer(DOM)
 player.init("../../data/playlist.json", "../../data/library.json")
