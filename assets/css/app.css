@@ -509,6 +509,9 @@ input[type="range"]:focus {
     border-radius: 4px;
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
+    height: 80vh;
+    scroll-behavior: smooth;
+    overflow-y: scroll;
 }
 
 .library-tracks-container img {
@@ -522,6 +525,7 @@ input[type="range"]:focus {
     align-items: center;
     background-color: var(--title-color);
     border-radius: 4px;
+    min-height: 70px;
     max-width: 200px;
     margin: 4px 8px 4px 8px;
     padding: 10px;
