@@ -3,15 +3,15 @@
         "name": "Playlist test",
         "songs": [
             {
-                "title": "edamame (Official Video)",
-                "author": "bbno$ & Rich Brian",
-                "url": "../music/bbno$ & Rich Brian - edamame (Official Video).mp3",
+                "title": "Background Music",
+                "author": "Dmitrii Spis",
+                "url": "../music/background-music.mp3",
                 "cover": "../img/shapes.webp"
             },
             {
-                "title": "Mockingbird (Lyrics)",
-                "author": "Eminem",
-                "url": "../music/Eminem - Mockingbird (Lyrics).mp3",
+                "title": "Sweet Life (Luxury Chill)",
+                "author": "Alex Grohl",
+                "url": "../music/sweet-life-luxury-chill.mp3",
                 "cover": "../img/tree.webp"
             }
         ]
@@ -20,21 +20,21 @@
         "name": "Playlist test 2",
         "songs": [
             {
-                "title": "Goodbye",
-                "author": "Russ",
-                "url": "../music/Goodbye.mp3",
+                "title": "Hype",
+                "author": "Kontraa Music",
+                "url": "../music/hype-drill-music.mp3",
                 "cover": "../img/tori.webp"
             },
             {
-                "title": "Stressed Out",
-                "author": "Twenty One Pilots",
-                "url": "../music/twenty one pilots Stressed Out [OFFICIAL VIDEO].mp3",
+                "title": "One more dance with you",
+                "author": "Paul Winter",
+                "url": "../music/one-more-dance-with-you-smooth-jazz-music.mp3",
                 "cover": "../img/water.webp"
             },
             {
-                "title": "Ecrire (les étoiles vagabondes expansion)",
-                "author": "Nekfeu",
-                "url": "../music/Nekfeu - Ecrire (les étoiles vagabondes expansion) Parole.mp3",
+                "title": "Jazz Background Music",
+                "author": "Andrii Poradovskyi",
+                "url": "../music/jazz-background-music.mp3",
                 "cover": "../img/meditate.webp"
             }
         ]
