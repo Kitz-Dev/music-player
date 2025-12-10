@@ -9,6 +9,24 @@
                 "cover": "../img/shapes.webp"
             },
             {
+                "title": "Hello Beloved",
+                "author": "alanajordan",
+                "url": "../music/hello-beloved.mp3",
+                "cover": "../img/tori.webp"
+            },
+            {
+                "title": "Hallucination",
+                "author": "alanajordan",
+                "url": "../music/hallucination.mp3",
+                "cover": "../img/water.webp"
+            },
+            {
+                "title": "The Crimson Flow",
+                "author": "Misselle",
+                "url": "../music/the-crimson-flow.mp3",
+                "cover": "../img/meditate.webp"
+            },
+            {
                 "title": "Sweet Life (Luxury Chill)",
                 "author": "Alex Grohl",
                 "url": "../music/sweet-life-luxury-chill.mp3",
