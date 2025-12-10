@@ -78,7 +78,7 @@ Le projet suit une architecture modulaire avec séparation des responsabilités 
 1. Clonez le repository
 
 ```bash
-git clone [votre-repo]
+git clone https://github.com/Kitz-Dev/music-player.git
 cd swiftfox-music-player
 ```
 
