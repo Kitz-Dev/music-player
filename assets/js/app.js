@@ -282,7 +282,6 @@ class LibraryController {
             const spanSpacer = document.createTextNode(" - ")
             const spanAuthor = document.createTextNode(track.author)
 
-            const newAnimWrapper = document.createElement("div")
             const newAnimSpanContainer = document.createElement("div")
             const newAnimTitleSpan = document.createElement("span")
             const newAnimSpacerSpan = document.createElement("span")
@@ -329,14 +328,12 @@ class LibraryController {
                 if (newSpanContainer.offsetWidth >= 100 && newAnimSpanContainer != null) {
                     console.log("toto")
 
-                    newAnimWrapper.setAttribute("class", "track-title-wrapper")
                     newAnimSpanContainer.setAttribute("class", "track-title-container")
                     newAnimTitleSpan.setAttribute("class", "track-title")
                     newAnimSpacerSpan.setAttribute("class", "track-title")
                     newAnimAuthorSpan.setAttribute("class", "track-title")
 
-                    newDiv.appendChild(newAnimWrapper)
-                    newAnimWrapper.appendChild(newAnimSpanContainer)
+                    newWrapper.appendChild(newAnimSpanContainer)
                     newAnimSpanContainer.appendChild(newAnimTitleSpan)
                     newAnimSpanContainer.appendChild(newAnimSpacerSpan)
                     newAnimSpanContainer.appendChild(newAnimAuthorSpan)

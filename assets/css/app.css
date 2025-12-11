@@ -530,8 +530,6 @@ input[type="range"]:focus {
     margin: 4px 8px 4px 8px;
     padding: 10px;
     cursor: pointer;
-    white-space: nowrap;
-    overflow: hidden;
 }
 
 .track-card:first-child {
@@ -543,17 +541,24 @@ input[type="range"]:focus {
     margin-bottom: 8px;
 }
 
+.track-title-wrapper {
+    display: flex;
+    align-items: center;
+    width: 300px;
+    height: 100%;
+    margin-left: 8px;
+    overflow: hidden;
+}
+
 .track-title-container {
     display: flex;
-    justify-content: space-between;
-    overflow: hidden;
     width: fit-content;
 }
 
 .track-card span {
     display: flex;
-    flex-wrap: wrap;
-    margin-left: 8px;
+    white-space: nowrap;
+    overflow: hidden;
     width: auto;
 }
 
@@ -579,3 +584,35 @@ input[type="range"]:focus {
 }
 
 /* TODO : Add touch support for volume button
+
+.song-title-container.active {
+    animation: slide-left 10s linear infinite;
+}
+    
+.song-title-container {
+display: flex;
+width: fit-content;
+background: -webkit-linear-gradient(var(--title-color), var(--secondary-color));
+-webkit-background-clip: text;
+background-clip: text;
+-webkit-text-fill-color: transparent;
+margin-top: 0;
+}
+
+.song-title-wrapper {
+    width: 300px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+}
+
+.song-title-wrapper.active {
+    justify-content: flex-start;
+}
+
+.title-display {
+    white-space: nowrap;
+    overflow: hidden;
+    margin: 0 5px;
+    font-size: calc(0.5vw + 12px);
+}
