@@ -267,24 +267,28 @@ class LibraryController {
     createAndPlayLibrary() {
         this.library = this.playlistService.library
         const insertDiv = document.getElementById("library-tracks-container")
-        const currentDiv = document.getElementById("track-1")
+        const currentDiv = document.getElementById("track-1") // ??
 
         for (let i = 0; i < this.library.length; i++) {
             const track = this.library[i]
             const newDiv = document.createElement("div")
             const newImg = document.createElement("img")
+            const newSpanContainer = document.createElement("div")
             const newSpan = document.createElement("span")
             const spanTitle = document.createTextNode(track.title)
             const spanSpacer = document.createTextNode(" - ")
             const spanAuthor = document.createTextNode(track.author)
 
             newDiv.setAttribute("class", "track-card")
+            newSpanContainer.setAttribute("class", "track-title-container")
             newImg.setAttribute("src", track.cover)
+            newImg.setAttribute("aria-label", "Cover Image")
             newSpan.setAttribute("class", "track-title")
             newSpan.setAttribute("width", "180px")
 
             newDiv.appendChild(newImg)
-            newDiv.appendChild(newSpan)
+            newDiv.appendChild(newSpanContainer)
+            newSpanContainer.appendChild(newSpan)
             newSpan.appendChild(spanTitle)
             newSpan.appendChild(spanSpacer)
             newSpan.appendChild(spanAuthor)
@@ -303,9 +307,26 @@ class LibraryController {
             const titleLength = newSpan.offsetWidth
             newDiv.addEventListener("mouseover", () => {
                 // console.log("toto")
-                if (titleLength >= 150) {
+
+                if (document.getElementsByClassName("track-title").offsetWidth >= 150) {
                     console.log("toto")
-                    newDiv.classList.add("active")
+                    const newAnimSpanContainer = document.createElement("div")
+                    const newAnimSpan = document.createElement("span")
+                    const spanAnimTitle = document.createTextNode(track.title)
+                    const spanAnimSpacer = document.createTextNode(" - ")
+                    const spanAnimAuthor = document.createTextNode(track.author)
+
+                    newAnimSpanContainer.setAttribute("class", "track-title-container")
+                    newAnimSpan.setAttribute("class", "track-title")
+                    newAnimSpan.setAttribute("width", "180px")
+
+                    newDiv.appendChild(newAnimSpanContainer)
+                    newAnimSpanContainer.appendChild(newAnimSpan)
+                    newAnimSpan.appendChild(spanAnimTitle)
+                    newAnimSpan.appendChild(spanAnimSpacer)
+                    newAnimSpan.appendChild(spanAnimAuthor)
+
+                    document.getElementById("track-card").classList.add("active")
                 }
             })
 

@@ -543,6 +543,10 @@ input[type="range"]:focus {
     margin-bottom: 8px;
 }
 
+.track-title-container {
+    overflow: hidden;
+}
+
 .track-card span {
     display: flex;
     flex-wrap: wrap;
@@ -550,7 +554,24 @@ input[type="range"]:focus {
 }
 
 .track-card.active span {
-    animation: slide-left 10s linear infinite;
+    animation: library-slide 10s linear infinite;
+}
+
+@keyframes library-slide {
+    0% {
+        -webkit-transform: translateX(0%);
+        transform: translateX(0%);
+    }
+
+    25% {
+        -webkit-transform: translateX(0%);
+        transform: translateX(0%);
+    }
+
+    100% {
+        -webkit-transform: translateX(-100%);
+        transform: translateX(-100%);
+    }
 }
 
 /* TODO : Add touch support for volume button
