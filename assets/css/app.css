@@ -544,6 +544,8 @@ input[type="range"]:focus {
 }
 
 .track-title-container {
+    display: flex;
+    justify-content: space-between;
     overflow: hidden;
     width: fit-content;
 }
@@ -555,7 +557,7 @@ input[type="range"]:focus {
     width: auto;
 }
 
-.track-card.active span {
+.track-card.active .track-title-container {
     animation: library-slide 10s linear infinite;
 }
 

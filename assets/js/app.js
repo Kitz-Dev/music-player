@@ -273,30 +273,42 @@ class LibraryController {
             const track = this.library[i]
             const newDiv = document.createElement("div")
             const newImg = document.createElement("img")
+            const newWrapper = document.createElement("div")
             const newSpanContainer = document.createElement("div")
-            const newSpan = document.createElement("span")
+            const newTitleSpan = document.createElement("span")
+            const newSpacerSpan = document.createElement("span")
+            const newAuthorSpan = document.createElement("span")
             const spanTitle = document.createTextNode(track.title)
             const spanSpacer = document.createTextNode(" - ")
             const spanAuthor = document.createTextNode(track.author)
 
+            const newAnimWrapper = document.createElement("div")
             const newAnimSpanContainer = document.createElement("div")
-            const newAnimSpan = document.createElement("span")
+            const newAnimTitleSpan = document.createElement("span")
+            const newAnimSpacerSpan = document.createElement("span")
+            const newAnimAuthorSpan = document.createElement("span")
             const spanAnimTitle = document.createTextNode(track.title)
             const spanAnimSpacer = document.createTextNode(" - ")
             const spanAnimAuthor = document.createTextNode(track.author)
 
             newDiv.setAttribute("class", "track-card")
+            newWrapper.setAttribute("class", "track-title-wrapper")
             newSpanContainer.setAttribute("class", "track-title-container")
             newImg.setAttribute("src", track.cover)
             newImg.setAttribute("aria-label", "Cover Image")
-            newSpan.setAttribute("class", "track-title")
+            newTitleSpan.setAttribute("class", "track-title")
+            newSpacerSpan.setAttribute("class", "track-title")
+            newAuthorSpan.setAttribute("class", "track-title")
 
             newDiv.appendChild(newImg)
-            newDiv.appendChild(newSpanContainer)
-            newSpanContainer.appendChild(newSpan)
-            newSpan.appendChild(spanTitle)
-            newSpan.appendChild(spanSpacer)
-            newSpan.appendChild(spanAuthor)
+            newDiv.appendChild(newWrapper)
+            newWrapper.appendChild(newSpanContainer)
+            newSpanContainer.appendChild(newTitleSpan)
+            newSpanContainer.appendChild(newSpacerSpan)
+            newSpanContainer.appendChild(newAuthorSpan)
+            newTitleSpan.appendChild(spanTitle)
+            newSpacerSpan.appendChild(spanSpacer)
+            newAuthorSpan.appendChild(spanAuthor)
 
             newDiv.addEventListener("click", () => {
                 this.audioController.loadSong(track)
@@ -309,23 +321,28 @@ class LibraryController {
             // TODO : Library Listening List
 
             // TODO : Mouseover event
-            const titleLength = newSpan.offsetWidth
+            const titleLength = newSpanContainer.offsetWidth
             newDiv.addEventListener("mouseover", () => {
                 // console.log("toto")
-                console.log(newSpan.offsetWidth)
+                console.log(newSpanContainer.offsetWidth)
 
-                if (newSpan.offsetWidth >= 150 && newAnimSpanContainer != null) {
+                if (newSpanContainer.offsetWidth >= 100 && newAnimSpanContainer != null) {
                     console.log("toto")
 
+                    newAnimWrapper.setAttribute("class", "track-title-wrapper")
                     newAnimSpanContainer.setAttribute("class", "track-title-container")
-                    newAnimSpan.setAttribute("class", "track-title")
-                    newAnimSpan.setAttribute("width", "auto")
+                    newAnimTitleSpan.setAttribute("class", "track-title")
+                    newAnimSpacerSpan.setAttribute("class", "track-title")
+                    newAnimAuthorSpan.setAttribute("class", "track-title")
 
-                    newDiv.appendChild(newAnimSpanContainer)
-                    newAnimSpanContainer.appendChild(newAnimSpan)
-                    newAnimSpan.appendChild(spanAnimTitle)
-                    newAnimSpan.appendChild(spanAnimSpacer)
-                    newAnimSpan.appendChild(spanAnimAuthor)
+                    newDiv.appendChild(newAnimWrapper)
+                    newAnimWrapper.appendChild(newAnimSpanContainer)
+                    newAnimSpanContainer.appendChild(newAnimTitleSpan)
+                    newAnimSpanContainer.appendChild(newAnimSpacerSpan)
+                    newAnimSpanContainer.appendChild(newAnimAuthorSpan)
+                    newAnimTitleSpan.appendChild(spanAnimTitle)
+                    newAnimSpacerSpan.appendChild(spanAnimSpacer)
+                    newAnimAuthorSpan.appendChild(spanAnimAuthor)
 
                     newDiv.classList.add("active")
                 }
