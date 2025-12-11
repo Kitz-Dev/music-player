@@ -279,12 +279,17 @@ class LibraryController {
             const spanSpacer = document.createTextNode(" - ")
             const spanAuthor = document.createTextNode(track.author)
 
+            const newAnimSpanContainer = document.createElement("div")
+            const newAnimSpan = document.createElement("span")
+            const spanAnimTitle = document.createTextNode(track.title)
+            const spanAnimSpacer = document.createTextNode(" - ")
+            const spanAnimAuthor = document.createTextNode(track.author)
+
             newDiv.setAttribute("class", "track-card")
             newSpanContainer.setAttribute("class", "track-title-container")
             newImg.setAttribute("src", track.cover)
             newImg.setAttribute("aria-label", "Cover Image")
             newSpan.setAttribute("class", "track-title")
-            newSpan.setAttribute("width", "180px")
 
             newDiv.appendChild(newImg)
             newDiv.appendChild(newSpanContainer)
@@ -307,18 +312,14 @@ class LibraryController {
             const titleLength = newSpan.offsetWidth
             newDiv.addEventListener("mouseover", () => {
                 // console.log("toto")
+                console.log(newSpan.offsetWidth)
 
-                if (document.getElementsByClassName("track-title").offsetWidth >= 150) {
+                if (newSpan.offsetWidth >= 150 && newAnimSpanContainer != null) {
                     console.log("toto")
-                    const newAnimSpanContainer = document.createElement("div")
-                    const newAnimSpan = document.createElement("span")
-                    const spanAnimTitle = document.createTextNode(track.title)
-                    const spanAnimSpacer = document.createTextNode(" - ")
-                    const spanAnimAuthor = document.createTextNode(track.author)
 
                     newAnimSpanContainer.setAttribute("class", "track-title-container")
                     newAnimSpan.setAttribute("class", "track-title")
-                    newAnimSpan.setAttribute("width", "180px")
+                    newAnimSpan.setAttribute("width", "auto")
 
                     newDiv.appendChild(newAnimSpanContainer)
                     newAnimSpanContainer.appendChild(newAnimSpan)
@@ -326,8 +327,12 @@ class LibraryController {
                     newAnimSpan.appendChild(spanAnimSpacer)
                     newAnimSpan.appendChild(spanAnimAuthor)
 
-                    document.getElementById("track-card").classList.add("active")
+                    newDiv.classList.add("active")
                 }
+            })
+
+            newDiv.addEventListener("mouseleave", () => {
+                newDiv.classList.remove("active")
             })
 
             insertDiv.insertBefore(newDiv, currentDiv)

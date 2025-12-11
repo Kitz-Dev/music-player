@@ -545,12 +545,14 @@ input[type="range"]:focus {
 
 .track-title-container {
     overflow: hidden;
+    width: fit-content;
 }
 
 .track-card span {
     display: flex;
     flex-wrap: wrap;
     margin-left: 8px;
+    width: auto;
 }
 
 .track-card.active span {
