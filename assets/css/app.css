@@ -510,6 +510,7 @@ input[type="range"]:focus {
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     height: 80vh;
+    width: 300px;
     scroll-behavior: smooth;
     overflow-y: scroll;
 }
@@ -526,7 +527,7 @@ input[type="range"]:focus {
     background-color: var(--title-color);
     border-radius: 4px;
     min-height: 70px;
-    max-width: 200px;
+    max-width: 284px;
     margin: 4px 8px 4px 8px;
     padding: 10px;
     cursor: pointer;

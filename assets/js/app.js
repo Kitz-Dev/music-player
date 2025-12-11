@@ -321,11 +321,11 @@ class LibraryController {
 
             // TODO : Mouseover event
             const titleLength = newSpanContainer.offsetWidth
-            newDiv.addEventListener("mouseover", () => {
+            newDiv.addEventListener("mouseenter", () => {
                 // console.log("toto")
                 console.log(newSpanContainer.offsetWidth)
 
-                if (newSpanContainer.offsetWidth >= 100 && newAnimSpanContainer != null) {
+                if (newSpanContainer.offsetWidth >= 284 && newAnimSpanContainer != null) {
                     console.log("toto")
 
                     newAnimSpanContainer.setAttribute("class", "track-title-container")
