@@ -269,8 +269,8 @@ class LibraryController {
         const insertDiv = document.getElementById("library-tracks-container")
         const currentDiv = document.getElementById("track-1") // ??
 
-        for (let i = 0; i < this.library.length; i++) {
-            const track = this.library[i]
+        for (const element of this.library) {
+            const track = element
             const newDiv = document.createElement("div")
             const newImg = document.createElement("img")
             const newWrapper = document.createElement("div")
@@ -319,13 +319,11 @@ class LibraryController {
 
             // TODO : Library Listening List
 
-            // TODO : Mouseover event
-            const titleLength = newSpanContainer.offsetWidth
             newDiv.addEventListener("mouseenter", () => {
                 // console.log("toto")
                 console.log(newSpanContainer.offsetWidth)
 
-                if (newSpanContainer.offsetWidth >= 284 && newAnimSpanContainer != null) {
+                if (newSpanContainer.offsetWidth >= newWrapper.offsetWidth && newAnimSpanContainer != null) {
                     console.log("toto")
 
                     newAnimSpanContainer.setAttribute("class", "track-title-container")
