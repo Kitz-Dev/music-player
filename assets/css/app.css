@@ -500,6 +500,7 @@ input[type="range"]:focus {
 .track-title {
     color: var(--secondary-color);
     font-weight: 500;
+    margin: 3px;
 }
 
 .library-tracks-container {
