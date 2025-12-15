@@ -306,10 +306,45 @@ class LibraryController {
     handleMouseEnter(trackCard, titleWrapper, track) {
         const mainContainer = titleWrapper.querySelector(".track-title-container")
 
-        if (mainContainer.offsetWidth >= titleWrapper.offsetWidth && mainContainer != null) {
+        if (this.shouldShowScrollingAnimation(mainContainer, titleWrapper)) {
             titleWrapper.appendChild(this.createTitleContainer(track))
             trackCard.classList.add("active")
         }
+    }
+
+    handleMouseLeave(trackCard) {
+        trackCard.classList.remove("active")
+    }
+
+    shouldShowScrollingAnimation(mainContainer, wrapper) {
+        if (mainContainer.offsetWidth >= wrapper.offsetWidth && mainContainer != null) {
+            return true
+        }
+    }
+
+    attachTrackCardEvents(trackCard, titleWrapper, track) {
+        trackCard.addEventListener("click", () => {
+            this.handleTrackClick(track)
+        })
+
+        trackCard.addEventListener("mouseenter", () => {
+            this.handleMouseEnter(trackCard, titleWrapper, track)
+        })
+
+        trackCard.addEventListener("mouseleave", () => {
+            this.handleMouseLeave(trackCard)
+        })
+    }
+
+    createTrackCard(track) {
+        const trackCard = document.createElement("div")
+        const coverImage = this.createCoverImage(track.cover)
+        const newWrapper = this.createTitleWrapper(track)
+        trackCard.setAttribute("class", "track-card")
+        trackCard.appendChild(coverImage)
+        trackCard.appendChild(newWrapper)
+        this.attachTrackCardEvents(trackCard, newWrapper, track)
+        return trackCard
     }
 
     createAndPlayLibrary() {
@@ -317,43 +352,15 @@ class LibraryController {
         const insertDiv = document.getElementById("library-tracks-container")
         const currentDiv = document.getElementById("track-1") // ??
 
-        for (const element of this.library) {
+        this.library.forEach(element => {
             const track = element
-            const newDiv = document.createElement("div")
-            const coverImage = this.createCoverImage(track.cover)
-            const newWrapper = this.createTitleWrapper(track)
-            const newSpanContainer = this.createTitleContainer(track)
-            const newAnimSpanContainer = this.createTitleContainer(track)
-
-            newDiv.setAttribute("class", "track-card")
-
-            newDiv.appendChild(coverImage)
-            newDiv.appendChild(newWrapper)
-
-            newDiv.addEventListener("click", () => {
-                this.handleTrackClick(track)
-            })
-
-            // TODO : Library Listening List
-
-            newDiv.addEventListener("mouseenter", () => {
-                if (newSpanContainer.offsetWidth >= newWrapper.offsetWidth && newAnimSpanContainer != null) {
-                    console.log("toto")
-
-                    newWrapper.appendChild(newAnimSpanContainer)
-                    newDiv.classList.add("active")
-                }
-            })
-
-            newDiv.addEventListener("mouseleave", () => {
-                newDiv.classList.remove("active")
-            })
-
-            insertDiv.insertBefore(newDiv, currentDiv)
-        };
+            const trackCard = this.createTrackCard(track)
+            insertDiv.insertBefore(trackCard, currentDiv)
+        });
     }
 }
 
+// TODO : Library Listening List
 
 // ============================================
 // 6. AudioController.js - Contrôle audio
