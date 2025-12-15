@@ -53,6 +53,8 @@ class PlaylistService {
         return this.playlist
     }
 
+
+    // TODO : Link library to UI/UX
     async loadLibrary(libraryUrl) {
         const res = await fetch(libraryUrl)
         if (!res.ok) {
