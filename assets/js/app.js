@@ -303,6 +303,15 @@ class LibraryController {
         this.audioController.play()
     }
 
+    handleMouseEnter(trackCard, titleWrapper, track) {
+        const mainContainer = titleWrapper.querySelector(".track-title-container")
+
+        if (mainContainer.offsetWidth >= titleWrapper.offsetWidth && mainContainer != null) {
+            titleWrapper.appendChild(this.createTitleContainer(track))
+            trackCard.classList.add("active")
+        }
+    }
+
     createAndPlayLibrary() {
         this.library = this.playlistService.library
         const insertDiv = document.getElementById("library-tracks-container")
@@ -328,9 +337,6 @@ class LibraryController {
             // TODO : Library Listening List
 
             newDiv.addEventListener("mouseenter", () => {
-                // console.log("toto")
-                console.log(newSpanContainer.offsetWidth)
-
                 if (newSpanContainer.offsetWidth >= newWrapper.offsetWidth && newAnimSpanContainer != null) {
                     console.log("toto")
 
