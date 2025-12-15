@@ -264,6 +264,45 @@ class LibraryController {
         this.uiController = uiController
     }
 
+    createCoverImage(coverSrc) {
+        const newImg = document.createElement("img")
+        newImg.setAttribute("src", coverSrc)
+        newImg.setAttribute("aria-label", "Album Cover")
+        return newImg
+    }
+
+    createTitleSpan(text) {
+        const newSpan = document.createElement("span")
+        newSpan.setAttribute("class", "track-title")
+        const newSpanContent = document.createTextNode(text)
+        newSpan.appendChild(newSpanContent)
+        return newSpan
+    }
+
+    createTitleContainer(track) {
+        const trackTitleContainer = document.createElement("div")
+        trackTitleContainer.setAttribute("class", "track-title-container")
+        trackTitleContainer.appendChild(this.createTitleSpan(track.title))
+        trackTitleContainer.appendChild(this.createTitleSpan(" - "))
+        trackTitleContainer.appendChild(this.createTitleSpan(track.author))
+        return trackTitleContainer
+    }
+
+    createTitleWrapper(track) {
+        const newWrapper = document.createElement("div")
+        newWrapper.setAttribute("class", "track-title-wrapper")
+        newWrapper.appendChild(this.createTitleContainer(track))
+        return newWrapper
+    }
+
+    handleTrackClick(track) {
+        this.audioController.loadSong(track)
+        if (!this.dom.currentSongAlbumCover.classList.contains("active")) {
+            this.uiController.toggleAlbumCoverAnimation()
+        }
+        this.audioController.play()
+    }
+
     createAndPlayLibrary() {
         this.library = this.playlistService.library
         const insertDiv = document.getElementById("library-tracks-container")
@@ -272,49 +311,18 @@ class LibraryController {
         for (const element of this.library) {
             const track = element
             const newDiv = document.createElement("div")
-            const newImg = document.createElement("img")
-            const newWrapper = document.createElement("div")
-            const newSpanContainer = document.createElement("div")
-            const newTitleSpan = document.createElement("span")
-            const newSpacerSpan = document.createElement("span")
-            const newAuthorSpan = document.createElement("span")
-            const spanTitle = document.createTextNode(track.title)
-            const spanSpacer = document.createTextNode(" - ")
-            const spanAuthor = document.createTextNode(track.author)
-
-            const newAnimSpanContainer = document.createElement("div")
-            const newAnimTitleSpan = document.createElement("span")
-            const newAnimSpacerSpan = document.createElement("span")
-            const newAnimAuthorSpan = document.createElement("span")
-            const spanAnimTitle = document.createTextNode(track.title)
-            const spanAnimSpacer = document.createTextNode(" - ")
-            const spanAnimAuthor = document.createTextNode(track.author)
+            const coverImage = this.createCoverImage(track.cover)
+            const newWrapper = this.createTitleWrapper(track)
+            const newSpanContainer = this.createTitleContainer(track)
+            const newAnimSpanContainer = this.createTitleContainer(track)
 
             newDiv.setAttribute("class", "track-card")
-            newWrapper.setAttribute("class", "track-title-wrapper")
-            newSpanContainer.setAttribute("class", "track-title-container")
-            newImg.setAttribute("src", track.cover)
-            newImg.setAttribute("aria-label", "Cover Image")
-            newTitleSpan.setAttribute("class", "track-title")
-            newSpacerSpan.setAttribute("class", "track-title")
-            newAuthorSpan.setAttribute("class", "track-title")
 
-            newDiv.appendChild(newImg)
+            newDiv.appendChild(coverImage)
             newDiv.appendChild(newWrapper)
-            newWrapper.appendChild(newSpanContainer)
-            newSpanContainer.appendChild(newTitleSpan)
-            newSpanContainer.appendChild(newSpacerSpan)
-            newSpanContainer.appendChild(newAuthorSpan)
-            newTitleSpan.appendChild(spanTitle)
-            newSpacerSpan.appendChild(spanSpacer)
-            newAuthorSpan.appendChild(spanAuthor)
 
             newDiv.addEventListener("click", () => {
-                this.audioController.loadSong(track)
-                if (!this.dom.currentSongAlbumCover.classList.contains("active")) {
-                    this.uiController.toggleAlbumCoverAnimation()
-                }
-                this.audioController.play()
+                this.handleTrackClick(track)
             })
 
             // TODO : Library Listening List
@@ -326,19 +334,7 @@ class LibraryController {
                 if (newSpanContainer.offsetWidth >= newWrapper.offsetWidth && newAnimSpanContainer != null) {
                     console.log("toto")
 
-                    newAnimSpanContainer.setAttribute("class", "track-title-container")
-                    newAnimTitleSpan.setAttribute("class", "track-title")
-                    newAnimSpacerSpan.setAttribute("class", "track-title")
-                    newAnimAuthorSpan.setAttribute("class", "track-title")
-
                     newWrapper.appendChild(newAnimSpanContainer)
-                    newAnimSpanContainer.appendChild(newAnimTitleSpan)
-                    newAnimSpanContainer.appendChild(newAnimSpacerSpan)
-                    newAnimSpanContainer.appendChild(newAnimAuthorSpan)
-                    newAnimTitleSpan.appendChild(spanAnimTitle)
-                    newAnimSpacerSpan.appendChild(spanAnimSpacer)
-                    newAnimAuthorSpan.appendChild(spanAnimAuthor)
-
                     newDiv.classList.add("active")
                 }
             })
