@@ -37,6 +37,7 @@ class PlaylistService {
         this.playlist = []
         this.playlists = []
         this.currentIndex = 0
+        this.libraryMode = false
         this.shuffleMode = false  // Mode shuffle activé ou non
         this.playedIndexes = []   // Historique des pistes jouées en mode shuffle
         this.playlistIndex = 0
@@ -97,6 +98,11 @@ class PlaylistService {
     toggleRepeatMode() {
         this.repeatMode = !this.repeatMode
         return this.repeatMode
+    }
+
+    setLibraryMode(isActive) {
+        this.libraryMode = isActive
+        return isActive
     }
 
     nextSong() {
