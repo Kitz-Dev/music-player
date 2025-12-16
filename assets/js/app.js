@@ -114,27 +114,51 @@ class PlaylistService {
     }
 
     nextSong() {
-        if (this.shuffleMode) {
-            return this.getRandomSong()
-        } else if (this.repeatMode) {
-            return this.getCurrentSong()
-        } else {
-            this.currentIndex = (this.currentIndex + 1) % this.playlist.length
-            return this.getCurrentSong()
+        if (this.libraryMode) {
+            if (this.shuffleMode) {
+                return this.getRandomSong()
+            } else if (this.repeatMode) {
+                return this.getCurrentSong()
+            } else {
+                this.currentLibraryIndex = (this.currentLibraryIndex + 1) % this.library.length
+                return this.getCurrentSong()
+            }
+        }
+        else {
+            if (this.shuffleMode) {
+                return this.getRandomSong()
+            } else if (this.repeatMode) {
+                return this.getCurrentSong()
+            } else {
+                this.currentIndex = (this.currentIndex + 1) % this.playlist.length
+                return this.getCurrentSong()
+            }
         }
     }
 
     previousSong() {
-        if (this.shuffleMode) {
-            // En mode shuffle, on revient à la piste précédente dans l'historique
-            if (this.playedIndexes.length > 1) {
-                this.playedIndexes.pop() // Retire la piste actuelle
-                this.currentIndex = this.playedIndexes[this.playedIndexes.length - 1]
+        if (this.libraryMode) {
+            if (this.shuffleMode) {
+                if (this.libraryPlayedIndexes.length > 1) {
+                    this.libraryPlayedIndexes.pop()
+                    this.currentLibraryIndex = this.libraryPlayedIndexes[this.libraryPlayedIndexes.length - 1]
+                }
+                return this.getCurrentSong()
+            } else {
+                this.currentLibraryIndex = (this.currentLibraryIndex - 1 + this.library.length) % this.library.length
+                return this.getCurrentSong()
             }
-            return this.getCurrentSong()
         } else {
-            this.currentIndex = (this.currentIndex - 1 + this.playlist.length) % this.playlist.length
-            return this.getCurrentSong()
+            if (this.shuffleMode) {
+                if (this.playedIndexes.length > 1) {
+                    this.playedIndexes.pop()
+                    this.currentIndex = this.playedIndexes[this.playedIndexes.length - 1]
+                }
+                return this.getCurrentSong()
+            } else {
+                this.currentIndex = (this.currentIndex - 1 + this.playlist.length) % this.playlist.length
+                return this.getCurrentSong()
+            }
         }
     }
 
