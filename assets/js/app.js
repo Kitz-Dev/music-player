@@ -406,16 +406,22 @@ class LibraryController {
         return trackCard
     }
 
-    createAndPlayLibrary() {
-        this.library = this.playlistService.library
+    displayTracks(playlist) {
         const insertDiv = document.getElementById("library-tracks-container")
-        const currentDiv = document.getElementById("track-1") // ??
 
-        this.library.forEach(element => {
-            const track = element
-            const trackCard = this.createTrackCard(track)
-            insertDiv.insertBefore(trackCard, currentDiv)
+        this.removeLibrary()
+
+        playlist.forEach(element => {
+            const trackCard = this.createTrackCard(element)
+            insertDiv.insertBefore(trackCard, null)
         });
+    }
+
+    removeLibrary() {
+        const container = document.getElementById("library-tracks-container")
+        while (container.firstChild) {
+            container.removeChild(container.firstChild)
+        }
     }
 }
 
@@ -502,7 +508,7 @@ class AudioPlayer {
         try {
             await this.playlistService.loadPlaylist(playlistUrl)
             await this.playlistService.loadLibrary(libraryUrl)
-            this.libraryController.createAndPlayLibrary()
+            this.libraryController.displayTracks(this.playlistService.library)
             const firstSong = this.playlistService.getCurrentSong()
             this.audioController.loadSong(firstSong)
             this.setupEventListeners()
@@ -543,6 +549,7 @@ class AudioPlayer {
             this.playlistService.setLibraryMode(false)
             this.playlistService.switchPlaylist(0)
             this.playlistService.currentIndex = 0
+            this.libraryController.displayTracks(this.playlistService.playlist)
             this.playCurrentSong()
         })
 
@@ -551,6 +558,7 @@ class AudioPlayer {
             this.playlistService.setLibraryMode(false)
             this.playlistService.switchPlaylist(1)
             this.playlistService.currentIndex = 0
+            this.libraryController.displayTracks(this.playlistService.playlist)
             this.playCurrentSong()
         })
 
