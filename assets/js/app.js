@@ -39,11 +39,12 @@ class PlaylistService {
         this.library = []
         this.currentIndex = 0
         this.currentLibraryIndex = 0
+        this.playlistIndex = 0
         this.libraryMode = false
         this.shuffleMode = false  // Mode shuffle activé ou non
+        this.repeatMode = false
         this.playedIndexes = []   // Historique des pistes jouées en mode shuffle
         this.libraryPlayedIndexes = []
-        this.playlistIndex = 0
     }
 
     async loadPlaylist(playlistUrl) {
@@ -88,7 +89,11 @@ class PlaylistService {
     }
 
     getCurrentSong() {
-        return this.playlist[this.currentIndex]
+        if (this.libraryMode) {
+            return this.library[this.currentLibraryIndex]
+        } else {
+            return this.playlist[this.currentIndex]
+        }
     }
 
     toggleShuffleMode() {
