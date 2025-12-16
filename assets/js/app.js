@@ -36,10 +36,13 @@ class PlaylistService {
     constructor() {
         this.playlist = []
         this.playlists = []
+        this.library = []
         this.currentIndex = 0
+        this.currentLibraryIndex = 0
         this.libraryMode = false
         this.shuffleMode = false  // Mode shuffle activé ou non
         this.playedIndexes = []   // Historique des pistes jouées en mode shuffle
+        this.libraryPlayedIndexes = []
         this.playlistIndex = 0
     }
 
