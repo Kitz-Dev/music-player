@@ -40,7 +40,7 @@ class PlaylistService {
         this.currentIndex = 0
         this.currentLibraryIndex = 0
         this.playlistIndex = 0
-        this.libraryMode = false
+        this.libraryMode = true
         this.shuffleMode = false  // Mode shuffle activé ou non
         this.repeatMode = false
         this.playedIndexes = []   // Historique des pistes jouées en mode shuffle
@@ -163,25 +163,36 @@ class PlaylistService {
     }
 
     getRandomSong() {
-        // Si toutes les pistes ont été jouées, on réinitialise
-        if (this.playedIndexes.length >= this.playlist.length) {
-            this.playedIndexes = [this.currentIndex]
+        let played, list, currentIndexProp
+
+        if (this.libraryMode) {
+            played = this.libraryPlayedIndexes
+            list = this.library
+            currentIndexProp = 'currentLibraryIndex'
+        } else {
+            played = this.playedIndexes
+            list = this.playlist
+            currentIndexProp = 'currentIndex'
+        }
+
+        if (played.length >= list.length) {
+            played.length = 0
+            played.push(this[currentIndexProp])
         }
 
         let randomIndex
         let attempts = 0
         do {
-            randomIndex = Math.floor(Math.random() * this.playlist.length)
+            randomIndex = Math.floor(Math.random() * list.length)
             attempts++
-            // Évite les boucles infinies
             if (attempts > 100) {
-                randomIndex = (this.currentIndex + 1) % this.playlist.length
+                randomIndex = (this[currentIndexProp] + 1) % list.length
                 break
             }
-        } while (this.playedIndexes.includes(randomIndex) && this.playlist.length > 1)
+        } while (played.includes(randomIndex) && list.length > 1)
 
-        this.currentIndex = randomIndex
-        this.playedIndexes.push(randomIndex)
+        this[currentIndexProp] = randomIndex
+        played.push(randomIndex)
         return this.getCurrentSong()
     }
 }
@@ -336,6 +347,14 @@ class LibraryController {
     }
 
     handleTrackClick(track) {
+        const clickedIndex = this.playlistService.library.indexOf(track)
+        this.playlistService.setLibraryMode(true)
+        this.playlistService.currentLibraryIndex = clickedIndex
+
+        if (this.playlistService.shuffleMode) {
+            this.playlistService.libraryPlayedIndexes = [clickedIndex]
+        }
+
         this.audioController.loadSong(track)
         if (!this.dom.currentSongAlbumCover.classList.contains("active")) {
             this.uiController.toggleAlbumCoverAnimation()
@@ -521,12 +540,18 @@ class AudioPlayer {
 
         // Bouton playlist 1
         this.dom.playlistButton1.addEventListener("click", () => {
+            this.playlistService.setLibraryMode(false)
             this.playlistService.switchPlaylist(0)
+            this.playlistService.currentIndex = 0
+            this.playCurrentSong()
         })
 
         // Bouton playlist 2
         this.dom.playlistButton2.addEventListener("click", () => {
+            this.playlistService.setLibraryMode(false)
             this.playlistService.switchPlaylist(1)
+            this.playlistService.currentIndex = 0
+            this.playCurrentSong()
         })
 
         // Événements audio
@@ -562,6 +587,15 @@ class AudioPlayer {
         this.dom.volumeButton.addEventListener("click", () => {
             this.audioController.toggleMute()
         })
+    }
+
+    playCurrentSong() {
+        const song = this.playlistService.getCurrentSong()
+        this.audioController.loadSong(song)
+        this.audioController.play()
+        if (!this.dom.currentSongAlbumCover.classList.contains("active")) {
+            this.uiController.toggleAlbumCoverAnimation()
+        }
     }
 
     playNextSong() {
