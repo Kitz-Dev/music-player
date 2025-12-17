@@ -346,13 +346,20 @@ class LibraryController {
         return newWrapper
     }
 
-    handleTrackClick(track) {
-        const clickedIndex = this.playlistService.library.indexOf(track)
-        this.playlistService.setLibraryMode(true)
-        this.playlistService.currentLibraryIndex = clickedIndex
+    handleTrackClick(track, sourceList, isLibrary) {
+        const clickedIndex = sourceList.indexOf(track)
+        this.playlistService.setLibraryMode(isLibrary)
 
-        if (this.playlistService.shuffleMode) {
-            this.playlistService.libraryPlayedIndexes = [clickedIndex]
+        if (isLibrary) {
+            this.playlistService.currentLibraryIndex = clickedIndex
+            if (this.playlistService.shuffleMode) {
+                this.playlistService.libraryPlayedIndexes = [clickedIndex]
+            }
+        } else {
+            this.playlistService.currentIndex = clickedIndex
+            if (this.playlistService.shuffleMode) {
+                this.playlistService.playedIndexes = [clickedIndex]
+            }
         }
 
         this.audioController.loadSong(track)
@@ -381,9 +388,9 @@ class LibraryController {
         }
     }
 
-    attachTrackCardEvents(trackCard, titleWrapper, track) {
+    attachTrackCardEvents(trackCard, titleWrapper, track, sourceList, isLibrary) {
         trackCard.addEventListener("click", () => {
-            this.handleTrackClick(track)
+            this.handleTrackClick(track, sourceList, isLibrary)
         })
 
         trackCard.addEventListener("mouseenter", () => {
@@ -395,24 +402,23 @@ class LibraryController {
         })
     }
 
-    createTrackCard(track) {
+    createTrackCard(track, sourceList, isLibrary) {
         const trackCard = document.createElement("div")
         const coverImage = this.createCoverImage(track.cover)
         const newWrapper = this.createTitleWrapper(track)
         trackCard.setAttribute("class", "track-card")
         trackCard.appendChild(coverImage)
         trackCard.appendChild(newWrapper)
-        this.attachTrackCardEvents(trackCard, newWrapper, track)
+        this.attachTrackCardEvents(trackCard, newWrapper, track, sourceList, isLibrary)
         return trackCard
     }
 
-    displayTracks(playlist) {
+    displayTracks(playlist, isLibrary = true) {
         const insertDiv = document.getElementById("library-tracks-container")
-
         this.removeLibrary()
 
         playlist.forEach(element => {
-            const trackCard = this.createTrackCard(element)
+            const trackCard = this.createTrackCard(element, playlist, isLibrary)
             insertDiv.insertBefore(trackCard, null)
         });
     }
@@ -549,7 +555,7 @@ class AudioPlayer {
             this.playlistService.setLibraryMode(false)
             this.playlistService.switchPlaylist(0)
             this.playlistService.currentIndex = 0
-            this.libraryController.displayTracks(this.playlistService.playlist)
+            this.libraryController.displayTracks(this.playlistService.playlist, false)
             this.playCurrentSong()
         })
 
@@ -558,7 +564,7 @@ class AudioPlayer {
             this.playlistService.setLibraryMode(false)
             this.playlistService.switchPlaylist(1)
             this.playlistService.currentIndex = 0
-            this.libraryController.displayTracks(this.playlistService.playlist)
+            this.libraryController.displayTracks(this.playlistService.playlist, false)
             this.playCurrentSong()
         })
 
