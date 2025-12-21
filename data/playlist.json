@@ -1,6 +1,7 @@
 [
     {
         "title": "Playlist 1",
+        "cover": "../fox-corpo-icon.webp",
         "songs": [
             {
                 "title": "Background Music",
@@ -48,6 +49,7 @@
     },
     {
         "title": "Playlist 2",
+        "cover": "../fox-corpo-icon.webp",
         "songs": [
             {
                 "title": "Hype",

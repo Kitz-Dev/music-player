@@ -27,6 +27,7 @@ const DOM = {
     playlistButton1: document.getElementById("playlist-1"),
     playlistButton2: document.getElementById("playlist-2"),
     trackListTitle: document.getElementById("tracklist-title"),
+    tracklistReturnButton: document.getElementById("tracklist-return-button-container"),
     trackCard: document.getElementsByClassName("track-card")
 }
 
@@ -37,6 +38,7 @@ class PlaylistService {
     constructor() {
         this.playlist = []
         this.playlists = []
+        this.libraryTracks = []
         this.library = []
         this.currentIndex = 0
         this.currentLibraryIndex = 0
@@ -68,8 +70,8 @@ class PlaylistService {
         }
         const data = await res.json()
         this.library = data
-        this.library = this.sortLibrary()
-        return this.library
+        this.libraryTracks = this.sortLibrary()
+        return this.libraryTracks
     }
 
     sortCurrentPlaylist() {
@@ -79,7 +81,8 @@ class PlaylistService {
     }
 
     sortLibrary() {
-        return [...this.library].sort((a, b) =>
+        console.log(this.library[0].songs)
+        return [...this.library[0].songs].sort((a, b) =>
             a.title.localeCompare(b.title)
         )
     }
@@ -91,7 +94,7 @@ class PlaylistService {
 
     getCurrentSong() {
         if (this.libraryMode) {
-            return this.library[this.currentLibraryIndex]
+            return this.libraryTracks[this.currentLibraryIndex]
         } else {
             return this.playlist[this.currentIndex]
         }
@@ -121,7 +124,7 @@ class PlaylistService {
             } else if (this.repeatMode) {
                 return this.getCurrentSong()
             } else {
-                this.currentLibraryIndex = (this.currentLibraryIndex + 1) % this.library.length
+                this.currentLibraryIndex = (this.currentLibraryIndex + 1) % this.libraryTracks.length
                 return this.getCurrentSong()
             }
         }
@@ -146,7 +149,7 @@ class PlaylistService {
                 }
                 return this.getCurrentSong()
             } else {
-                this.currentLibraryIndex = (this.currentLibraryIndex - 1 + this.library.length) % this.library.length
+                this.currentLibraryIndex = (this.currentLibraryIndex - 1 + this.libraryTracks.length) % this.libraryTracks.length
                 return this.getCurrentSong()
             }
         } else {
@@ -168,7 +171,7 @@ class PlaylistService {
 
         if (this.libraryMode) {
             played = this.libraryPlayedIndexes
-            list = this.library
+            list = this.libraryTracks
             currentIndexProp = 'currentLibraryIndex'
         } else {
             played = this.playedIndexes
@@ -340,10 +343,24 @@ class LibraryController {
         return trackTitleContainer
     }
 
+    createPlaylistTitleContainer(track) {
+        const trackTitleContainer = document.createElement("div")
+        trackTitleContainer.setAttribute("class", "track-title-container")
+        trackTitleContainer.appendChild(this.createTitleSpan(track.title))
+        return trackTitleContainer
+    }
+
     createTitleWrapper(track) {
         const newWrapper = document.createElement("div")
         newWrapper.setAttribute("class", "track-title-wrapper")
         newWrapper.appendChild(this.createTitleContainer(track))
+        return newWrapper
+    }
+
+    createPlaylistTitleWrapper(track) {
+        const newWrapper = document.createElement("div")
+        newWrapper.setAttribute("class", "track-title-wrapper")
+        newWrapper.appendChild(this.createPlaylistTitleContainer(track))
         return newWrapper
     }
 
@@ -430,6 +447,39 @@ class LibraryController {
             container.removeChild(container.firstChild)
         }
     }
+
+    createPlaylistChoice(playlists) {
+        const playlistCard = document.createElement("div")
+        const coverImage = this.createCoverImage(playlists.cover)
+        const newWrapper = this.createPlaylistTitleWrapper(playlists)
+        playlistCard.setAttribute("class", "playlist-card")
+        playlistCard.appendChild(coverImage)
+        playlistCard.appendChild(newWrapper)
+        return playlistCard
+    }
+
+    createLibraryCard(library) {
+        const libraryCard = document.createElement("div")
+        const coverImage = this.createCoverImage("../fox-corpo-icon.webp")
+        const newWrapper = this.createPlaylistTitleWrapper(library)
+        libraryCard.setAttribute("class", "playlist-card")
+        libraryCard.appendChild(coverImage)
+        libraryCard.appendChild(newWrapper)
+        return libraryCard
+    }
+
+    displayPlaylistChoice(playlists) {
+        const insertDiv = document.getElementById("library-tracks-container")
+        this.removeLibrary()
+
+        const libraryCard = this.createLibraryCard(this.playlistService.library[0])
+        insertDiv.insertBefore(libraryCard, null)
+
+        playlists.forEach(element => {
+            const playlistCard = this.createPlaylistChoice(element)
+            insertDiv.insertBefore(playlistCard, null)
+        });
+    }
 }
 
 // TODO : Library Listening List
@@ -515,7 +565,7 @@ class AudioPlayer {
         try {
             await this.playlistService.loadPlaylist(playlistUrl)
             await this.playlistService.loadLibrary(libraryUrl)
-            this.libraryController.displayTracks(this.playlistService.library)
+            this.libraryController.displayTracks(this.playlistService.libraryTracks)
             const firstSong = this.playlistService.getCurrentSong()
             this.audioController.loadSong(firstSong)
             this.setupEventListeners()
@@ -549,6 +599,11 @@ class AudioPlayer {
         // Bouton repeat
         this.dom.repeatButton.addEventListener("click", () => {
             this.toggleRepeatMode()
+        })
+
+        // Bouton tracklist return
+        this.dom.tracklistReturnButton.addEventListener("click", () => {
+            this.libraryController.displayPlaylistChoice(this.playlistService.playlists)
         })
 
         // ========== AJOUT DE PLAYLIST ==========
