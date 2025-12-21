@@ -552,6 +552,7 @@ class AudioPlayer {
         })
 
         // ========== AJOUT DE PLAYLIST ==========
+        // TODO : Bouton de retour a la librairie
         // Bouton playlist 1
         this.dom.playlistButton1.addEventListener("click", () => {
             this.playlistService.setLibraryMode(false)
