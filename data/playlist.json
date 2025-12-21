@@ -1,6 +1,6 @@
 [
     {
-        "name": "Playlist test",
+        "title": "Playlist 1",
         "songs": [
             {
                 "title": "Background Music",
@@ -47,7 +47,7 @@
         ]
     },
     {
-        "name": "Playlist test 2",
+        "title": "Playlist 2",
         "songs": [
             {
                 "title": "Hype",

@@ -26,6 +26,7 @@ const DOM = {
     volumeButtonImg: document.getElementById("volume-button-img"),
     playlistButton1: document.getElementById("playlist-1"),
     playlistButton2: document.getElementById("playlist-2"),
+    trackListTitle: document.getElementById("tracklist-title"),
     trackCard: document.getElementsByClassName("track-card")
 }
 
@@ -550,12 +551,15 @@ class AudioPlayer {
             this.toggleRepeatMode()
         })
 
+        // ========== AJOUT DE PLAYLIST ==========
         // Bouton playlist 1
         this.dom.playlistButton1.addEventListener("click", () => {
             this.playlistService.setLibraryMode(false)
             this.playlistService.switchPlaylist(0)
+            // Forçage de l'index à 0
             this.playlistService.currentIndex = 0
             this.libraryController.displayTracks(this.playlistService.playlist, false)
+            this.dom.trackListTitle.textContent = this.playlistService.playlists[this.playlistService.playlistIndex].title
             this.playCurrentSong()
         })
 
@@ -563,8 +567,10 @@ class AudioPlayer {
         this.dom.playlistButton2.addEventListener("click", () => {
             this.playlistService.setLibraryMode(false)
             this.playlistService.switchPlaylist(1)
+            // Forçage de l'index à 0
             this.playlistService.currentIndex = 0
             this.libraryController.displayTracks(this.playlistService.playlist, false)
+            this.dom.trackListTitle.textContent = this.playlistService.playlists[this.playlistService.playlistIndex].title
             this.playCurrentSong()
         })
 
