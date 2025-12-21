@@ -454,10 +454,13 @@ input[type="range"]:focus {
     align-items: center;
     background-color: var(--title-color);
     border-radius: 4px;
-    max-width: 200px;
-    margin: 8px 8px 4px 8px;
+    margin: 4px 8px;
     padding: 10px;
     cursor: pointer;
+}
+
+.playlist-card:first-child {
+    margin-top: 8px;
 }
 
 .playlist-card:last-child {
@@ -503,6 +506,11 @@ input[type="range"]:focus {
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
+/* TODO: Rotate image
+#tracklist-return-button {
+    /* transform: rotate(180deg); */
+/* } */
 
 .track-title {
     color: var(--primary-color);
