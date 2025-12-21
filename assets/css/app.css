@@ -79,6 +79,24 @@
     --thumb-width: 12px;
     --slider-value: 0%;
 
+    /* Track-card anim */
+    --btn-padding-x: 2rem;
+    --btn-padding-y: 1rem;
+    --btn-color: #fff;
+    --btn-color-hover: #000000;
+    --btn-bgcolor: #000;
+    --btn-bgcolor-hover: #ffdd00;
+    --btn-border-radius: 10px;
+    --btn-blur: 0px;
+    --font-size: 1.35rem;
+    --easing: 0.3s ease;
+    --bg: #282832;
+
+    /* New vars for the ring/gap */
+    --ring-width: 2px;
+    --outer-offset: 4px;
+    /* gap (2px) + ring (2px) */
+
 }
 
 /** ==============================
@@ -498,6 +516,9 @@ input[type="range"]:focus {
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    padding: 4px;
+    border-radius: 10px;
+    background: #141a24;
 }
 
 .library-container h2 {
@@ -521,7 +542,7 @@ input[type="range"]:focus {
 .library-tracks-container {
     display: flex;
     flex-direction: column;
-    background: linear-gradient(var(--alt-color, 0, var(--title-color), 100));
+    background: #141a24;
     border-radius: 4px;
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
@@ -543,10 +564,103 @@ input[type="range"]:focus {
     align-items: center;
     background-color: var(--title-color);
     border-radius: 4px;
-    min-height: 70px;
+    height: 45px;
     margin: 4px 8px 4px 8px;
     padding: 10px;
     cursor: pointer;
+    white-space: nowrap;
+    transition: color var(--easing), background-color var(--easing);
+}
+
+.track-card.anim {
+    /* Test anim */
+
+    /* color: var(--btn-color); */
+    border: 0 none;
+    cursor: pointer;
+    position: relative;
+
+    &.small {
+        padding: calc(var(--btn-padding-y) / 1.4) calc(var(--btn-padding-x) / 1.4);
+        font-size: calc(var(--font-size) / 1.4);
+    }
+
+    &.rounded {
+        border-radius: var(--btn-border-radius);
+    }
+
+    &.pill {
+        border-radius: 500px;
+    }
+
+    &:hover {
+        /* color: var(--btn-color-hover); */
+        background-color: var(--alt-color);
+    }
+
+    &:hover:before {
+        filter: blur(var(--btn-blur));
+    }
+
+    &:hover:before,
+    &:hover:after {
+        opacity: 1;
+    }
+
+    /* Blurred gradient background */
+    &:before {
+        content: '';
+        position: absolute;
+        inset: -4px;
+        z-index: -2;
+        background: linear-gradient(160deg,
+                #ffffff00 0%,
+                #ffffff 15%,
+                #00fff3 20%,
+                #800080 25%,
+                #ffffff00 35%,
+                #ffffff00 40%,
+                #ffffff 55%,
+                #00fff3 60%,
+                #800080 65%,
+                #ffffff00 75%,
+                #ffffff00 80%,
+                #ffffff 95%,
+                #00fff3 100%);
+        background-size: 300% 300%;
+        filter: blur(0px);
+        border-radius: inherit;
+        opacity: 0;
+        transition: opacity var(--easing), filter var(--easing), background-position var(--easing);
+        animation: gradientMove 3s linear infinite;
+    }
+
+    /* Mask layer to create the gap */
+    &:after {
+        content: '';
+        position: absolute;
+        inset: -2px;
+        z-index: -1;
+        background: var(--bg);
+        /* Match body background */
+        border-radius: inherit;
+        opacity: 0;
+        transition: opacity var(--easing);
+    }
+}
+
+@keyframes gradientMove {
+    0% {
+        background-position: 15% 15%;
+    }
+
+    100% {
+        background-position: 75% 75%;
+    }
+}
+
+.track-card img {
+    border-radius: 50%;
 }
 
 .track-card:first-child {

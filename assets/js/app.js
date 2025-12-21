@@ -28,6 +28,7 @@ const DOM = {
     playlistButton2: document.getElementById("playlist-2"),
     trackListTitle: document.getElementById("tracklist-title"),
     tracklistReturnButton: document.getElementById("tracklist-return-button-container"),
+    trackCardContainer: document.getElementById("library-tracks-container"),
     trackCard: document.getElementsByClassName("track-card")
 }
 
@@ -389,6 +390,7 @@ class LibraryController {
 
     handleMouseEnter(trackCard, titleWrapper, track) {
         const mainContainer = titleWrapper.querySelector(".track-title-container")
+        trackCard.classList.add("anim")
 
         if (this.shouldShowScrollingAnimation(mainContainer, titleWrapper)) {
             titleWrapper.appendChild(this.createTitleContainer(track))
@@ -398,6 +400,11 @@ class LibraryController {
 
     handleMouseLeave(trackCard) {
         trackCard.classList.remove("active")
+        trackCard.classList.remove("anim")
+    }
+
+    handleTrackCardAnim(isPlaying, track) {
+        this.uiController.updateTrackCardAnim(isPlaying, track)
     }
 
     shouldShowScrollingAnimation(mainContainer, wrapper) {
@@ -425,6 +432,8 @@ class LibraryController {
         const coverImage = this.createCoverImage(track.cover)
         const newWrapper = this.createTitleWrapper(track)
         trackCard.setAttribute("class", "track-card")
+        // TODO: Appel par ID plutôt que par title
+        trackCard.setAttribute("id", `track-card ${track.title}`)
         trackCard.appendChild(coverImage)
         trackCard.appendChild(newWrapper)
         this.attachTrackCardEvents(trackCard, newWrapper, track, sourceList, isLibrary)
@@ -432,7 +441,7 @@ class LibraryController {
     }
 
     displayTracks(playlist, isLibrary = true) {
-        const insertDiv = document.getElementById("library-tracks-container")
+        const insertDiv = this.dom.trackCardContainer
         this.removeLibrary()
 
         playlist.forEach(element => {
@@ -442,7 +451,7 @@ class LibraryController {
     }
 
     removeLibrary() {
-        const container = document.getElementById("library-tracks-container")
+        const container = this.dom.trackCardContainer
         while (container.firstChild) {
             container.removeChild(container.firstChild)
         }
@@ -469,7 +478,7 @@ class LibraryController {
     }
 
     displayPlaylistChoice(playlists) {
-        const insertDiv = document.getElementById("library-tracks-container")
+        const insertDiv = this.dom.trackCardContainer
         this.removeLibrary()
 
         const libraryCard = this.createLibraryCard(this.playlistService.library[0])
