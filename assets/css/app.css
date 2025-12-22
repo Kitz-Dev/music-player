@@ -596,11 +596,6 @@ input[type="range"]:focus {
         filter: blur(var(--btn-blur));
     }
 
-    &:hover:before,
-    &:hover:after {
-        opacity: 1;
-    }
-
     /* Blurred gradient background */
     &:before {
         content: '';

@@ -681,9 +681,12 @@ class AudioPlayer {
 
         // Barre de progression
         this.dom.progressBar.addEventListener("input", (e) => {
+            const value = Number(e.target.value)
+            const duration = this.dom.progressBar.max
             this.audioController.seekTo(e.target.value)
             const percentage = (e.target.value / this.dom.progressBar.max) * 100
             this.dom.progressBar.style.setProperty('--slider-value', `${percentage}%`)
+            this.uiController.updateProgressBar(value, duration)
         })
 
         // Contrôle du volume
