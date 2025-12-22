@@ -572,7 +572,7 @@ input[type="range"]:focus {
     transition: color var(--easing), background-color var(--easing);
 }
 
-.track-card.anim {
+.track-card.playing {
     /* Test anim */
 
     /* color: var(--btn-color); */
@@ -591,11 +591,6 @@ input[type="range"]:focus {
 
     &.pill {
         border-radius: 500px;
-    }
-
-    &:hover {
-        /* color: var(--btn-color-hover); */
-        background-color: var(--alt-color);
     }
 
     &:hover:before {
@@ -630,7 +625,7 @@ input[type="range"]:focus {
         background-size: 300% 300%;
         filter: blur(0px);
         border-radius: inherit;
-        opacity: 0;
+        opacity: 1;
         transition: opacity var(--easing), filter var(--easing), background-position var(--easing);
         animation: gradientMove 3s linear infinite;
     }
@@ -644,9 +639,13 @@ input[type="range"]:focus {
         background: var(--bg);
         /* Match body background */
         border-radius: inherit;
-        opacity: 0;
+        opacity: 1;
         transition: opacity var(--easing);
     }
+}
+
+.track-card.hover-anim {
+    background-color: var(--alt-color);
 }
 
 @keyframes gradientMove {

@@ -318,6 +318,8 @@ class LibraryController {
         this.playlistService = playlistService
         this.audioController = audioController
         this.uiController = uiController
+        this.trackCardMap = new Map()
+        this.currentAnimatedCard = null
     }
 
     createCoverImage(coverSrc) {
@@ -390,7 +392,7 @@ class LibraryController {
 
     handleMouseEnter(trackCard, titleWrapper, track) {
         const mainContainer = titleWrapper.querySelector(".track-title-container")
-        trackCard.classList.add("anim")
+        trackCard.classList.add("hover-anim")
 
         if (this.shouldShowScrollingAnimation(mainContainer, titleWrapper)) {
             titleWrapper.appendChild(this.createTitleContainer(track))
@@ -399,8 +401,7 @@ class LibraryController {
     }
 
     handleMouseLeave(trackCard) {
-        trackCard.classList.remove("active")
-        trackCard.classList.remove("anim")
+        trackCard.classList.remove("active", "hover-anim")
     }
 
     handleTrackCardAnim(isPlaying, track) {
@@ -411,6 +412,18 @@ class LibraryController {
         if (mainContainer.offsetWidth >= wrapper.offsetWidth && mainContainer != null) {
             return true
         }
+    }
+
+    onSongChange(song) {
+        const newCard = this.trackCardMap.get(song.id)
+        if (!newCard) return
+
+        if (this.currentAnimatedCard) {
+            this.currentAnimatedCard.classList.remove("playing")
+        }
+
+        newCard.classList.add("playing")
+        this.currentAnimatedCard = newCard
     }
 
     attachTrackCardEvents(trackCard, titleWrapper, track, sourceList, isLibrary) {
@@ -433,9 +446,10 @@ class LibraryController {
         const newWrapper = this.createTitleWrapper(track)
         trackCard.setAttribute("class", "track-card")
         // TODO: Appel par ID plutôt que par title
-        trackCard.setAttribute("id", `track-card ${track.title}`)
+        trackCard.setAttribute("id", `track-card ${track.id}`)
         trackCard.appendChild(coverImage)
         trackCard.appendChild(newWrapper)
+        this.trackCardMap.set(track.id, trackCard)
         this.attachTrackCardEvents(trackCard, newWrapper, track, sourceList, isLibrary)
         return trackCard
     }
@@ -501,6 +515,7 @@ class AudioController {
         this.audio = audioElement
         this.ui = uiController
         this.previousVolume = 0.5
+        this.songChangeListener = null
     }
 
     play() {
@@ -522,6 +537,10 @@ class AudioController {
     }
 
     loadSong(song) {
+        if (this.songChangeListener) {
+            this.songChangeListener(song)
+        }
+
         this.audio.src = song.url
         this.ui.updateSongInfo(song)
     }
@@ -555,6 +574,9 @@ class AudioPlayer {
         this.uiController = new UIController(dom)
         this.audioController = new AudioController(dom.currentSong, this.uiController)
         this.libraryController = new LibraryController(dom, this.playlistService, this.audioController, this.uiController)
+        this.audioController.songChangeListener = (song) => {
+            this.libraryController.onSongChange(song)
+        }
         this.initVolume()
         this.initColor()
     }
