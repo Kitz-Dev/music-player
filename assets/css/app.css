@@ -32,7 +32,7 @@
 
 :root {
     /* Couleurs (palette réduite pour meilleure cohérence) */
-    --primary-color: #1A202C;
+    --primary-color: #010102;
     --secondary-color: #b417e4;
     --secondary-color-hover: rgb(151, 89, 170);
     --title-color: #EDF2F7;
@@ -516,9 +516,9 @@ input[type="range"]:focus {
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: 4px;
-    border-radius: 10px;
-    background: #141a24;
+    padding: 4px 10px;
+    border-radius: 15px;
+    background: #19202c;
 }
 
 .library-container h2 {
@@ -534,7 +534,7 @@ input[type="range"]:focus {
 /* } */
 
 .track-title {
-    color: var(--primary-color);
+    color: var(--title-color);
     font-weight: 400;
     margin: 3px;
 }
@@ -542,8 +542,8 @@ input[type="range"]:focus {
 .library-tracks-container {
     display: flex;
     flex-direction: column;
-    background: #141a24;
-    border-radius: 4px;
+    background: #19202c;
+    border-radius: 15px;
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     height: 80vh;
@@ -562,7 +562,7 @@ input[type="range"]:focus {
 .track-card {
     display: flex;
     align-items: center;
-    background-color: var(--title-color);
+    background-color: #2e3a4e;
     border-radius: 4px;
     height: 45px;
     margin: 4px 8px 4px 8px;
