@@ -85,7 +85,6 @@
     --btn-color: #fff;
     --btn-color-hover: #000000;
     --btn-bgcolor: #000;
-    --btn-bgcolor-hover: #ffdd00;
     --btn-border-radius: 10px;
     --btn-blur: 0px;
     --font-size: 1.35rem;
@@ -611,17 +610,17 @@ input[type="range"]:focus {
         background: linear-gradient(160deg,
                 #ffffff00 0%,
                 #ffffff 15%,
-                #00fff3 20%,
+                #b417e4 20%,
                 #800080 25%,
                 #ffffff00 35%,
                 #ffffff00 40%,
                 #ffffff 55%,
-                #00fff3 60%,
+                #b417e4 60%,
                 #800080 65%,
                 #ffffff00 75%,
                 #ffffff00 80%,
                 #ffffff 95%,
-                #00fff3 100%);
+                #b417e4 100%);
         background-size: 300% 300%;
         filter: blur(0px);
         border-radius: inherit;
