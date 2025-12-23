@@ -24,8 +24,6 @@ const DOM = {
     volumeBar: document.getElementById("volume-bar"),
     volumeButton: document.getElementById("volume-button"),
     volumeButtonImg: document.getElementById("volume-button-img"),
-    playlistButton1: document.getElementById("playlist-0"),
-    playlistButton2: document.getElementById("playlist-1"),
     trackListTitle: document.getElementById("tracklist-title"),
     tracklistReturnButton: document.getElementById("tracklist-return-button-container"),
     trackCardContainer: document.getElementById("library-tracks-container"),
@@ -689,29 +687,6 @@ class AudioPlayer {
         // Bouton tracklist return
         this.dom.tracklistReturnButton.addEventListener("click", () => {
             this.libraryController.displayPlaylistChoice(this.playlistService.playlists)
-        })
-
-        // ========== AJOUT DE PLAYLIST ==========
-        // Bouton playlist 1
-        this.dom.playlistButton1.addEventListener("click", () => {
-            this.playlistService.setLibraryMode(false)
-            this.playlistService.switchPlaylist(0)
-            // Forçage de l'index à 0
-            this.playlistService.currentIndex = 0
-            this.libraryController.displayTracks(this.playlistService.playlist, false)
-            this.dom.trackListTitle.textContent = this.playlistService.playlists[this.playlistService.playlistIndex].title
-            this.playCurrentSong()
-        })
-
-        // Bouton playlist 2
-        this.dom.playlistButton2.addEventListener("click", () => {
-            this.playlistService.setLibraryMode(false)
-            this.playlistService.switchPlaylist(1)
-            // Forçage de l'index à 0
-            this.playlistService.currentIndex = 0
-            this.libraryController.displayTracks(this.playlistService.playlist, false)
-            this.dom.trackListTitle.textContent = this.playlistService.playlists[this.playlistService.playlistIndex].title
-            this.playCurrentSong()
         })
 
         // Événements audio
