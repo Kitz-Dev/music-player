@@ -24,8 +24,8 @@ const DOM = {
     volumeBar: document.getElementById("volume-bar"),
     volumeButton: document.getElementById("volume-button"),
     volumeButtonImg: document.getElementById("volume-button-img"),
-    playlistButton1: document.getElementById("playlist-1"),
-    playlistButton2: document.getElementById("playlist-2"),
+    playlistButton1: document.getElementById("playlist-0"),
+    playlistButton2: document.getElementById("playlist-1"),
     trackListTitle: document.getElementById("tracklist-title"),
     tracklistReturnButton: document.getElementById("tracklist-return-button-container"),
     trackCardContainer: document.getElementById("library-tracks-container"),
@@ -44,6 +44,7 @@ class PlaylistService {
         this.currentIndex = 0
         this.currentLibraryIndex = 0
         this.playlistIndex = 0
+        this.playlistSelectionMode = false
         this.libraryMode = true
         this.shuffleMode = false  // Mode shuffle activé ou non
         this.repeatMode = false
@@ -91,6 +92,11 @@ class PlaylistService {
     switchPlaylist(id) {
         this.playlistIndex = id
         this.playlist = this.sortCurrentPlaylist()
+    }
+
+    setPlaylistSelectionMode(isActive) {
+        this.playlistSelectionMode = isActive
+        return isActive
     }
 
     getCurrentSong() {
@@ -307,6 +313,18 @@ class UIController {
             this.dom.currentSongTitleAnimContainer.classList.remove("active")
         }
     }
+
+    toggleReturnButton(show) {
+        if (show) {
+            this.dom.tracklistReturnButton.style.display = "flex"
+        } else {
+            this.dom.tracklistReturnButton.style.display = "none"
+        }
+    }
+
+    updateTracklistTitle(title) {
+        this.dom.trackListTitle.textContent = title
+    }
 }
 
 // ============================================
@@ -440,12 +458,41 @@ class LibraryController {
         })
     }
 
+    // TODO : Fix animation au changement de playlist
+    attachPlaylistCardEvents(playlistCard, playlist) {
+        playlistCard.addEventListener("click", () => {
+            const playlistId = playlist.id
+
+            this.playlistService.setLibraryMode(false)
+            this.playlistService.switchPlaylist(playlistId)
+            this.playlistService.currentIndex = 0
+
+            this.displayTracks(this.playlistService.playlist, false)
+
+            this.playlistService.setPlaylistSelectionMode(false)
+            this.uiController.toggleReturnButton(true)
+            this.uiController.updateTracklistTitle(playlist.title)
+        })
+    }
+
+    attachLibraryCardEvents(libraryCard) {
+        libraryCard.addEventListener("click", () => {
+            this.playlistService.setLibraryMode(true)
+            this.playlistService.currentLibraryIndex = 0
+
+            this.displayTracks(this.playlistService.libraryTracks, true)
+
+            this.playlistService.setPlaylistSelectionMode(false)
+            this.uiController.toggleReturnButton(true)
+            this.uiController.updateTracklistTitle("Library")
+        })
+    }
+
     createTrackCard(track, sourceList, isLibrary) {
         const trackCard = document.createElement("div")
         const coverImage = this.createCoverImage(track.cover)
         const newWrapper = this.createTitleWrapper(track)
         trackCard.setAttribute("class", "track-card")
-        // TODO: Appel par ID plutôt que par title
         trackCard.setAttribute("id", `track-card ${track.id}`)
         trackCard.appendChild(coverImage)
         trackCard.appendChild(newWrapper)
@@ -476,8 +523,10 @@ class LibraryController {
         const coverImage = this.createCoverImage(playlists.cover)
         const newWrapper = this.createPlaylistTitleWrapper(playlists)
         playlistCard.setAttribute("class", "playlist-card")
+        playlistCard.setAttribute("id", `playlist-${playlists.id}`)
         playlistCard.appendChild(coverImage)
         playlistCard.appendChild(newWrapper)
+        this.attachPlaylistCardEvents(playlistCard, playlists)
         return playlistCard
     }
 
@@ -488,6 +537,7 @@ class LibraryController {
         libraryCard.setAttribute("class", "playlist-card")
         libraryCard.appendChild(coverImage)
         libraryCard.appendChild(newWrapper)
+        this.attachLibraryCardEvents(libraryCard)
         return libraryCard
     }
 
@@ -502,6 +552,10 @@ class LibraryController {
             const playlistCard = this.createPlaylistChoice(element)
             insertDiv.insertBefore(playlistCard, null)
         });
+
+        this.playlistService.setPlaylistSelectionMode(true)
+        this.uiController.toggleReturnButton(false)
+        this.uiController.updateTracklistTitle("Playlists")
     }
 }
 
@@ -638,7 +692,6 @@ class AudioPlayer {
         })
 
         // ========== AJOUT DE PLAYLIST ==========
-        // TODO : Bouton de retour a la librairie
         // Bouton playlist 1
         this.dom.playlistButton1.addEventListener("click", () => {
             this.playlistService.setLibraryMode(false)

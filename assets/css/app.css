@@ -426,7 +426,8 @@ input[type="range"]:focus {
 }
 
 .playlists-container {
-    display: flex;
+    /* ! =================== DISPLAY FLEX POUR AFFICHER =================== */
+    display: none;
     flex-direction: column;
     align-items: center;
     padding: 0 8px;
@@ -469,11 +470,17 @@ input[type="range"]:focus {
 .playlist-card {
     display: flex;
     align-items: center;
-    background-color: var(--title-color);
+    background-color: #2e3a4e;
     border-radius: 4px;
-    margin: 4px 8px;
+    height: 45px;
+    margin: 4px 8px 4px 8px;
     padding: 10px;
     cursor: pointer;
+    white-space: nowrap;
+
+    &:hover {
+        background-color: var(--alt-color);
+    }
 }
 
 .playlist-card:first-child {

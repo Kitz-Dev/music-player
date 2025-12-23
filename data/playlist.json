@@ -1,5 +1,6 @@
 [
     {
+        "id": "0",
         "title": "Playlist 1",
         "cover": "../fox-corpo-icon.webp",
         "songs": [
@@ -55,6 +56,7 @@
         ]
     },
     {
+        "id": "1",
         "title": "Playlist 2",
         "cover": "../fox-corpo-icon.webp",
         "songs": [
