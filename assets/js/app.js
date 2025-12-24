@@ -48,6 +48,7 @@ class PlaylistService {
         this.repeatMode = false
         this.playedIndexes = []   // Historique des pistes jouées en mode shuffle
         this.libraryPlayedIndexes = []
+        this.currentPlayingSongId = null
     }
 
     async loadPlaylist(playlistUrl) {
@@ -81,7 +82,6 @@ class PlaylistService {
     }
 
     sortLibrary() {
-        console.log(this.library[0].songs)
         return [...this.library[0].songs].sort((a, b) =>
             a.title.localeCompare(b.title)
         )
@@ -433,7 +433,6 @@ class LibraryController {
     onSongChange(song) {
         const newCard = this.trackCardMap.get(song.id)
         if (!newCard) return
-
         if (this.currentAnimatedCard) {
             this.currentAnimatedCard.classList.remove("playing")
         }
@@ -507,6 +506,22 @@ class LibraryController {
             const trackCard = this.createTrackCard(element, playlist, isLibrary)
             insertDiv.insertBefore(trackCard, null)
         });
+
+        this.restorePlayingAnimation()
+    }
+
+    restorePlayingAnimation() {
+        const currentSongId = this.playlistService.currentPlayingSongId
+        if (currentSongId) {
+            const card = this.trackCardMap.get(currentSongId)
+            if (card) {
+                if (this.currentAnimatedCard) {
+                    this.currentAnimatedCard.classList.remove("playing")
+                }
+                card.classList.add("playing")
+                this.currentAnimatedCard = card
+            }
+        }
     }
 
     removeLibrary() {
@@ -568,6 +583,7 @@ class AudioController {
         this.ui = uiController
         this.previousVolume = 0.5
         this.songChangeListener = null
+        this.currentSongIdCallback = null
     }
 
     play() {
@@ -591,6 +607,10 @@ class AudioController {
     loadSong(song) {
         if (this.songChangeListener) {
             this.songChangeListener(song)
+        }
+
+        if (this.currentSongIdCallback) {
+            this.currentSongIdCallback(song.id)
         }
 
         this.audio.src = song.url
@@ -626,9 +646,15 @@ class AudioPlayer {
         this.uiController = new UIController(dom)
         this.audioController = new AudioController(dom.currentSong, this.uiController)
         this.libraryController = new LibraryController(dom, this.playlistService, this.audioController, this.uiController)
+
         this.audioController.songChangeListener = (song) => {
             this.libraryController.onSongChange(song)
         }
+
+        this.audioController.currentSongIdCallback = (songId) => {
+            this.playlistService.currentPlayingSongId = songId
+        }
+
         this.initVolume()
         this.initColor()
     }
