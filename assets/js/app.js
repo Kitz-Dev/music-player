@@ -27,7 +27,8 @@ const DOM = {
     trackListTitle: document.getElementById("tracklist-title"),
     tracklistReturnButton: document.getElementById("tracklist-return-button-container"),
     trackCardContainer: document.getElementById("library-tracks-container"),
-    trackCard: document.getElementsByClassName("track-card")
+    trackCard: document.getElementsByClassName("track-card"),
+    sortLibrary: document.getElementById("add-playlisy-button-container")
 }
 
 // ============================================
@@ -49,6 +50,7 @@ class PlaylistService {
         this.playedIndexes = []   // Historique des pistes jouées en mode shuffle
         this.libraryPlayedIndexes = []
         this.currentPlayingSongId = null
+        this.revertSortMode = false
     }
 
     async loadPlaylist(playlistUrl) {
@@ -76,14 +78,33 @@ class PlaylistService {
     }
 
     sortCurrentPlaylist() {
-        return [...this.playlists[this.playlistIndex].songs].sort((a, b) =>
-            a.title.localeCompare(b.title)
-        )
+        if (this.libraryMode) {
+            return [...this.playlists[this.playlistIndex].songs].sort((a, b) =>
+                b.title.localeCompare(a.title)
+            )
+        } else {
+            return [...this.playlists[this.playlistIndex].songs].sort((a, b) =>
+                a.title.localeCompare(b.title)
+            )
+        }
     }
 
     sortLibrary() {
+        if (this.libraryMode) {
+            return [...this.library[0].songs].sort((a, b) =>
+                b.title.localeCompare(a.title)
+            )
+        } else {
+            return [...this.library[0].songs].sort((a, b) =>
+                a.title.localeCompare(b.title)
+            )
+        }
+
+    }
+
+    sortLibraryByAuthor() {
         return [...this.library[0].songs].sort((a, b) =>
-            a.title.localeCompare(b.title)
+            a.author.localeCompare(b.author)
         )
     }
 
@@ -571,9 +592,21 @@ class LibraryController {
         this.uiController.toggleReturnButton(false)
         this.uiController.updateTracklistTitle("Playlists")
     }
-}
 
-// TODO : Library Listening List
+    onListSort() {
+        // TODO : addEventListener pour toggle isRevert de this.playlistService.revertSortMode
+        const isRevert = this.playlistService.revertSortMode
+        this.dom.sortLibrary.addEventListener("click", () => {
+            if (isRevert) {
+                console.log(isRevert)
+                this.playlistService.revertSortMode = false
+            } else {
+                this.playlistService.revertSortMode = true
+            }
+            this.playlistService.loadLibrary()
+        })
+    }
+}
 
 // ============================================
 // 6. AudioController.js - Contrôle audio
