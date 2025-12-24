@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- HTML Meta Tags -->
-    <title>SwiftFox.fr | For those who come after</title>
+    <title>SwiftFox Music</title>
     <meta name="description" content="SwiftFox | Audio Player">
 
     <!-- Security Meta Tags -->
@@ -52,6 +52,36 @@
 
 <body>
     <main>
+        <section class="playlists">
+            <div class="playlists-container">
+                <div class="title-container">
+                    <h2>
+                        Playlists
+                    </h2>
+
+                    <div class="button-container">
+                        <span id="add-playlist-tooltip" class="tooltip">Add</span>
+                        <svg id="add-playlist-button" class="logic-button" xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <use href="./img/sprite.svg#add-playlist-button"></use>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="playlist-container">
+                    <!-- <div id="playlist-1" class="playlist-card">
+                        <img loading="lazy" class="playlist-cover" src="./fox-corpo-icon.webp" alt="Playlist 1 Cover">
+                        <span class="playlist-title">Playlist 1</span>
+                    </div>
+
+                    <div id="playlist-2" class="playlist-card">
+                        <img loading="lazy" class="playlist-cover" src="./fox-corpo-icon.webp" alt="Playlist 2 Cover">
+                        <span class="playlist-title">Playlist 2</span>
+                    </div> -->
+                </div>
+            </div>
+        </section>
+
         <section class="music-player">
             <h1>
                 SwiftFox Music
@@ -60,7 +90,6 @@
             <div class="album-cover-container">
                 <img loading="eager" id="album-cover" class="album-cover" src="./fox-corpo-icon.webp" alt="album cover">
             </div>
-
 
             <div id="player-logic" class="player-logic">
                 <div class="button-container">
@@ -118,7 +147,6 @@
                     </div>
                 </div>
 
-
                 <div class="volume-container">
                     <div class="volume-bar-container">
                         <input type="range" id="volume-bar" class="volume-bar" value="0.5" step="any" max="1"
@@ -132,13 +160,50 @@
                 </div>
             </div>
 
-            <section class="song-title-container">
-                <div id="song-title" class="title-display"></div>
-                <span class="title-display"> - </span>
-                <div id="song-author" class="title-display"></div>
-            </section>
+            <div id="song-title-wrapper" class="song-title-wrapper">
+                <div id="song-title-container" class="song-title-container">
+                    <div id="song-title" class="title-display"></div>
+                    <span class="title-display"> - </span>
+                    <div id="song-author" class="title-display"></div>
+                </div>
+                <div id="song-title-anim-container" class="song-title-container">
+                    <div id="song-title-anim" class="title-display"></div>
+                    <span class="title-display"> - </span>
+                    <div id="song-author-anim" class="title-display"></div>
+                </div>
+            </div>
 
             <audio preload="metadata" crossorigin="use-credentials" id="current-song" type="audio/mpeg"></audio>
+        </section>
+
+        <section class="library">
+            <div class="library-container" scrollable>
+                <div class="title-container">
+                    <div id="tracklist-return-button-container" class="tracklist-title-button">
+                        <span id="tracklist-return-tooltip" class="tooltip">Return</span>
+                        <svg id="tracklist-return-button" class="logic-button" xmlns="http://www.w3.org/2000/svg"
+                            width="24" height="24" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+                            <use href="./img/sprite.svg#tracklist-return-button"></use>
+                        </svg>
+                    </div>
+
+                    <h2 id="tracklist-title">
+                        Library
+                    </h2>
+
+                    <div id="add-playlist-button-container" class="tracklist-title-button">
+                        <span id="add-track-tooltip" class="tooltip">Add</span>
+                        <svg id="add-track-button" class="logic-button" xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <use href="./img/sprite.svg#add-playlist-button"></use>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Library Tracks Container -->
+                <div id="library-tracks-container" class="library-tracks-container">
+                </div>
+            </div>
         </section>
     </main>
 

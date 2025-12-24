@@ -1,0 +1,78 @@
+[
+    {
+        "title": "Library",
+        "cover": "../fox-corpo-icon.webp",
+        "songs": [
+            {
+                "id": "0",
+                "title": "Background Music",
+                "author": "Dmitrii Spis",
+                "url": "../music/background-music.mp3",
+                "cover": "../img/shapes.webp"
+            },
+            {
+                "id": "1",
+                "title": "Hello Beloved",
+                "author": "alanajordan",
+                "url": "../music/hello-beloved.mp3",
+                "cover": "../img/tori.webp"
+            },
+            {
+                "id": "2",
+                "title": "Hallucination",
+                "author": "alanajordan",
+                "url": "../music/hallucination.mp3",
+                "cover": "../img/water.webp"
+            },
+            {
+                "id": "3",
+                "title": "The Crimson Flow",
+                "author": "Misselle",
+                "url": "../music/the-crimson-flow.mp3",
+                "cover": "../img/meditate.webp"
+            },
+            {
+                "id": "4",
+                "title": "Sweet Life (Luxury Chill)",
+                "author": "Alex Grohl",
+                "url": "../music/sweet-life-luxury-chill.mp3",
+                "cover": "../img/tree.webp"
+            },
+            {
+                "id": "5",
+                "title": "Alicia",
+                "author": "Lorien Testard",
+                "url": "../music/Clair Obscur - Alicia 2.mp3",
+                "cover": "../img/tree.webp"
+            },
+            {
+                "id": "6",
+                "title": "Lumière",
+                "author": "Lorien Testard",
+                "url": "../music/Clair Obscur - Lumière (FA) MP3.mp3",
+                "cover": "../img/tree.webp"
+            },
+            {
+                "id": "7",
+                "title": "Hype",
+                "author": "Kontraa Music",
+                "url": "../music/hype-drill-music.mp3",
+                "cover": "../img/tori.webp"
+            },
+            {
+                "id": "8",
+                "title": "One more dance with you",
+                "author": "Paul Winter",
+                "url": "../music/one-more-dance-with-you-smooth-jazz-music.mp3",
+                "cover": "../img/water.webp"
+            },
+            {
+                "id": "9",
+                "title": "Jazz Background Music",
+                "author": "Andrii Poradovskyi",
+                "url": "../music/jazz-background-music.mp3",
+                "cover": "../img/meditate.webp"
+            }
+        ]
+    }
+]

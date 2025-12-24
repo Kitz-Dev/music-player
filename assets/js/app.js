@@ -4,7 +4,12 @@
 const DOM = {
     currentSong: document.getElementById("current-song"),
     currentSongTitle: document.getElementById("song-title"),
+    currentSongTitleAnim: document.getElementById("song-title-anim"),
+    currentSongTitleWrapper: document.getElementById("song-title-wrapper"),
+    currentSongTitleContainer: document.getElementById("song-title-container"),
+    currentSongTitleAnimContainer: document.getElementById("song-title-anim-container"),
     currentSongAuthor: document.getElementById("song-author"),
+    currentSongAuthorAnim: document.getElementById("song-author-anim"),
     currentSongCountUp: document.getElementById("song-countup"),
     currentSongCountDown: document.getElementById("song-countdown"),
     currentSongAlbumCover: document.getElementById("album-cover"),
@@ -18,7 +23,11 @@ const DOM = {
     progressBar: document.getElementById("progress-bar"),
     volumeBar: document.getElementById("volume-bar"),
     volumeButton: document.getElementById("volume-button"),
-    volumeButtonImg: document.getElementById("volume-button-img")
+    volumeButtonImg: document.getElementById("volume-button-img"),
+    trackListTitle: document.getElementById("tracklist-title"),
+    tracklistReturnButton: document.getElementById("tracklist-return-button-container"),
+    trackCardContainer: document.getElementById("library-tracks-container"),
+    trackCard: document.getElementsByClassName("track-card")
 }
 
 // ============================================
@@ -27,25 +36,73 @@ const DOM = {
 class PlaylistService {
     constructor() {
         this.playlist = []
+        this.playlists = []
+        this.libraryTracks = []
+        this.library = []
         this.currentIndex = 0
+        this.currentLibraryIndex = 0
+        this.playlistIndex = 0
+        this.playlistSelectionMode = false
+        this.libraryMode = true
         this.shuffleMode = false  // Mode shuffle activé ou non
+        this.repeatMode = false
         this.playedIndexes = []   // Historique des pistes jouées en mode shuffle
+        this.libraryPlayedIndexes = []
+        this.currentPlayingSongId = null
     }
 
-    async loadPlaylist(url) {
-        const res = await fetch(url)
+    async loadPlaylist(playlistUrl) {
+        const res = await fetch(playlistUrl)
         if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`)
         }
         const data = await res.json()
-        this.playlist = [...data[1].songs].sort((a, b) =>
-            a.title.localeCompare(b.title)
-        )
+        this.playlists = data
+        this.playlist = this.sortCurrentPlaylist()
         return this.playlist
     }
 
+
+    // TODO : Link library to UI/UX
+    async loadLibrary(libraryUrl) {
+        const res = await fetch(libraryUrl)
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`)
+        }
+        const data = await res.json()
+        this.library = data
+        this.libraryTracks = this.sortLibrary()
+        return this.libraryTracks
+    }
+
+    sortCurrentPlaylist() {
+        return [...this.playlists[this.playlistIndex].songs].sort((a, b) =>
+            a.title.localeCompare(b.title)
+        )
+    }
+
+    sortLibrary() {
+        return [...this.library[0].songs].sort((a, b) =>
+            a.title.localeCompare(b.title)
+        )
+    }
+
+    switchPlaylist(id) {
+        this.playlistIndex = id
+        this.playlist = this.sortCurrentPlaylist()
+    }
+
+    setPlaylistSelectionMode(isActive) {
+        this.playlistSelectionMode = isActive
+        return isActive
+    }
+
     getCurrentSong() {
-        return this.playlist[this.currentIndex]
+        if (this.libraryMode) {
+            return this.libraryTracks[this.currentLibraryIndex]
+        } else {
+            return this.playlist[this.currentIndex]
+        }
     }
 
     toggleShuffleMode() {
@@ -60,51 +117,91 @@ class PlaylistService {
         return this.repeatMode
     }
 
+    setLibraryMode(isActive) {
+        this.libraryMode = isActive
+        return isActive
+    }
+
     nextSong() {
-        if (this.shuffleMode) {
-            return this.getRandomSong()
-        } else if (this.repeatMode) {
-            return this.getCurrentSong()
-        } else {
-            this.currentIndex = (this.currentIndex + 1) % this.playlist.length
-            return this.getCurrentSong()
+        if (this.libraryMode) {
+            if (this.shuffleMode) {
+                return this.getRandomSong()
+            } else if (this.repeatMode) {
+                return this.getCurrentSong()
+            } else {
+                this.currentLibraryIndex = (this.currentLibraryIndex + 1) % this.libraryTracks.length
+                return this.getCurrentSong()
+            }
+        }
+        else {
+            if (this.shuffleMode) {
+                return this.getRandomSong()
+            } else if (this.repeatMode) {
+                return this.getCurrentSong()
+            } else {
+                this.currentIndex = (this.currentIndex + 1) % this.playlist.length
+                return this.getCurrentSong()
+            }
         }
     }
 
     previousSong() {
-        if (this.shuffleMode) {
-            // En mode shuffle, on revient à la piste précédente dans l'historique
-            if (this.playedIndexes.length > 1) {
-                this.playedIndexes.pop() // Retire la piste actuelle
-                this.currentIndex = this.playedIndexes[this.playedIndexes.length - 1]
+        if (this.libraryMode) {
+            if (this.shuffleMode) {
+                if (this.libraryPlayedIndexes.length > 1) {
+                    this.libraryPlayedIndexes.pop()
+                    this.currentLibraryIndex = this.libraryPlayedIndexes[this.libraryPlayedIndexes.length - 1]
+                }
+                return this.getCurrentSong()
+            } else {
+                this.currentLibraryIndex = (this.currentLibraryIndex - 1 + this.libraryTracks.length) % this.libraryTracks.length
+                return this.getCurrentSong()
             }
-            return this.getCurrentSong()
         } else {
-            this.currentIndex = (this.currentIndex - 1 + this.playlist.length) % this.playlist.length
-            return this.getCurrentSong()
+            if (this.shuffleMode) {
+                if (this.playedIndexes.length > 1) {
+                    this.playedIndexes.pop()
+                    this.currentIndex = this.playedIndexes[this.playedIndexes.length - 1]
+                }
+                return this.getCurrentSong()
+            } else {
+                this.currentIndex = (this.currentIndex - 1 + this.playlist.length) % this.playlist.length
+                return this.getCurrentSong()
+            }
         }
     }
 
     getRandomSong() {
-        // Si toutes les pistes ont été jouées, on réinitialise
-        if (this.playedIndexes.length >= this.playlist.length) {
-            this.playedIndexes = [this.currentIndex]
+        let played, list, currentIndexProp
+
+        if (this.libraryMode) {
+            played = this.libraryPlayedIndexes
+            list = this.libraryTracks
+            currentIndexProp = 'currentLibraryIndex'
+        } else {
+            played = this.playedIndexes
+            list = this.playlist
+            currentIndexProp = 'currentIndex'
+        }
+
+        if (played.length >= list.length) {
+            played.length = 0
+            played.push(this[currentIndexProp])
         }
 
         let randomIndex
         let attempts = 0
         do {
-            randomIndex = Math.floor(Math.random() * this.playlist.length)
+            randomIndex = Math.floor(Math.random() * list.length)
             attempts++
-            // Évite les boucles infinies
             if (attempts > 100) {
-                randomIndex = (this.currentIndex + 1) % this.playlist.length
+                randomIndex = (this[currentIndexProp] + 1) % list.length
                 break
             }
-        } while (this.playedIndexes.includes(randomIndex) && this.playlist.length > 1)
+        } while (played.includes(randomIndex) && list.length > 1)
 
-        this.currentIndex = randomIndex
-        this.playedIndexes.push(randomIndex)
+        this[currentIndexProp] = randomIndex
+        played.push(randomIndex)
         return this.getCurrentSong()
     }
 }
@@ -131,9 +228,12 @@ class UIController {
 
     updateSongInfo(song) {
         this.dom.currentSongTitle.textContent = song.title
+        this.dom.currentSongTitleAnim.textContent = song.title
         this.dom.currentSongAuthor.textContent = song.author
+        this.dom.currentSongAuthorAnim.textContent = song.author
         this.dom.currentSongAlbumCover.src = song.cover
         this.dom.currentSong.src = song.url
+        this.toggleSongTitleAnim()
     }
 
     updatePlayButton(isPlaying) {
@@ -198,16 +298,293 @@ class UIController {
         this.dom.volumeBar.style.setProperty('--slider-value', `${percentage}%`)
         this.updateVolumeIcon(volume)
     }
+
+    toggleSongTitleAnim() {
+        const titleLength = this.dom.currentSongTitleContainer.offsetWidth
+        if (titleLength >= 300) {
+            this.dom.currentSongTitleContainer.classList.add("active")
+            this.dom.currentSongTitleWrapper.classList.add("active")
+            this.dom.currentSongTitleAnimContainer.classList.add("active")
+        } else if (titleLength < 300) {
+            this.dom.currentSongTitleContainer.classList.remove("active")
+            this.dom.currentSongTitleWrapper.classList.remove("active")
+            this.dom.currentSongTitleAnimContainer.classList.remove("active")
+        }
+    }
+
+    toggleReturnButton(show) {
+        if (show) {
+            this.dom.tracklistReturnButton.style.display = "flex"
+        } else {
+            this.dom.tracklistReturnButton.style.display = "none"
+        }
+    }
+
+    updateTracklistTitle(title) {
+        this.dom.trackListTitle.textContent = title
+    }
 }
 
 // ============================================
-// 5. AudioController.js - Contrôle audio
+// 5. LibraryController.js - Contrôle de la bibliothèque
+// ============================================
+class LibraryController {
+    constructor(dom, playlistService, audioController, uiController) {
+        this.dom = dom
+        this.playlistService = playlistService
+        this.audioController = audioController
+        this.uiController = uiController
+        this.trackCardMap = new Map()
+        this.currentAnimatedCard = null
+    }
+
+    createCoverImage(coverSrc) {
+        const newImg = document.createElement("img")
+        newImg.setAttribute("src", coverSrc)
+        newImg.setAttribute("aria-label", "Album Cover")
+        return newImg
+    }
+
+    createTitleSpan(text) {
+        const newSpan = document.createElement("span")
+        newSpan.setAttribute("class", "track-title")
+        const newSpanContent = document.createTextNode(text)
+        newSpan.appendChild(newSpanContent)
+        return newSpan
+    }
+
+    createTitleContainer(track) {
+        const trackTitleContainer = document.createElement("div")
+        trackTitleContainer.setAttribute("class", "track-title-container")
+        trackTitleContainer.appendChild(this.createTitleSpan(track.title))
+        trackTitleContainer.appendChild(this.createTitleSpan(" - "))
+        trackTitleContainer.appendChild(this.createTitleSpan(track.author))
+        return trackTitleContainer
+    }
+
+    createPlaylistTitleContainer(track) {
+        const trackTitleContainer = document.createElement("div")
+        trackTitleContainer.setAttribute("class", "track-title-container")
+        trackTitleContainer.appendChild(this.createTitleSpan(track.title))
+        return trackTitleContainer
+    }
+
+    createTitleWrapper(track) {
+        const newWrapper = document.createElement("div")
+        newWrapper.setAttribute("class", "track-title-wrapper")
+        newWrapper.appendChild(this.createTitleContainer(track))
+        return newWrapper
+    }
+
+    createPlaylistTitleWrapper(track) {
+        const newWrapper = document.createElement("div")
+        newWrapper.setAttribute("class", "track-title-wrapper")
+        newWrapper.appendChild(this.createPlaylistTitleContainer(track))
+        return newWrapper
+    }
+
+    handleTrackClick(track, sourceList, isLibrary) {
+        const clickedIndex = sourceList.indexOf(track)
+        this.playlistService.setLibraryMode(isLibrary)
+
+        if (isLibrary) {
+            this.playlistService.currentLibraryIndex = clickedIndex
+            if (this.playlistService.shuffleMode) {
+                this.playlistService.libraryPlayedIndexes = [clickedIndex]
+            }
+        } else {
+            this.playlistService.currentIndex = clickedIndex
+            if (this.playlistService.shuffleMode) {
+                this.playlistService.playedIndexes = [clickedIndex]
+            }
+        }
+
+        this.audioController.loadSong(track)
+        if (!this.dom.currentSongAlbumCover.classList.contains("active")) {
+            this.uiController.toggleAlbumCoverAnimation()
+        }
+        this.audioController.play()
+    }
+
+    handleMouseEnter(trackCard, titleWrapper, track) {
+        const mainContainer = titleWrapper.querySelector(".track-title-container")
+        trackCard.classList.add("hover-anim")
+
+        if (this.shouldShowScrollingAnimation(mainContainer, titleWrapper)) {
+            titleWrapper.appendChild(this.createTitleContainer(track))
+            trackCard.classList.add("active")
+        }
+    }
+
+    handleMouseLeave(trackCard) {
+        trackCard.classList.remove("active", "hover-anim")
+    }
+
+    handleTrackCardAnim(isPlaying, track) {
+        this.uiController.updateTrackCardAnim(isPlaying, track)
+    }
+
+    shouldShowScrollingAnimation(mainContainer, wrapper) {
+        if (mainContainer.offsetWidth >= wrapper.offsetWidth && mainContainer != null) {
+            return true
+        }
+    }
+
+    onSongChange(song) {
+        const newCard = this.trackCardMap.get(song.id)
+        if (!newCard) return
+        if (this.currentAnimatedCard) {
+            this.currentAnimatedCard.classList.remove("playing")
+        }
+
+        newCard.classList.add("playing")
+        this.currentAnimatedCard = newCard
+    }
+
+    attachTrackCardEvents(trackCard, titleWrapper, track, sourceList, isLibrary) {
+        trackCard.addEventListener("click", () => {
+            this.handleTrackClick(track, sourceList, isLibrary)
+        })
+
+        trackCard.addEventListener("mouseenter", () => {
+            this.handleMouseEnter(trackCard, titleWrapper, track)
+        })
+
+        trackCard.addEventListener("mouseleave", () => {
+            this.handleMouseLeave(trackCard)
+        })
+    }
+
+    // TODO : Fix animation au changement de playlist
+    attachPlaylistCardEvents(playlistCard, playlist) {
+        playlistCard.addEventListener("click", () => {
+            const playlistId = playlist.id
+
+            this.playlistService.setLibraryMode(false)
+            this.playlistService.switchPlaylist(playlistId)
+            this.playlistService.currentIndex = 0
+
+            this.displayTracks(this.playlistService.playlist, false)
+
+            this.playlistService.setPlaylistSelectionMode(false)
+            this.uiController.toggleReturnButton(true)
+            this.uiController.updateTracklistTitle(playlist.title)
+        })
+    }
+
+    attachLibraryCardEvents(libraryCard) {
+        libraryCard.addEventListener("click", () => {
+            this.playlistService.setLibraryMode(true)
+            this.playlistService.currentLibraryIndex = 0
+
+            this.displayTracks(this.playlistService.libraryTracks, true)
+
+            this.playlistService.setPlaylistSelectionMode(false)
+            this.uiController.toggleReturnButton(true)
+            this.uiController.updateTracklistTitle("Library")
+        })
+    }
+
+    createTrackCard(track, sourceList, isLibrary) {
+        const trackCard = document.createElement("div")
+        const coverImage = this.createCoverImage(track.cover)
+        const newWrapper = this.createTitleWrapper(track)
+        trackCard.setAttribute("class", "track-card")
+        trackCard.setAttribute("id", `track-card ${track.id}`)
+        trackCard.appendChild(coverImage)
+        trackCard.appendChild(newWrapper)
+        this.trackCardMap.set(track.id, trackCard)
+        this.attachTrackCardEvents(trackCard, newWrapper, track, sourceList, isLibrary)
+        return trackCard
+    }
+
+    displayTracks(playlist, isLibrary = true) {
+        const insertDiv = this.dom.trackCardContainer
+        this.removeLibrary()
+
+        playlist.forEach(element => {
+            const trackCard = this.createTrackCard(element, playlist, isLibrary)
+            insertDiv.insertBefore(trackCard, null)
+        });
+
+        this.restorePlayingAnimation()
+    }
+
+    restorePlayingAnimation() {
+        const currentSongId = this.playlistService.currentPlayingSongId
+        if (currentSongId) {
+            const card = this.trackCardMap.get(currentSongId)
+            if (card) {
+                if (this.currentAnimatedCard) {
+                    this.currentAnimatedCard.classList.remove("playing")
+                }
+                card.classList.add("playing")
+                this.currentAnimatedCard = card
+            }
+        }
+    }
+
+    removeLibrary() {
+        const container = this.dom.trackCardContainer
+        while (container.firstChild) {
+            container.removeChild(container.firstChild)
+        }
+        this.trackCardMap.clear()
+    }
+
+    createPlaylistChoice(playlists) {
+        const playlistCard = document.createElement("div")
+        const coverImage = this.createCoverImage(playlists.cover)
+        const newWrapper = this.createPlaylistTitleWrapper(playlists)
+        playlistCard.setAttribute("class", "playlist-card")
+        playlistCard.setAttribute("id", `playlist-${playlists.id}`)
+        playlistCard.appendChild(coverImage)
+        playlistCard.appendChild(newWrapper)
+        this.attachPlaylistCardEvents(playlistCard, playlists)
+        return playlistCard
+    }
+
+    createLibraryCard(library) {
+        const libraryCard = document.createElement("div")
+        const coverImage = this.createCoverImage("../fox-corpo-icon.webp")
+        const newWrapper = this.createPlaylistTitleWrapper(library)
+        libraryCard.setAttribute("class", "playlist-card")
+        libraryCard.appendChild(coverImage)
+        libraryCard.appendChild(newWrapper)
+        this.attachLibraryCardEvents(libraryCard)
+        return libraryCard
+    }
+
+    displayPlaylistChoice(playlists) {
+        const insertDiv = this.dom.trackCardContainer
+        this.removeLibrary()
+
+        const libraryCard = this.createLibraryCard(this.playlistService.library[0])
+        insertDiv.insertBefore(libraryCard, null)
+
+        playlists.forEach(element => {
+            const playlistCard = this.createPlaylistChoice(element)
+            insertDiv.insertBefore(playlistCard, null)
+        });
+
+        this.playlistService.setPlaylistSelectionMode(true)
+        this.uiController.toggleReturnButton(false)
+        this.uiController.updateTracklistTitle("Playlists")
+    }
+}
+
+// TODO : Library Listening List
+
+// ============================================
+// 6. AudioController.js - Contrôle audio
 // ============================================
 class AudioController {
     constructor(audioElement, uiController) {
         this.audio = audioElement
         this.ui = uiController
         this.previousVolume = 0.5
+        this.songChangeListener = null
+        this.currentSongIdCallback = null
     }
 
     play() {
@@ -229,6 +606,14 @@ class AudioController {
     }
 
     loadSong(song) {
+        if (this.songChangeListener) {
+            this.songChangeListener(song)
+        }
+
+        if (this.currentSongIdCallback) {
+            this.currentSongIdCallback(song.id)
+        }
+
         this.audio.src = song.url
         this.ui.updateSongInfo(song)
     }
@@ -253,7 +638,7 @@ class AudioController {
 }
 
 // ============================================
-// 6. AudioPlayer.js - Application principale
+// 7. AudioPlayer.js - Application principale
 // ============================================
 class AudioPlayer {
     constructor(dom) {
@@ -261,6 +646,16 @@ class AudioPlayer {
         this.playlistService = new PlaylistService()
         this.uiController = new UIController(dom)
         this.audioController = new AudioController(dom.currentSong, this.uiController)
+        this.libraryController = new LibraryController(dom, this.playlistService, this.audioController, this.uiController)
+
+        this.audioController.songChangeListener = (song) => {
+            this.libraryController.onSongChange(song)
+        }
+
+        this.audioController.currentSongIdCallback = (songId) => {
+            this.playlistService.currentPlayingSongId = songId
+        }
+
         this.initVolume()
         this.initColor()
     }
@@ -276,9 +671,11 @@ class AudioPlayer {
         this.dom.repeatButton.style.stroke = initialColor
     }
 
-    async init(playlistUrl) {
+    async init(playlistUrl, libraryUrl) {
         try {
             await this.playlistService.loadPlaylist(playlistUrl)
+            await this.playlistService.loadLibrary(libraryUrl)
+            this.libraryController.displayTracks(this.playlistService.libraryTracks)
             const firstSong = this.playlistService.getCurrentSong()
             this.audioController.loadSong(firstSong)
             this.setupEventListeners()
@@ -314,6 +711,11 @@ class AudioPlayer {
             this.toggleRepeatMode()
         })
 
+        // Bouton tracklist return
+        this.dom.tracklistReturnButton.addEventListener("click", () => {
+            this.libraryController.displayPlaylistChoice(this.playlistService.playlists)
+        })
+
         // Événements audio
         this.dom.currentSong.addEventListener("loadedmetadata", () => {
             this.uiController.initProgressBar(this.dom.currentSong.duration)
@@ -334,9 +736,12 @@ class AudioPlayer {
 
         // Barre de progression
         this.dom.progressBar.addEventListener("input", (e) => {
+            const value = Number(e.target.value)
+            const duration = this.dom.progressBar.max
             this.audioController.seekTo(e.target.value)
             const percentage = (e.target.value / this.dom.progressBar.max) * 100
             this.dom.progressBar.style.setProperty('--slider-value', `${percentage}%`)
+            this.uiController.updateProgressBar(value, duration)
         })
 
         // Contrôle du volume
@@ -347,6 +752,15 @@ class AudioPlayer {
         this.dom.volumeButton.addEventListener("click", () => {
             this.audioController.toggleMute()
         })
+    }
+
+    playCurrentSong() {
+        const song = this.playlistService.getCurrentSong()
+        this.audioController.loadSong(song)
+        this.audioController.play()
+        if (!this.dom.currentSongAlbumCover.classList.contains("active")) {
+            this.uiController.toggleAlbumCoverAnimation()
+        }
     }
 
     playNextSong() {
@@ -386,7 +800,7 @@ class AudioPlayer {
 }
 
 // ============================================
-// 7. Initialisation
+// 8. Initialisation
 // ============================================
 const player = new AudioPlayer(DOM)
-player.init("../../data/playlist.json")
+player.init("../../data/playlist.json", "../../data/library.json")
