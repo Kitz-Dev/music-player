@@ -555,8 +555,13 @@ input[type="range"]:focus {
     height: 80vh;
     width: 300px;
     scroll-behavior: smooth;
-    overflow-y: scroll;
+    overflow: auto;
+    scrollbar-width: none;
     backdrop-filter: blur(10px);
+}
+
+.library-tracks-container::-webkit-scrollbar {
+    display: none;
 }
 
 .library-tracks-container img {
