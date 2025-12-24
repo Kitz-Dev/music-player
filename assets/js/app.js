@@ -529,6 +529,7 @@ class LibraryController {
         while (container.firstChild) {
             container.removeChild(container.firstChild)
         }
+        this.trackCardMap.clear()
     }
 
     createPlaylistChoice(playlists) {
