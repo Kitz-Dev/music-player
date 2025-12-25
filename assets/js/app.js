@@ -28,7 +28,7 @@ const DOM = {
     tracklistReturnButton: document.getElementById("tracklist-return-button-container"),
     trackCardContainer: document.getElementById("library-tracks-container"),
     trackCard: document.getElementsByClassName("track-card"),
-    sortLibrary: document.getElementById("add-playlisy-button-container")
+    sortLibrary: document.getElementById("add-playlist-button-container")
 }
 
 // ============================================
@@ -141,6 +141,11 @@ class PlaylistService {
     setLibraryMode(isActive) {
         this.libraryMode = isActive
         return isActive
+    }
+
+    setSortMode(isRevert) {
+        this.revertSortMode = isRevert
+        return isRevert
     }
 
     nextSong() {
@@ -593,17 +598,28 @@ class LibraryController {
         this.uiController.updateTracklistTitle("Playlists")
     }
 
-    onListSort() {
+    handleListSort(isLibrary) {
         // TODO : addEventListener pour toggle isRevert de this.playlistService.revertSortMode
-        const isRevert = this.playlistService.revertSortMode
+        this.playlistService.setLibraryMode(isLibrary)
+
         this.dom.sortLibrary.addEventListener("click", () => {
-            if (isRevert) {
-                console.log(isRevert)
-                this.playlistService.revertSortMode = false
+            if (isLibrary) {
+                if (this.playlistService.setSortMode(true)) {
+                    this.playlistService.setSortMode(false)
+                    this.playlistService.loadLibrary()
+                } else {
+                    this.playlistService.setSortMode(true)
+                    this.playlistService.loadLibrary()
+                }
             } else {
-                this.playlistService.revertSortMode = true
+                if (this.playlistService.setSortMode(true)) {
+                    this.playlistService.setSortMode(false)
+                    this.playlistService.loadPlaylist()
+                } else {
+                    this.playlistService.setSortMode(true)
+                    this.playlistService.loadPlaylist()
+                }
             }
-            this.playlistService.loadLibrary()
         })
     }
 }
@@ -784,6 +800,18 @@ class AudioPlayer {
 
         this.dom.volumeButton.addEventListener("click", () => {
             this.audioController.toggleMute()
+        })
+
+        // Sort current list
+        this.dom.sortLibrary.addEventListener("click", () => {
+            this.libraryController.handleListSort(this.playlistService.libraryMode)
+            if (this.playlistService.setSortMode(true)) {
+                this.playlistService.setSortMode(false)
+                console.log(this.playlistService.setSortMode(false))
+            } else {
+                this.playlistService.setSortMode(true)
+                console.log(this.playlistService.setSortMode(true))
+            }
         })
     }
 
