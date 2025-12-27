@@ -78,7 +78,7 @@ class PlaylistService {
     }
 
     sortCurrentPlaylist() {
-        if (this.libraryMode) {
+        if (this.revertSortMode) {
             return [...this.playlists[this.playlistIndex].songs].sort((a, b) =>
                 b.title.localeCompare(a.title)
             )
@@ -90,7 +90,7 @@ class PlaylistService {
     }
 
     sortLibrary() {
-        if (this.libraryMode) {
+        if (this.revertSortMode) {
             return [...this.library[0].songs].sort((a, b) =>
                 b.title.localeCompare(a.title)
             )
@@ -99,7 +99,16 @@ class PlaylistService {
                 a.title.localeCompare(b.title)
             )
         }
+    }
 
+    refreshCurrentList() {
+        if (this.libraryMode) {
+            this.libraryTracks = this.sortLibrary()
+            return this.libraryTracks
+        } else {
+            this.playlist = this.sortCurrentPlaylist()
+            return this.playlist
+        }
     }
 
     sortLibraryByAuthor() {
@@ -597,31 +606,6 @@ class LibraryController {
         this.uiController.toggleReturnButton(false)
         this.uiController.updateTracklistTitle("Playlists")
     }
-
-    handleListSort(isLibrary) {
-        // TODO : addEventListener pour toggle isRevert de this.playlistService.revertSortMode
-        this.playlistService.setLibraryMode(isLibrary)
-
-        this.dom.sortLibrary.addEventListener("click", () => {
-            if (isLibrary) {
-                if (this.playlistService.setSortMode(true)) {
-                    this.playlistService.setSortMode(false)
-                    this.playlistService.loadLibrary()
-                } else {
-                    this.playlistService.setSortMode(true)
-                    this.playlistService.loadLibrary()
-                }
-            } else {
-                if (this.playlistService.setSortMode(true)) {
-                    this.playlistService.setSortMode(false)
-                    this.playlistService.loadPlaylist()
-                } else {
-                    this.playlistService.setSortMode(true)
-                    this.playlistService.loadPlaylist()
-                }
-            }
-        })
-    }
 }
 
 // ============================================
@@ -804,14 +788,20 @@ class AudioPlayer {
 
         // Sort current list
         this.dom.sortLibrary.addEventListener("click", () => {
-            this.libraryController.handleListSort(this.playlistService.libraryMode)
-            if (this.playlistService.setSortMode(true)) {
-                this.playlistService.setSortMode(false)
-                console.log(this.playlistService.setSortMode(false))
-            } else {
-                this.playlistService.setSortMode(true)
-                console.log(this.playlistService.setSortMode(true))
+            if (this.playlistService.playlistSelectionMode) {
+                return
             }
+
+            this.playlistService.revertSortMode = !this.playlistService.revertSortMode
+
+            const sortedList = this.playlistService.refreshCurrentList()
+
+            this.libraryController.displayTracks(
+                sortedList,
+                this.playlistService.libraryMode
+            )
+
+            console.log('Sort mode:', this.playlistService.revertSortMode ? 'Z-A' : 'A-Z')
         })
     }
 
