@@ -28,7 +28,8 @@ const DOM = {
     tracklistReturnButton: document.getElementById("tracklist-return-button-container"),
     trackCardContainer: document.getElementById("library-tracks-container"),
     trackCard: document.getElementsByClassName("track-card"),
-    sortLibrary: document.getElementById("add-playlist-button-container")
+    sortLibrary: document.getElementById("sort-button-container"),
+    sortLibraryImg: document.getElementById("sort-button-img")
 }
 
 // ============================================
@@ -793,6 +794,7 @@ class AudioPlayer {
             }
 
             this.playlistService.revertSortMode = !this.playlistService.revertSortMode
+            this.playlistService.revertSortMode ? this.dom.sortLibraryImg.setAttribute("href", "./img/sprite.svg#sort-up-button") : this.dom.sortLibraryImg.setAttribute("href", "./img/sprite.svg#sort-down-button")
 
             const sortedList = this.playlistService.refreshCurrentList()
 
@@ -800,8 +802,6 @@ class AudioPlayer {
                 sortedList,
                 this.playlistService.libraryMode
             )
-
-            console.log('Sort mode:', this.playlistService.revertSortMode ? 'Z-A' : 'A-Z')
         })
     }
 
