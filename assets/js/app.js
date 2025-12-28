@@ -421,10 +421,10 @@ class LibraryController {
     }
 
     createSongInfos(track) {
-        const infosWrapper = this.createElement("div")
+        const infosWrapper = document.createElement("div")
         infosWrapper.setAttribute("class", "song-infos-wrapper")
 
-        const infosContainer = this.dom.songInfos
+        // const infosContainer = this.dom.songInfos
         const infosCoverContainer = document.createElement("div")
         const coverImage = this.createCoverImage(track.cover)
         infosCoverContainer.setAttribute("class", "infos-cover-container")
@@ -435,15 +435,15 @@ class LibraryController {
 
         const titleElement = document.createElement("h3")
         titleElement.setAttribute("class", "infos-title")
-        titleElement.textContent = track.title
+        titleElement.textContent = `Title: ${track.title}`
 
         const authorElement = document.createElement("h4")
         authorElement.setAttribute("class", "infos-author")
-        authorElement.textContent = track.author
+        authorElement.textContent = `Artist: ${track.author}`
 
         const genreElement = document.createElement("span")
         genreElement.setAttribute("class", "infos-genre")
-        genreElement.textContent = track.genre
+        genreElement.textContent = `Genre: ${track.genre}`
 
         const loreElement = document.createElement("p")
         loreElement.setAttribute("class", "infos-lore")
