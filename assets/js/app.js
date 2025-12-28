@@ -29,7 +29,8 @@ const DOM = {
     trackCardContainer: document.getElementById("library-tracks-container"),
     trackCard: document.getElementsByClassName("track-card"),
     sortLibrary: document.getElementById("sort-button-container"),
-    sortLibraryImg: document.getElementById("sort-button-img")
+    sortLibraryImg: document.getElementById("sort-button-img"),
+    songInfos: document.getElementById("song-infos-container")
 }
 
 // ============================================
@@ -417,6 +418,40 @@ class LibraryController {
         newWrapper.setAttribute("class", "track-title-wrapper")
         newWrapper.appendChild(this.createPlaylistTitleContainer(track))
         return newWrapper
+    }
+
+    createSongInfos(track) {
+        const infosContainer = this.dom.songInfos
+        const infosCoverContainer = document.createElement("div")
+        const coverImage = this.createCoverImage(track.cover)
+        infosCoverContainer.setAttribute("class", "infos-cover-container")
+        infosCoverContainer.appendChild(coverImage)
+
+        const infosTitleContainer = document.createElement("div")
+        infosTitleContainer.setAttribute("class", "infos-title-container")
+
+        const titleElement = document.createElement("h3")
+        titleElement.setAttribute("class", "infos-title")
+        titleElement.textContent = track.title
+
+        const authorElement = document.createElement("h4")
+        authorElement.setAttribute("class", "infos-author")
+        authorElement.textContent = track.author
+
+        const genreElement = document.createElement("span")
+        genreElement.setAttribute("class", "infos-genre")
+        genreElement.textContent = track.genre
+
+        const loreElement = document.createElement("p")
+        loreElement.setAttribute("class", "infos-lore")
+        loreElement.textContent = track.lore
+
+        infosTitleContainer.appendChild(titleElement)
+        infosTitleContainer.appendChild(authorElement)
+        infosTitleContainer.appendChild(genreElement)
+        infosTitleContainer.appendChild(loreElement)
+
+        infosContainer.appendChild(infosCoverContainer)
     }
 
     handleTrackClick(track, sourceList, isLibrary) {

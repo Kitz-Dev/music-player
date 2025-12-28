@@ -52,8 +52,34 @@
 
 <body>
     <main>
-        <!-- Section placeholder pour l'affichage 1/3 -->
-        <section class="placeholder">
+        <section class="library">
+            <div class="library-container" scrollable>
+                <div class="title-container">
+                    <div id="tracklist-return-button-container" class="tracklist-title-button">
+                        <span id="tracklist-return-tooltip" class="tooltip">Return</span>
+                        <svg id="tracklist-return-button" class="logic-button" xmlns="http://www.w3.org/2000/svg"
+                            width="24" height="24" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+                            <use href="./img/sprite.svg#tracklist-return-button"></use>
+                        </svg>
+                    </div>
+
+                    <h2 id="tracklist-title">
+                        Library
+                    </h2>
+
+                    <div id="sort-button-container" class="tracklist-title-button">
+                        <span id="sort-track-tooltip" class="tooltip">Sort</span>
+                        <svg id="sort-down-button" class="logic-button" xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <use id="sort-button-img" href="./img/sprite.svg#sort-down-button"></use>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Library Tracks Container -->
+                <div id="library-tracks-container" class="library-tracks-container">
+                </div>
+            </div>
         </section>
 
         <section class="music-player">
@@ -153,29 +179,13 @@
         <section class="library">
             <div class="library-container" scrollable>
                 <div class="title-container">
-                    <div id="tracklist-return-button-container" class="tracklist-title-button">
-                        <span id="tracklist-return-tooltip" class="tooltip">Return</span>
-                        <svg id="tracklist-return-button" class="logic-button" xmlns="http://www.w3.org/2000/svg"
-                            width="24" height="24" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-                            <use href="./img/sprite.svg#tracklist-return-button"></use>
-                        </svg>
-                    </div>
-
                     <h2 id="tracklist-title">
-                        Library
+                        Infos
                     </h2>
-
-                    <div id="sort-button-container" class="tracklist-title-button">
-                        <span id="sort-track-tooltip" class="tooltip">Sort</span>
-                        <svg id="sort-down-button" class="logic-button" xmlns="http://www.w3.org/2000/svg" width="24"
-                            height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                            <use id="sort-button-img" href="./img/sprite.svg#sort-down-button"></use>
-                        </svg>
-                    </div>
                 </div>
 
                 <!-- Library Tracks Container -->
-                <div id="library-tracks-container" class="library-tracks-container">
+                <div id="song-infos-container" class="library-tracks-container">
                 </div>
             </div>
         </section>
