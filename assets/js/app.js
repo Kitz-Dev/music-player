@@ -421,6 +421,9 @@ class LibraryController {
     }
 
     createSongInfos(track) {
+        const infosWrapper = this.createElement("div")
+        infosWrapper.setAttribute("class", "song-infos-wrapper")
+
         const infosContainer = this.dom.songInfos
         const infosCoverContainer = document.createElement("div")
         const coverImage = this.createCoverImage(track.cover)
@@ -451,7 +454,10 @@ class LibraryController {
         infosTitleContainer.appendChild(genreElement)
         infosTitleContainer.appendChild(loreElement)
 
-        infosContainer.appendChild(infosCoverContainer)
+        infosWrapper.appendChild(infosCoverContainer)
+        infosWrapper.appendChild(infosTitleContainer)
+
+        return infosWrapper
     }
 
     handleTrackClick(track, sourceList, isLibrary) {
@@ -474,6 +480,8 @@ class LibraryController {
         if (!this.dom.currentSongAlbumCover.classList.contains("active")) {
             this.uiController.toggleAlbumCoverAnimation()
         }
+
+        this.displayInfos(track)
         this.audioController.play()
     }
 
@@ -581,6 +589,13 @@ class LibraryController {
         this.restorePlayingAnimation()
     }
 
+    displayInfos(track) {
+        const insertDiv = this.dom.songInfos
+        this.clearSongInfos()
+        const infos = this.createSongInfos(track)
+        insertDiv.insertBefore(infos, null)
+    }
+
     restorePlayingAnimation() {
         const currentSongId = this.playlistService.currentPlayingSongId
         if (currentSongId) {
@@ -601,6 +616,13 @@ class LibraryController {
             container.removeChild(container.firstChild)
         }
         this.trackCardMap.clear()
+    }
+
+    clearSongInfos() {
+        const container = this.dom.songInfos
+        while (container.firstChild) {
+            container.removeChild(container.firstChild)
+        }
     }
 
     createPlaylistChoice(playlists) {
@@ -679,6 +701,10 @@ class AudioController {
             this.songChangeListener(song)
         }
 
+        if (this.songInfosUpdateListener) {
+            this.songInfosUpdateListener(song)
+        }
+
         if (this.currentSongIdCallback) {
             this.currentSongIdCallback(song.id)
         }
@@ -719,6 +745,10 @@ class AudioPlayer {
 
         this.audioController.songChangeListener = (song) => {
             this.libraryController.onSongChange(song)
+        }
+
+        this.audioController.songInfosUpdateListener = (song) => {
+            this.libraryController.displayInfos(song)
         }
 
         this.audioController.currentSongIdCallback = (songId) => {
