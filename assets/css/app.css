@@ -104,12 +104,14 @@
 body {
     background: linear-gradient(135deg,
             #282f3bbd 0%,
+            /* var(--primary-color) 10%, */
             var(--primary-color) 33%,
             var(--primary-color) 45%,
-            #282f3bd0 50%,
-            #282f3bd0 50%,
+            /* #282f3be3 50%,
+            #282f3be1 50%, */
             var(--primary-color) 55%,
             var(--primary-color) 66%,
+            /* var(--primary-color) 90%, */
             #282f3bbd 100%);
     font-family: var(--secondary-font);
 }
@@ -145,11 +147,11 @@ section {
     -webkit-backdrop-filter: blur(3px);
     backdrop-filter: blur(3px);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(25, 32, 44, 0.4);
+    border: 1px solid rgba(107, 75, 122, 0.479);
 }
 
 #player-title-container {
-    display: none;
+    display: flex;
     justify-content: center;
     align-items: center;
     /* ! Placeholder */
@@ -467,7 +469,7 @@ input[type="range"]:focus {
 #infos-title-container {
     justify-content: center;
     /* ! Placeholder */
-    visibility: hidden;
+    /* visibility: hidden; */
 }
 
 .playlists-container h2 {
@@ -558,7 +560,7 @@ input[type="range"]:focus {
     -webkit-backdrop-filter: blur(3px);
     backdrop-filter: blur(3px);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(25, 32, 44, 0.4);
+    border: 1px solid rgba(107, 75, 122, 0.479);
 }
 
 .library-container h2 {
@@ -592,7 +594,7 @@ input[type="range"]:focus {
     -webkit-backdrop-filter: blur(3px);
     backdrop-filter: blur(3px);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(25, 32, 44, 0.4);
+    border: 1px solid rgba(107, 75, 122, 0.479);
 }
 
 .library-tracks-container::-webkit-scrollbar {
