@@ -30,7 +30,8 @@ const DOM = {
     trackCard: document.getElementsByClassName("track-card"),
     sortLibrary: document.getElementById("sort-button-container"),
     sortLibraryImg: document.getElementById("sort-button-img"),
-    songInfos: document.getElementById("song-infos-container")
+    songInfos: document.getElementById("song-infos-container"),
+    card: document.querySelector("#music-player-container")
 }
 
 // ============================================
@@ -424,7 +425,6 @@ class LibraryController {
         const infosWrapper = document.createElement("div")
         infosWrapper.setAttribute("class", "song-infos-wrapper")
 
-        // const infosContainer = this.dom.songInfos
         const infosCoverContainer = document.createElement("div")
         const coverImage = this.createCoverImage(track.cover)
         infosCoverContainer.setAttribute("class", "infos-cover-container")
@@ -733,6 +733,97 @@ class AudioController {
 }
 
 // ============================================
+// 7. CardGlow.js - Application principale
+// ============================================
+
+// ============================================
+// 7. CardGlow.js - Effets de lueur sur la carte
+// ============================================
+
+class CardGlow {
+    constructor(dom) {
+        this.dom = dom
+        this.initCardEffects()
+    }
+
+    initCardEffects() {
+        this.dom.card.addEventListener("pointermove", (e) => this.cardUpdate(e))
+    }
+
+    // Mise à jour de la carte au mouvement du pointeur
+    cardUpdate(e) {
+        const position = this.pointerPositionRelativeToElement(this.dom.card, e)
+        const [px, py] = position.pixels
+        const [perx, pery] = position.percent
+        const [dx, dy] = this.distanceFromCenter(this.dom.card, px, py)
+        const edge = this.closenessToEdge(this.dom.card, px, py)
+        const angle = this.angleFromPointerEvent(this.dom.card, dx, dy)
+
+        this.dom.card.style.setProperty('--pointer-x', `${this.round(perx)}%`)
+        this.dom.card.style.setProperty('--pointer-y', `${this.round(pery)}%`)
+        this.dom.card.style.setProperty('--pointer-°', `${this.round(angle)}deg`)
+        this.dom.card.style.setProperty('--pointer-d', `${this.round(edge * 100)}`)
+
+        this.dom.card.classList.remove('animating')
+    }
+
+    centerOfElement($el) {
+        const { width, height } = $el.getBoundingClientRect()
+        return [width / 2, height / 2]
+    }
+
+    pointerPositionRelativeToElement($el, e) {
+        const pos = [e.clientX, e.clientY]
+        const { left, top, width, height } = $el.getBoundingClientRect()
+        const x = pos[0] - left
+        const y = pos[1] - top
+        const px = this.clamp((100 / width) * x)
+        const py = this.clamp((100 / height) * y)
+        return { pixels: [x, y], percent: [px, py] }
+    }
+
+    angleFromPointerEvent($el, dx, dy) {
+        let angleRadians = 0
+        let angleDegrees = 0
+        if (dx !== 0 || dy !== 0) {
+            angleRadians = Math.atan2(dy, dx)
+            angleDegrees = angleRadians * (180 / Math.PI) + 90
+            if (angleDegrees < 0) {
+                angleDegrees += 360
+            }
+        }
+        return angleDegrees
+    }
+
+    distanceFromCenter($el, x, y) {
+        const [cx, cy] = this.centerOfElement($el)
+        return [x - cx, y - cy]
+    }
+
+    closenessToEdge($el, x, y) {
+        const [cx, cy] = this.centerOfElement($el)
+        const [dx, dy] = this.distanceFromCenter($el, x, y)
+        let k_x = Infinity
+        let k_y = Infinity
+        if (dx !== 0) {
+            k_x = cx / Math.abs(dx)
+        }
+        if (dy !== 0) {
+            k_y = cy / Math.abs(dy)
+        }
+        return this.clamp((1 / Math.min(k_x, k_y)), 0, 1)
+    }
+
+    round(value, precision = 3) {
+        return parseFloat(value.toFixed(precision))
+    }
+
+    clamp(value, min = 0, max = 100) {
+        return Math.min(Math.max(value, min), max)
+    }
+}
+
+// ============================================
 // 7. AudioPlayer.js - Application principale
 // ============================================
 class AudioPlayer {
@@ -742,6 +833,7 @@ class AudioPlayer {
         this.uiController = new UIController(dom)
         this.audioController = new AudioController(dom.currentSong, this.uiController)
         this.libraryController = new LibraryController(dom, this.playlistService, this.audioController, this.uiController)
+        this.cardGlow = new CardGlow(dom)
 
         this.audioController.songChangeListener = (song) => {
             this.libraryController.onSongChange(song)
