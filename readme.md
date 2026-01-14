@@ -207,10 +207,9 @@ Les couleurs principales sont définies dans `app.css` :
 
 ### Polices
 
-Deux polices sont utilisées :
+Une police utilisée :
 
 - **Alkatra** : Titres et éléments décoratifs
-- **DM Sans** : Corps de texte et interface
 
 ## 📝 Notes techniques
 
