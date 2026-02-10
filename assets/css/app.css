@@ -102,15 +102,8 @@
  * MAIN STYLES
  * =============================== */
 body {
-    background: linear-gradient(135deg,
-            #282f3bbd 0%,
-            var(--primary-color) 33%,
-            var(--primary-color) 45%,
-            #282f3bd0 50%,
-            #282f3bd0 50%,
-            var(--primary-color) 55%,
-            var(--primary-color) 66%,
-            #282f3bbd 100%);
+    background: url('../../img/background.jpg');
+    background-position: center;
     font-family: var(--secondary-font);
 }
 
@@ -142,8 +135,8 @@ section {
     width: 100%;
     border-radius: 15px;
     background-color: rgba(25, 32, 44, 0.2);
-    -webkit-backdrop-filter: blur(3px);
-    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(25, 32, 44, 0.4);
 }
@@ -172,11 +165,12 @@ h2 {
 .song-title-container {
     display: flex;
     width: fit-content;
-    background: -webkit-linear-gradient(var(--title-color), var(--secondary-color));
+    /* background: -webkit-linear-gradient(var(--title-color), var(--secondary-color));
     -webkit-background-clip: text;
     background-clip: text;
-    -webkit-text-fill-color: transparent;
+    -webkit-text-fill-color: transparent; */
     margin-top: 0;
+    color: var(--btn-color);
 }
 
 .song-title-container.active {
@@ -228,10 +222,11 @@ h2 {
 }
 
 .song-timer {
-    background: -webkit-linear-gradient(var(--title-color), var(--secondary-color));
+    /* background: -webkit-linear-gradient(var(--title-color), var(--secondary-color));
     -webkit-background-clip: text;
     background-clip: text;
-    -webkit-text-fill-color: transparent;
+    -webkit-text-fill-color: transparent; */
+    color: var(--btn-color);
 }
 
 .album-cover {
@@ -783,11 +778,11 @@ h4 {
 }
 
 .infos-author {
-    color: var(--alt-color)
+    color: var(--btn-color);
 }
 
 .infos-genre {
-    color: var(--alt-color);
+    color: var(--btn-color);
 }
 
 /* TODO : Add touch support for volume button
