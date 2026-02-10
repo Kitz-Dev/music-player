@@ -8,70 +8,200 @@
                 "title": "Background Music",
                 "author": "Dmitrii Spis",
                 "url": "../music/background-music.mp3",
-                "cover": "../img/shapes.webp"
+                "cover": "../img/shapes.webp",
+                "genre": "Jazz",
+                "publication": "2021",
+                "lore": "Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al"
             },
             {
                 "id": "1",
                 "title": "Hello Beloved",
                 "author": "alanajordan",
                 "url": "../music/hello-beloved.mp3",
-                "cover": "../img/tori.webp"
+                "cover": "../img/tori.webp",
+                "genre": "Blues",
+                "publication": "2025",
+                "lore": "Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al"
             },
             {
                 "id": "2",
                 "title": "Hallucination",
                 "author": "alanajordan",
                 "url": "../music/hallucination.mp3",
-                "cover": "../img/water.webp"
+                "cover": "../img/water.webp",
+                "genre": "Blues",
+                "publication": "2012",
+                "lore": "Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al"
             },
             {
                 "id": "3",
                 "title": "The Crimson Flow",
                 "author": "Misselle",
                 "url": "../music/the-crimson-flow.mp3",
-                "cover": "../img/meditate.webp"
+                "cover": "../img/meditate.webp",
+                "genre": "Jazz",
+                "publication": "2020",
+                "lore": "Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al"
             },
             {
                 "id": "4",
                 "title": "Sweet Life (Luxury Chill)",
                 "author": "Alex Grohl",
                 "url": "../music/sweet-life-luxury-chill.mp3",
-                "cover": "../img/tree.webp"
+                "cover": "../img/tree.webp",
+                "genre": "Blues",
+                "publication": "2020",
+                "lore": "Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al"
             },
             {
                 "id": "5",
                 "title": "Alicia",
                 "author": "Lorien Testard",
                 "url": "../music/Clair Obscur - Alicia 2.mp3",
-                "cover": "../img/tree.webp"
+                "cover": "../img/tree.webp",
+                "genre": "Guitar",
+                "publication": "2025",
+                "lore": "Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al"
             },
             {
                 "id": "6",
                 "title": "Lumière",
                 "author": "Lorien Testard",
                 "url": "../music/Clair Obscur - Lumière (FA) MP3.mp3",
-                "cover": "../img/tree.webp"
+                "cover": "../img/tree.webp",
+                "genre": "Guitar",
+                "publication": "2025",
+                "lore": "Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al"
             },
             {
                 "id": "7",
                 "title": "Hype",
                 "author": "Kontraa Music",
                 "url": "../music/hype-drill-music.mp3",
-                "cover": "../img/tori.webp"
+                "cover": "../img/tori.webp",
+                "genre": "Drill",
+                "publication": "2020",
+                "lore": "Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al"
             },
             {
                 "id": "8",
                 "title": "One more dance with you",
                 "author": "Paul Winter",
                 "url": "../music/one-more-dance-with-you-smooth-jazz-music.mp3",
-                "cover": "../img/water.webp"
+                "cover": "../img/water.webp",
+                "genre": "Blues",
+                "publication": "2020",
+                "lore": "Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al"
             },
             {
                 "id": "9",
                 "title": "Jazz Background Music",
                 "author": "Andrii Poradovskyi",
                 "url": "../music/jazz-background-music.mp3",
-                "cover": "../img/meditate.webp"
+                "cover": "../img/meditate.webp",
+                "genre": "Jazz",
+                "publication": "2020",
+                "lore": "Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al"
+            },
+            {
+                "id": "10",
+                "title": "Background Music",
+                "author": "Dmitrii Spis",
+                "url": "../music/background-music.mp3",
+                "cover": "../img/shapes.webp",
+                "genre": "Jazz",
+                "publication": "2021",
+                "lore": "Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al"
+            },
+            {
+                "id": "11",
+                "title": "Hello Beloved",
+                "author": "alanajordan",
+                "url": "../music/hello-beloved.mp3",
+                "cover": "../img/tori.webp",
+                "genre": "Blues",
+                "publication": "2025",
+                "lore": "Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al"
+            },
+            {
+                "id": "12",
+                "title": "Hallucination",
+                "author": "alanajordan",
+                "url": "../music/hallucination.mp3",
+                "cover": "../img/water.webp",
+                "genre": "Blues",
+                "publication": "2012",
+                "lore": "Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al"
+            },
+            {
+                "id": "13",
+                "title": "The Crimson Flow",
+                "author": "Misselle",
+                "url": "../music/the-crimson-flow.mp3",
+                "cover": "../img/meditate.webp",
+                "genre": "Jazz",
+                "publication": "2020",
+                "lore": "Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al"
+            },
+            {
+                "id": "14",
+                "title": "Sweet Life (Luxury Chill)",
+                "author": "Alex Grohl",
+                "url": "../music/sweet-life-luxury-chill.mp3",
+                "cover": "../img/tree.webp",
+                "genre": "Blues",
+                "publication": "2020",
+                "lore": "Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al"
+            },
+            {
+                "id": "15",
+                "title": "Alicia",
+                "author": "Lorien Testard",
+                "url": "../music/Clair Obscur - Alicia 2.mp3",
+                "cover": "../img/tree.webp",
+                "genre": "Guitar",
+                "publication": "2025",
+                "lore": "Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al"
+            },
+            {
+                "id": "16",
+                "title": "Lumière",
+                "author": "Lorien Testard",
+                "url": "../music/Clair Obscur - Lumière (FA) MP3.mp3",
+                "cover": "../img/tree.webp",
+                "genre": "Guitar",
+                "publication": "2025",
+                "lore": "Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al"
+            },
+            {
+                "id": "17",
+                "title": "Hype",
+                "author": "Kontraa Music",
+                "url": "../music/hype-drill-music.mp3",
+                "cover": "../img/tori.webp",
+                "genre": "Drill",
+                "publication": "2020",
+                "lore": "Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al"
+            },
+            {
+                "id": "18",
+                "title": "One more dance with you",
+                "author": "Paul Winter",
+                "url": "../music/one-more-dance-with-you-smooth-jazz-music.mp3",
+                "cover": "../img/water.webp",
+                "genre": "Blues",
+                "publication": "2020",
+                "lore": "Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al"
+            },
+            {
+                "id": "19",
+                "title": "Jazz Background Music",
+                "author": "Andrii Poradovskyi",
+                "url": "../music/jazz-background-music.mp3",
+                "cover": "../img/meditate.webp",
+                "genre": "Jazz",
+                "publication": "2020",
+                "lore": "Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al Lorem ipsum dolor ipset al"
             }
         ]
     }

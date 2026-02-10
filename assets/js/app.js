@@ -27,7 +27,10 @@ const DOM = {
     trackListTitle: document.getElementById("tracklist-title"),
     tracklistReturnButton: document.getElementById("tracklist-return-button-container"),
     trackCardContainer: document.getElementById("library-tracks-container"),
-    trackCard: document.getElementsByClassName("track-card")
+    trackCard: document.getElementsByClassName("track-card"),
+    sortLibrary: document.getElementById("sort-button-container"),
+    sortLibraryImg: document.getElementById("sort-button-img"),
+    songInfos: document.getElementById("song-infos-container")
 }
 
 // ============================================
@@ -49,6 +52,7 @@ class PlaylistService {
         this.playedIndexes = []   // Historique des pistes jouées en mode shuffle
         this.libraryPlayedIndexes = []
         this.currentPlayingSongId = null
+        this.revertSortMode = false
     }
 
     async loadPlaylist(playlistUrl) {
@@ -76,14 +80,42 @@ class PlaylistService {
     }
 
     sortCurrentPlaylist() {
-        return [...this.playlists[this.playlistIndex].songs].sort((a, b) =>
-            a.title.localeCompare(b.title)
-        )
+        if (this.revertSortMode) {
+            return [...this.playlists[this.playlistIndex].songs].sort((a, b) =>
+                b.title.localeCompare(a.title)
+            )
+        } else {
+            return [...this.playlists[this.playlistIndex].songs].sort((a, b) =>
+                a.title.localeCompare(b.title)
+            )
+        }
     }
 
     sortLibrary() {
+        if (this.revertSortMode) {
+            return [...this.library[0].songs].sort((a, b) =>
+                b.title.localeCompare(a.title)
+            )
+        } else {
+            return [...this.library[0].songs].sort((a, b) =>
+                a.title.localeCompare(b.title)
+            )
+        }
+    }
+
+    refreshCurrentList() {
+        if (this.libraryMode) {
+            this.libraryTracks = this.sortLibrary()
+            return this.libraryTracks
+        } else {
+            this.playlist = this.sortCurrentPlaylist()
+            return this.playlist
+        }
+    }
+
+    sortLibraryByAuthor() {
         return [...this.library[0].songs].sort((a, b) =>
-            a.title.localeCompare(b.title)
+            a.author.localeCompare(b.author)
         )
     }
 
@@ -120,6 +152,11 @@ class PlaylistService {
     setLibraryMode(isActive) {
         this.libraryMode = isActive
         return isActive
+    }
+
+    setSortMode(isRevert) {
+        this.revertSortMode = isRevert
+        return isRevert
     }
 
     nextSong() {
@@ -383,6 +420,46 @@ class LibraryController {
         return newWrapper
     }
 
+    createSongInfos(track) {
+        const infosWrapper = document.createElement("div")
+        infosWrapper.setAttribute("class", "song-infos-wrapper")
+
+        // const infosContainer = this.dom.songInfos
+        const infosCoverContainer = document.createElement("div")
+        const coverImage = this.createCoverImage(track.cover)
+        infosCoverContainer.setAttribute("class", "infos-cover-container")
+        infosCoverContainer.appendChild(coverImage)
+
+        const infosTitleContainer = document.createElement("div")
+        infosTitleContainer.setAttribute("class", "infos-title-container")
+
+        const titleElement = document.createElement("h3")
+        titleElement.setAttribute("class", "infos-title")
+        titleElement.textContent = `Title: ${track.title}`
+
+        const authorElement = document.createElement("h4")
+        authorElement.setAttribute("class", "infos-author")
+        authorElement.textContent = `Artist: ${track.author}`
+
+        const genreElement = document.createElement("span")
+        genreElement.setAttribute("class", "infos-genre")
+        genreElement.textContent = `Genre: ${track.genre}`
+
+        const loreElement = document.createElement("p")
+        loreElement.setAttribute("class", "infos-lore")
+        loreElement.textContent = track.lore
+
+        infosTitleContainer.appendChild(titleElement)
+        infosTitleContainer.appendChild(authorElement)
+        infosTitleContainer.appendChild(genreElement)
+        infosTitleContainer.appendChild(loreElement)
+
+        infosWrapper.appendChild(infosCoverContainer)
+        infosWrapper.appendChild(infosTitleContainer)
+
+        return infosWrapper
+    }
+
     handleTrackClick(track, sourceList, isLibrary) {
         const clickedIndex = sourceList.indexOf(track)
         this.playlistService.setLibraryMode(isLibrary)
@@ -403,6 +480,8 @@ class LibraryController {
         if (!this.dom.currentSongAlbumCover.classList.contains("active")) {
             this.uiController.toggleAlbumCoverAnimation()
         }
+
+        this.displayInfos(track)
         this.audioController.play()
     }
 
@@ -510,6 +589,13 @@ class LibraryController {
         this.restorePlayingAnimation()
     }
 
+    displayInfos(track) {
+        const insertDiv = this.dom.songInfos
+        this.clearSongInfos()
+        const infos = this.createSongInfos(track)
+        insertDiv.insertBefore(infos, null)
+    }
+
     restorePlayingAnimation() {
         const currentSongId = this.playlistService.currentPlayingSongId
         if (currentSongId) {
@@ -530,6 +616,13 @@ class LibraryController {
             container.removeChild(container.firstChild)
         }
         this.trackCardMap.clear()
+    }
+
+    clearSongInfos() {
+        const container = this.dom.songInfos
+        while (container.firstChild) {
+            container.removeChild(container.firstChild)
+        }
     }
 
     createPlaylistChoice(playlists) {
@@ -573,8 +666,6 @@ class LibraryController {
     }
 }
 
-// TODO : Library Listening List
-
 // ============================================
 // 6. AudioController.js - Contrôle audio
 // ============================================
@@ -608,6 +699,10 @@ class AudioController {
     loadSong(song) {
         if (this.songChangeListener) {
             this.songChangeListener(song)
+        }
+
+        if (this.songInfosUpdateListener) {
+            this.songInfosUpdateListener(song)
         }
 
         if (this.currentSongIdCallback) {
@@ -650,6 +745,10 @@ class AudioPlayer {
 
         this.audioController.songChangeListener = (song) => {
             this.libraryController.onSongChange(song)
+        }
+
+        this.audioController.songInfosUpdateListener = (song) => {
+            this.libraryController.displayInfos(song)
         }
 
         this.audioController.currentSongIdCallback = (songId) => {
@@ -751,6 +850,23 @@ class AudioPlayer {
 
         this.dom.volumeButton.addEventListener("click", () => {
             this.audioController.toggleMute()
+        })
+
+        // Sort current list
+        this.dom.sortLibrary.addEventListener("click", () => {
+            if (this.playlistService.playlistSelectionMode) {
+                return
+            }
+
+            this.playlistService.revertSortMode = !this.playlistService.revertSortMode
+            this.playlistService.revertSortMode ? this.dom.sortLibraryImg.setAttribute("href", "./img/sprite.svg#sort-up-button") : this.dom.sortLibraryImg.setAttribute("href", "./img/sprite.svg#sort-down-button")
+
+            const sortedList = this.playlistService.refreshCurrentList()
+
+            this.libraryController.displayTracks(
+                sortedList,
+                this.playlistService.libraryMode
+            )
         })
     }
 
